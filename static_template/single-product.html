@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noir Essence 01 | L'ESSENCE NYC</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;600&family=Space+Mono&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --cream: #f9f7f2;
+            --accent: #b5a48b;
+            --border: rgba(0, 0, 0, 0.1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-family: 'Cormorant Garamond';
+            z-index: 1002;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 1002;
+            width: 25px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: black;
+            transition: var(--transition);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        /* --- PDP Layout --- */
+        .pdp-wrapper {
+            display: flex;
+            margin-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* --- LEFT SIDE: GALLERY SYSTEM --- */
+        .pdp-gallery-container {
+            width: 60%;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        /* Large Sticky Hero with Zoom */
+        .gallery-main-sticky {
+            flex: 2;
+            height: calc(100vh - 100px);
+            position: sticky;
+            top: 90px;
+            overflow: hidden;
+            background: var(--cream);
+            cursor: zoom-in;
+        }
+
+        /* The actual image that will zoom */
+        #mainHeroImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease-out, opacity 0.4s ease;
+            transform-origin: center center;
+        }
+
+        /* Thumbnail Stream */
+        .gallery-detail-stream {
+            flex: 0.5;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .gallery-detail-stream img {
+            width: 100%;
+            aspect-ratio: 1 / 1.3;
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .gallery-detail-stream img.active,
+        .gallery-detail-stream img:hover {
+            opacity: 1;
+        }
+
+        /* --- RIGHT SIDE: PRODUCT INFO --- */
+        .pdp-info {
+            width: 40%;
+            padding: 80px 6%;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            border-left: 1px solid var(--border);
+        }
+
+        .breadcrumb {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .p-title {
+            font-family: 'Cormorant Garamond';
+            font-size: 3.5rem;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .p-price {
+            font-size: 1.25rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        /* Selectors */
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .size-btn {
+            padding: 12px 25px;
+            border: 1px solid var(--border);
+            background: none;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .size-btn.active {
+            background: var(--black);
+            color: white;
+            border-color: var(--black);
+        }
+
+        .atb-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--black);
+            color: white;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 50px;
+        }
+
+        /* Scent Profile Details */
+        .scent-row {
+            display: flex;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .note-title {
+            width: 100px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .note-content {
+            opacity: 0.7;
+            flex: 1;
+        }
+
+        .intensity-bar {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .intensity-fill {
+            height: 1px;
+            width: 75%;
+            background: var(--black);
+            position: absolute;
+        }
+
+        .intensity-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--black);
+            color: white;
+            padding: 100px 5% 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond';
+            font-size: 32px;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        .footer-bottom {
+            grid-column: span 4;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 10px;
+            opacity: 0.4;
+            text-transform: uppercase;
+        }
+
+        /* --- Mobile Logic --- */
+        @media (max-width: 1024px) {
+            .pdp-wrapper {
+                flex-direction: column;
+            }
+
+            .pdp-gallery-container {
+                width: 100%;
+                display: block;
+                padding: 0;
+                position: relative;
+            }
+
+            .gallery-main-sticky {
+                display: none;
+            }
+
+            .gallery-detail-stream {
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 0;
+                scrollbar-width: none;
+            }
+
+            .gallery-detail-stream::-webkit-scrollbar {
+                display: none;
+            }
+
+            .gallery-detail-stream img {
+                min-width: 100vw;
+                height: 70vh;
+                scroll-snap-align: start;
+                opacity: 1;
+                aspect-ratio: auto;
+            }
+
+            .pdp-info {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-left: none;
+                border-top: 1px solid var(--border);
+                padding: 50px 8%;
+            }
+
+            .nav-desktop {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            footer {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* --- Product Grid CSS --- */
+        .related-products {
+            padding: 100px 8%;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+        }
+
+        .related-products h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 40px 20px;
+        }
+
+        .p-card {
+            text-decoration: none;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .p-img {
+            position: relative;
+            aspect-ratio: 1/1.3;
+            background: #f8f8f8;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .p-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .p-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 10px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .p-badge.sale {
+            background: var(--accent);
+        }
+
+        .p-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            transform: translateY(100%);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .p-card:hover .p-actions {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .p-card:hover .p-img img {
+            transform: scale(1.05);
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--black);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .p-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            color: var(--black);
+            opacity: 0.9;
+        }
+
+        .p-price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .p-price-sale {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .p-price-regular {
+            font-size: 12px;
+            color: var(--black);
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .p-price {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <style>
+        /* --- Mobile Bottom Nav Styles --- */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            flex: 1;
+            gap: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            opacity: 0.7;
+        }
+
+        .nav-item span {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .nav-item.active svg,
+        .nav-item.active span {
+            opacity: 1;
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: var(--black);
+            color: white;
+            font-family: 'Inter';
+            font-size: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            body {
+                padding-bottom: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+        <div class="nav-desktop mono"><a href="#">Perfume</a> <a href="#">Leather</a></div>
+        <a href="index.html" class="logo">L'ESSENCE</a>
+        <div class="nav-desktop mono"><a href="#">Journal</a> <a href="#">Cart (0)</a></div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#">Perfumes</a><a href="#">Leather</a><a href="#">Gifts</a><a href="#">Journal</a>
+    </div>
+
+    <main class="pdp-wrapper">
+
+        <section class="pdp-gallery-container">
+            <div class="gallery-main-sticky" id="zoomContainer">
+                <img id="mainHeroImage" src="images/perfume-05.jpg" alt="Product">
+            </div>
+
+            <div class="gallery-detail-stream" id="mobileScroll">
+                <img class="active" src="images/perfume-05.jpg" onclick="updateHero(this)" alt="Detail 1">
+                <img src="images/perfume-06.jpg" onclick="updateHero(this)" alt="Detail 2">
+                <img src="images/perfume-01.jpg" onclick="updateHero(this)" alt="Detail 3">
+                <img src="images/perfume-02.jpg" onclick="updateHero(this)" alt="Detail 4">
+            </div>
+        </section>
+
+        <section class="pdp-info">
+            <span class="breadcrumb">Fragrance / Eau De Parfum</span>
+            <h1 class="p-title">Noir Essence 01</h1>
+            <p class="p-price">$165.00</p>
+
+            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 40px;">
+                A nocturnal exploration of Manhattan's hidden gardens. Noir Essence 01 blends the cold metallic notes of
+                the city with the warmth of aged sandalwood.
+            </p>
+
+            <div class="size-options">
+                <button class="size-btn active">50ML</button>
+                <button class="size-btn">100ML</button>
+            </div>
+
+            <button class="atb-btn">Add to Bag — $165</button>
+
+            <div class="scent-breakdown">
+                <div class="scent-row"><span class="note-title">Top</span><span class="note-content">Pink Pepper,
+                        Bergamot, Ozone</span></div>
+                <div class="scent-row"><span class="note-title">Heart</span><span class="note-content">Damask Rose,
+                        Smoked Tea</span></div>
+                <div class="scent-row"><span class="note-title">Base</span><span class="note-content">Sandalwood,
+                        Patchouli, Amber</span></div>
+
+                <div style="margin-top: 40px;">
+                    <span class="note-title">Scent Intensity</span>
+                    <div class="intensity-bar">
+                        <div class="intensity-fill"></div>
+                    </div>
+                    <div class="intensity-labels"><span>Subtle</span><span>Powerful</span></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="related-products">
+        <h2 class="serif">You May Also Like</h2>
+        <div class="product-grid">
+            <div class="p-card">
+                <a href="single-product.html" class="p-img">
+                    <span class="p-badge sale">Sale</span>
+                    <img src="images/perfume-09.jpg" alt="Oud Satin">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="single-product.html" class="p-title">Oud Satin</a>
+                <div class="p-price-container">
+                    <span class="p-price-sale">$180.00</span>
+                    <span class="p-price-regular">$210.00</span>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <a href="single-product.html" class="p-img">
+                    <span class="p-badge">New</span>
+                    <img src="images/perfume-12.jpg" alt="Leather Luxe">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="single-product.html" class="p-title">Leather Luxe</a>
+                <div class="p-price-container">
+                    <span class="p-price">$220.00</span>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <a href="single-product.html" class="p-img">
+                    <img src="images/perfume-10.jpg" alt="Bergamot Rain">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="single-product.html" class="p-title">Bergamot Rain</a>
+                <div class="p-price-container">
+                    <span class="p-price">$130.00</span>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <a href="single-product.html" class="p-img">
+                    <img src="images/perfume-11.jpg" alt="Santal Fire">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="single-product.html" class="p-title">Santal Fire</a>
+                <div class="p-price-container">
+                    <span class="p-price">$160.00</span>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <a href="single-product.html" class="p-img">
+                    <img src="images/perfume-06.jpg" alt="Midnight Oud">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="single-product.html" class="p-title">Midnight Oud</a>
+                <div class="p-price-container">
+                    <span class="p-price">$195.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">
+            <div class="footer-logo">L'ESSENCE</div>
+            <p style="opacity: 0.5; font-size: 13px;">New York studio.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+                <li>Perfume</li>
+                <li>Leather</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li>Shipping</li>
+                <li>Returns</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li>Privacy</li>
+                <li>Terms</li>
+            </ul>
+        </div>
+        <div class="footer-bottom"><span>© 2025 L'ESSENCE NYC</span><span>Manhattan | Grasse</span></div>
+    </footer>
+
+    <script>
+        // 1. ZOOM ON HOVER LOGIC
+        const zoomContainer = document.getElementById('zoomContainer');
+        const mainHeroImage = document.getElementById('mainHeroImage');
+
+        zoomContainer.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 1024) {
+                const { left, top, width, height } = zoomContainer.getBoundingClientRect();
+                const x = ((e.pageX - left) / width) * 100;
+                const y = ((e.pageY - top - window.scrollY) / height) * 100;
+
+                mainHeroImage.style.transformOrigin = `${x}% ${y}%`;
+                mainHeroImage.style.transform = "scale(2)";
+            }
+        });
+
+        zoomContainer.addEventListener('mouseleave', () => {
+            mainHeroImage.style.transform = "scale(1)";
+            mainHeroImage.style.transformOrigin = "center center";
+        });
+
+        // 2. HERO UPDATE LOGIC
+        function updateHero(thumbnail) {
+            const thumbnails = document.querySelectorAll('.gallery-detail-stream img');
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+
+            if (window.innerWidth > 1024) {
+                mainHeroImage.style.opacity = '0';
+                setTimeout(() => {
+                    mainHeroImage.src = thumbnail.src;
+                    mainHeroImage.style.opacity = '1';
+                }, 250);
+            }
+        }
+
+        // 3. NAV LOGIC
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('mobileMenu');
+        toggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+    </script>
+
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="shop.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Shop</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="cart-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <span class="cart-badge">0</span>
+            </div>
+            <span>Bag</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Account</span>
+        </a>
+    </div>
+</body>
+
+</html>

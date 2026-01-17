@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'ESSENCE NYC | Fragrance & Objects Atelier</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;600&family=Space+Mono&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --cream: #f9f7f2;
+            --accent: #b5a48b;
+            --border: rgba(0, 0, 0, 0.1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- 1. Responsive Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 6%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid transparent;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                linear-gradient(90deg, transparent, rgba(181, 164, 139, 0.2), transparent);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 18px 6%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 5px;
+            font-family: 'Cormorant Garamond';
+            z-index: 1002;
+            background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            letter-spacing: 6px;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-desktop a {
+            position: relative;
+            padding: 5px 0;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        .nav-desktop a:hover {
+            color: var(--accent);
+        }
+
+        /* Hamburger Animation */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 1002;
+            width: 25px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: black;
+            transition: var(--transition);
+        }
+
+        /* X Transformation */
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond';
+            font-size: 32px;
+            transition: 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        /* --- 2. Hero Section --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=2000') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            z-index: 10;
+            padding: 0 5%;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            margin: 20px 0;
+        }
+
+        .btn-luxe {
+            display: inline-block;
+            padding: 18px 45px;
+            border: 1px solid white;
+            color: white;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-luxe:hover {
+            background: white;
+            color: var(--black);
+        }
+
+        /* --- 3. Responsive Bento Categories --- */
+        .bento {
+            display: grid;
+            padding: 20px;
+            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 350px;
+        }
+
+        .bento-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .bento-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .bento-overlay {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bento-1 {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .bento-2 {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        /* --- 4. Product Spotlight --- */
+        .section-padding {
+            padding: 100px 8%;
+        }
+
+        /* --- 4. Product Spotlight --- */
+        .section-padding {
+            padding: 100px 8%;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 40px 20px;
+        }
+
+        .p-card {
+            text-decoration: none;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .p-img {
+            position: relative;
+            aspect-ratio: 1/1.3;
+            background: #f8f8f8;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .p-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        /* Badge Styling */
+        .p-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 10px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .p-badge.sale {
+            background: var(--accent);
+        }
+
+        /* Hover Actions Overlay */
+        .p-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            transform: translateY(100%);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .p-card:hover .p-actions {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .p-card:hover .p-img img {
+            transform: scale(1.05);
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--black);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .p-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            color: var(--black);
+            opacity: 0.9;
+        }
+
+        .p-price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .p-price-sale {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .p-price-regular {
+            font-size: 12px;
+            color: var(--black);
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .p-price {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        /* --- 5. Discovery & Atelier (Flex Sections) --- */
+        .split-section {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .split-section>div {
+            flex: 1;
+        }
+
+        .discovery {
+            background: var(--cream);
+        }
+
+        .atelier {
+            flex-direction: row-reverse;
+        }
+
+        .split-img img {
+            width: 100%;
+            max-height: 600px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .credit-tag {
+            display: inline-block;
+            padding: 15px 30px;
+            border: 1px solid var(--black);
+            margin-top: 25px;
+        }
+
+        /* --- 6. Journal Section --- */
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .journal-card img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .journal-card h3 {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            line-height: 1.2;
+        }
+
+        /* --- 7. Master Dark Footer --- */
+        /*  footer { background: var(--black); color: white; padding: 100px 5% 40px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 50px; }
+        .footer-logo { font-family: 'Cormorant Garamond'; font-size: 32px; letter-spacing: 5px; margin-bottom: 20px; }
+        .footer-col h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; color: var(--accent); }
+        .footer-col ul li { margin-bottom: 12px; font-size: 13px; opacity: 0.5; }
+        .footer-col ul li a:hover { opacity: 1; color: var(--white); }
+        .newsletter input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 10px 0; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .newsletter input:focus { border-bottom-color: var(--accent); }
+ */
+        /* --- RESPONSIVE FIXES --- */
+        @media (max-width: 1024px) {
+            .bento {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 300px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .split-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .split-section.atelier {
+                flex-direction: column;
+            }
+
+            footer {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .bento {
+                grid-template-columns: 1fr;
+                grid-auto-rows: 400px;
+                padding: 10px;
+            }
+
+            .bento-1,
+            .bento-2 {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .journal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .section-padding {
+                padding: 60px 5%;
+            }
+        }
+
+        /* --- Updated Footer Styles --- */
+        footer {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: white;
+            padding: 80px 5% 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(181, 164, 139, 0.3), transparent);
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond';
+            font-size: 36px;
+            letter-spacing: 6px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #b5a48b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-brand p {
+            opacity: 0.6;
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 280px;
+        }
+
+        .footer-col h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .footer-col ul li {
+            margin-bottom: 14px;
+            font-size: 13px;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            opacity: 1;
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        /* --- The New Copyright Bar --- */
+        .footer-bottom {
+            grid-column: span 4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .copyright-text {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal-links a {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+        }
+
+        .footer-legal-links a:hover {
+            opacity: 1;
+        }
+
+        .newsletter input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 18px;
+            width: 100%;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            font-size: 13px;
+            border-radius: 2px;
+        }
+
+        .newsletter input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .newsletter input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* --- Responsive Footer Logic --- */
+        @media (max-width: 1024px) {
+            footer {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-bottom {
+                grid-column: span 2;
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 60px;
+            }
+
+            .footer-bottom {
+                grid-column: span 1;
+            }
+
+            .footer-brand {
+                margin-bottom: 20px;
+            }
+
+            .footer-brand p {
+                margin: 0 auto;
+            }
+
+            .footer-legal-links {
+                justify-content: center;
+            }
+        }
+
+        /* --- 8. Exclusive Offers --- */
+        .offers {
+            background: var(--cream);
+            display: flex;
+            align-items: stretch;
+            min-height: 600px;
+        }
+
+        .offer-content {
+            flex: 1;
+            padding: 80px 8%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .offer-img {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offer-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .offers:hover .offer-img img {
+            transform: scale(1.03);
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            background: var(--white);
+            padding: 20px;
+        }
+
+        .offer-card {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .offer-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .offer-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            color: white;
+        }
+
+        /* --- 9. Shop Contact Details --- */
+        .shop-details {
+            padding: 120px 8%;
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .shop-details::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            transition: var(--transition);
+        }
+
+        .detail-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .detail-icon {
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 5px;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .detail-item:hover .detail-icon {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .detail-item h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .detail-item p,
+        .detail-item a {
+            font-size: 13px;
+            opacity: 0.6;
+            line-height: 2;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item a:hover {
+            color: var(--accent);
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .offers {
+                flex-direction: column;
+            }
+
+            .details-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <style>
+        /* --- Mobile Bottom Nav Styles --- */
+        .mobile-bottom-nav {
+            display: none;
+            /* Hidden on Desktop */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            /* Fix for iPhone Notch */
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            flex: 1;
+            gap: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            opacity: 0.7;
+        }
+
+        .nav-item span {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .nav-item.active svg,
+        .nav-item.active span {
+            opacity: 1;
+        }
+
+        /* Cart Badge in Bottom Nav */
+        .cart-icon-wrapper {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: var(--black);
+            color: white;
+            font-family: 'Inter';
+            font-size: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* --- Show only on Mobile --- */
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            /* Add padding to body so footer/content isn't hidden behind the bar */
+            body {
+                padding-bottom: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-desktop mono">
+            <a href="#">Perfume</a>
+            <a href="#">Leather</a>
+        </div>
+        <a href="#" class="logo">L'ESSENCE</a>
+        <div class="nav-desktop mono">
+            <a href="#">Journal</a>
+            <a href="#">Cart (0)</a>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#">Perfumes</a>
+        <a href="#">Leather Goods</a>
+        <a href="#">Gifts</a>
+        <a href="#">Journal</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p class="mono">Bottled in Manhattan</p>
+            <h1>Eau De Parfum</h1>
+            <a href="#" class="btn-luxe">Explore Collection</a>
+        </div>
+    </section>
+
+    <section class="bento">
+        <div class="bento-item bento-1">
+            <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1000" alt="Perfume">
+            <div class="bento-overlay">
+                <p class="mono">Signature</p>
+                <h2>The Fragrance Library</h2>
+            </div>
+        </div>
+        <div class="bento-item bento-2">
+            <img src="https://images.unsplash.com/photo-1547949003-9792a18a2601?q=80&w=1000" alt="Bags">
+            <div class="bento-overlay">
+                <h2>Leather Objects</h2>
+            </div>
+        </div>
+        <div class="bento-item">
+            <img src="https://images.unsplash.com/photo-1512909006721-3d6018887383?q=80&w=800" alt="Gifts">
+            <div class="bento-overlay">
+                <h2>Gift Edit</h2>
+            </div>
+        </div>
+        <div class="bento-item">
+            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800" alt="New">
+            <div class="bento-overlay">
+                <h2>New Arrivals</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;">
+            <h2 style="font-size: 2.5rem;">The Essentials</h2>
+            <a href="#" class="mono" style="border-bottom: 1px solid black; padding-bottom: 5px;">Shop All</a>
+        </div>
+        <div class="product-grid">
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <span class="p-badge sale">Sale</span>
+                    <img src="images/perfume-01.jpg" alt="Noir Essence">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Noir Essence 01</a>
+                <div class="p-price-container">
+                    <span class="p-price-sale">$135.00</span>
+                    <span class="p-price-regular">$165.00</span>
+                </div>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="images/perfume-02.jpg" alt="Velvet Rose">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Velvet Rose</a>
+                <p class="p-price">$185.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <span class="p-badge">New</span>
+                    <img src="images/perfume-03.jpg" alt="Vetiver Vert">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Vetiver Vert</a>
+                <p class="p-price">$145.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="images/perfume-04.jpg" alt="Discovery Set">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Discovery Set</a>
+                <p class="p-price">$45.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="https://images.unsplash.com/photo-1594035910387-fea477a4265f?q=80&w=800"
+                        alt="Rosewood Scent">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Rosewood Scent</a>
+                <p class="p-price">$155.00</p>
+            </div>
+            <!-- Second Row -->
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?q=80&w=800" alt="Amber Deep">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Amber Deep</a>
+                <p class="p-price">$195.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <span class="p-badge sale">Sale</span>
+                    <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?q=80&w=800" alt="Santal Royal">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Santal Royal</a>
+                <div class="p-price-container">
+                    <span class="p-price-sale">$160.00</span>
+                    <span class="p-price-regular">$210.00</span>
+                </div>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=800"
+                        alt="Bergamot Mist">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Bergamot Mist</a>
+                <p class="p-price">$120.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <span class="p-badge">New</span>
+                    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=800"
+                        alt="Midnight Oud">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Midnight Oud</a>
+                <p class="p-price">$240.00</p>
+            </div>
+            <div class="p-card">
+                <a href="#" class="p-img">
+                    <img src="https://images.unsplash.com/photo-1615108857234-8c17df376041?q=80&w=800"
+                        alt="Floral Garden">
+                    <div class="p-actions">
+                        <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                        <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                        <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                    </div>
+                </a>
+                <a href="#" class="p-title">Floral Garden</a>
+                <p class="p-price">$130.00</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="offers">
+        <div class="offer-content">
+            <p class="mono">Private Collection</p>
+            <h2 style="font-size: 3.5rem; margin: 20px 0;">Exclusive Offers</h2>
+            <p style="margin-bottom: 30px; opacity: 0.7; max-width: 450px;">Unlock access to our most sought-after
+                fragrances and limited edition leather objects. Tailored for those who appreciate the finer details of
+                Manhattan craftsmanship.</p>
+            <a href="#" class="btn-luxe"
+                style="color: var(--black); border-color: var(--black); align-self: flex-start;">View Member Access</a>
+        </div>
+        <div class="offer-img">
+            <img src="C:/Users/Tipusultan/.gemini/antigravity/brain/c3ff2123-5e91-45c4-9d01-db7ac1687eb4/exclusive_offer_1_1768296576219.png"
+                alt="Exclusive Offer">
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: var(--white);">
+        <div class="offers-grid">
+            <a href="#" class="offer-card">
+                <img src="C:/Users/Tipusultan/.gemini/antigravity/brain/c3ff2123-5e91-45c4-9d01-db7ac1687eb4/exclusive_offer_2_1768296594482.png"
+                    alt="Leather Offer">
+                <div class="offer-card-overlay">
+                    <p class="mono">Limited Edition</p>
+                    <h3 class="serif" style="font-size: 2rem;">The Artisan Tote</h3>
+                </div>
+            </a>
+            <a href="#" class="offer-card">
+                <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800"
+                    alt="Fragrance Offer">
+                <div class="offer-card-overlay">
+                    <p class="mono">Gift Set</p>
+                    <h3 class="serif" style="font-size: 2rem;">Discovery Voyage</h3>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="shop-details">
+        <div class="details-grid">
+            <div class="detail-item">
+                <i class="ri-map-pin-line detail-icon"></i>
+                <h4>Visit Us</h4>
+                <p>72 Greene Street<br>SoHo, New York, NY 10012</p>
+            </div>
+            <div class="detail-item">
+                <i class="ri-time-line detail-icon"></i>
+                <h4>Atelier Hours</h4>
+                <p>Mon - Sat: 11am — 7pm<br>Sun: 12pm — 6pm</p>
+            </div>
+            <div class="detail-item">
+                <i class="ri-mail-line detail-icon"></i>
+                <h4>Contact</h4>
+                <p><a href="mailto:concierge@lessence.com">concierge@lessence.com</a><br><a href="tel:+12125550198">+1
+                        (212) 555-0198</a></p>
+            </div>
+            <div class="detail-item">
+                <i class="ri-information-line detail-icon"></i>
+                <h4>Inquiry</h4>
+                <p><a href="#">Wholesale</a><br><a href="#">Press Relations</a></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="split-section discovery section-padding">
+        <div class="split-img">
+            <img src="https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?q=80&w=1000" alt="Scent Library">
+        </div>
+        <div class="discovery-content">
+            <p class="mono">Discovery</p>
+            <h2 style="font-size: 3rem; margin: 20px 0;">The Scent Library</h2>
+            <p style="opacity: 0.7; max-width: 450px;">Experience all five signature perfumes in 2ml glass vials. Find
+                your signature before committing to a full-sized bottle.</p>
+            <div class="credit-tag">
+                <p class="mono" style="margin-bottom: 5px; color: var(--accent);">Redeemable Credit</p>
+                <p class="serif" style="font-style: italic; font-size: 1.2rem;">Fully credited toward your first full
+                    bottle.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="split-section atelier section-padding">
+        <div class="split-img">
+            <img src="https://images.unsplash.com/photo-1565688534245-05d6b5be184a?q=80&w=1000" alt="Leather Atelier">
+        </div>
+        <div class="atelier-content">
+            <p class="mono">Our Atelier</p>
+            <h2 style="font-size: 3rem; margin: 20px 0;">The Art of the Objects</h2>
+            <p style="opacity: 0.7;">Every leather piece is hand-stitched in our Garment District studio. We combine
+                ancestral French techniques with a modern New York silhouette.</p>
+            <a href="#" class="mono" style="display: block; margin-top: 30px; text-decoration: underline;">Read our
+                story</a>
+        </div>
+    </section>
+
+    <section class="section-padding" style="border-top: 1px solid var(--border);">
+        <p class="mono" style="text-align: center;">The Journal</p>
+        <h2 style="font-size: 3rem; text-align: center; margin-bottom: 40px;">Stories & Scent</h2>
+        <div class="journal-grid">
+            <div class="journal-card">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=600" alt="Article 1">
+                <p class="mono" style="margin-top: 20px;">Culture</p>
+                <h3>The Architecture of Modern Perfumery</h3>
+            </div>
+            <div class="journal-card">
+                <img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?q=80&w=600" alt="Article 2">
+                <p class="mono" style="margin-top: 20px;">Process</p>
+                <h3>Inside our Garment District Studio</h3>
+            </div>
+            <div class="journal-card">
+                <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=600" alt="Article 3">
+                <p class="mono" style="margin-top: 20px;">Notes</p>
+                <h3>Winter Notes: Why we love Smoked Tea</h3>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-brand">
+            <div class="footer-logo">L'ESSENCE</div>
+            <p style="opacity: 0.5; font-size: 13px; max-width: 250px;">New York based studio dedicated to the art of
+                scent and objects.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a href="#">Fragrance</a></li>
+                <li><a href="#">Leather</a></li>
+                <li><a href="#">Gifts</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#">Shipping</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Newsletter</h4>
+            <div class="newsletter">
+                <input type="text" placeholder="Your email address">
+                <p style="font-size: 10px; opacity: 0.4; margin-top: 15px;">Join our inner circle for early access to
+                    limited editions.</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright-text">
+                © 2025 L'ESSENCE NYC. BOTTLED IN MANHATTAN.
+            </div>
+            <div class="footer-legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="collection.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Shop</span>
+        </a>
+        <a href="#" class="nav-item" id="mobileCartTrigger">
+            <div class="cart-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <span class="cart-badge">2</span>
+            </div>
+            <span>Bag</span>
+        </a>
+        <a href="account.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Account</span>
+        </a>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('mobileMenu');
+
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            menu.classList.toggle('active');
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Navigation Scroll Effect
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+    <script>
+        // Link the bottom bar 'Bag' button to trigger the Off-canvas Cart
+        document.getElementById('mobileCartTrigger').addEventListener('click', (e) => {
+            e.preventDefault();
+            // This calls the same function used in your header cart button
+            toggleCart();
+        });
+    </script>
+</body>
+
+</html>

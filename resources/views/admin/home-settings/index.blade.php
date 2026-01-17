@@ -1,0 +1,124 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Home Page Settings')
+@section('page_title', 'Home Page Settings')
+
+@section('content')
+<div class="space-y-10">
+    @if(session('success'))
+        <div class="bg-emerald-50 text-emerald-600 p-4 rounded-lg text-sm border border-emerald-100">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Hero Section -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white p-8 border border-black/5 rounded-2xl shadow-sm">
+                <h3 class="font-serif text-xl mb-6">Hero Section</h3>
+                <form action="{{ route('admin.home-settings.hero') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Main Title</label>
+                            <input type="text" name="title" value="{{ $hero->title ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Subtitle</label>
+                            <input type="text" name="subtitle" value="{{ $hero->subtitle ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Button Text</label>
+                            <input type="text" name="button_text" value="{{ $hero->button_text ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Button Link</label>
+                            <input type="text" name="button_link" value="{{ $hero->button_link ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-widest opacity-40">Background Image URL</label>
+                        <input type="text" name="image_path" value="{{ $hero->image_path ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all placeholder:opacity-30" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <button type="submit" class="bg-luxury-black text-white px-8 py-3 rounded-lg text-xs uppercase tracking-widest hover:opacity-90 transition-all">Save Hero Section</button>
+                </form>
+            </div>
+
+            <!-- Heritage Section -->
+            <div class="bg-white p-8 border border-black/5 rounded-2xl shadow-sm">
+                <h3 class="font-serif text-xl mb-6">Heritage Section</h3>
+                <form action="{{ route('admin.home-settings.heritage') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Section Title</label>
+                            <input type="text" name="title" value="{{ $heritage->title ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Badge/Subtitle</label>
+                            <input type="text" name="subtitle" value="{{ $heritage->subtitle ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-widest opacity-40">Content Text</label>
+                        <textarea name="content" rows="3" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">{{ $heritage->content ?? '' }}</textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Button Text</label>
+                            <input type="text" name="button_text" value="{{ $heritage->button_text ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] uppercase tracking-widest opacity-40">Button Link</label>
+                            <input type="text" name="button_link" value="{{ $heritage->button_link ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-widest opacity-40">Section Image URL</label>
+                        <input type="text" name="image_path" value="{{ $heritage->image_path ?? '' }}" class="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm focus:ring-1 focus:ring-luxury-accent focus:bg-white transition-all placeholder:opacity-30" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <button type="submit" class="bg-luxury-black text-white px-8 py-3 rounded-lg text-xs uppercase tracking-widest hover:opacity-90 transition-all">Save Heritage Section</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Curation Sidebar -->
+        <div class="space-y-6">
+            <div class="bg-white p-8 border border-black/5 rounded-2xl shadow-sm sticky top-28">
+                <h3 class="font-serif text-xl mb-6">Home Page Curation</h3>
+                <form action="{{ route('admin.home-settings.curation') }}" method="POST" class="space-y-8">
+                    @csrf
+                    
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] uppercase tracking-widest font-semibold border-b border-black/5 pb-2">Categories (Max 4)</h4>
+                        <div class="max-h-60 overflow-y-auto space-y-2 pr-2">
+                            @foreach($categories as $category)
+                            <label class="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-luxury-cream transition-colors group">
+                                <span class="text-xs">{{ $category->name }}</span>
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}" {{ $category->show_on_home ? 'checked' : '' }} class="rounded border-gray-300 text-luxury-accent focus:ring-luxury-accent">
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] uppercase tracking-widest font-semibold border-b border-black/5 pb-2">Featured Products</h4>
+                        <div class="max-h-60 overflow-y-auto space-y-2 pr-2">
+                            @foreach($products as $product)
+                            <label class="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-luxury-cream transition-colors group">
+                                <span class="text-xs truncate mr-4">{{ $product->name }}</span>
+                                <input type="checkbox" name="products[]" value="{{ $product->id }}" {{ $product->is_featured ? 'checked' : '' }} class="rounded border-gray-300 text-luxury-accent focus:ring-luxury-accent">
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-luxury-accent text-white px-8 py-4 rounded-lg text-xs uppercase tracking-widest hover:opacity-90 shadow-lg shadow-luxury-accent/20 transition-all">Apply Curation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

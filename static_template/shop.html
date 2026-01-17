@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Collection | L'ESSENCE NYC</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;600&family=Space+Mono&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #ffffff;
+            --cream: #f9f7f2;
+            --accent: #b5a48b;
+            --border: rgba(0, 0, 0, 0.1);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- 1. Responsive Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            font-family: 'Cormorant Garamond';
+            z-index: 1002;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 1002;
+            width: 25px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: black;
+            transition: var(--transition);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond';
+            font-size: 32px;
+        }
+
+        /* --- 2. Collection Header --- */
+        .collection-header {
+            padding: 140px 5% 40px;
+            text-align: center;
+            background: var(--cream);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .collection-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        .collection-header p {
+            font-size: 13px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- 3. Shop Layout --- */
+        .shop-container {
+            display: flex;
+            padding: 60px 5%;
+            gap: 60px;
+        }
+
+        /* Sidebar Filter (Desktop) */
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .filter-section {
+            margin-bottom: 40px;
+        }
+
+        .filter-section h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .filter-list li {
+            margin-bottom: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .filter-list li:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .filter-list input {
+            margin-right: 12px;
+            accent-color: var(--black);
+        }
+
+        /* Product Grid */
+        .product-grid-container {
+            flex-grow: 1;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 40px 20px;
+        }
+
+        .p-card {
+            text-decoration: none;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .p-img {
+            position: relative;
+            aspect-ratio: 1/1.3;
+            background: #f8f8f8;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .p-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        /* Badge Styling */
+        .p-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--black);
+            color: var(--white);
+            padding: 4px 10px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .p-badge.sale {
+            background: var(--accent);
+        }
+
+        /* Hover Actions Overlay */
+        .p-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+            transform: translateY(100%);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .p-card:hover .p-actions {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .p-card:hover .p-img img {
+            transform: scale(1.05);
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--black);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .p-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            color: var(--black);
+            opacity: 0.9;
+        }
+
+        .p-price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .p-price-sale {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .p-price-regular {
+            font-size: 12px;
+            color: var(--black);
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .p-price {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        /* --- 4. Mobile Filter Bar --- */
+        .mobile-filter-bar {
+            display: none;
+            position: sticky;
+            top: 75px;
+            background: white;
+            z-index: 90;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 5%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-trigger-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* --- 5. Modal & Offcanvas --- */
+        .offcanvas-filter {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 85%;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: var(--transition);
+            padding: 40px 5%;
+            overflow-y: auto;
+        }
+
+        .offcanvas-filter.active {
+            left: 0;
+        }
+
+        .offcanvas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .filter-overlay.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10;
+        }
+
+        .modal-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-right {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .modal-right h2 {
+            font-family: 'Cormorant Garamond';
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .add-to-cart {
+            background: var(--black);
+            color: white;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* --- 6. Footer --- */
+        footer {
+            background: var(--black);
+            color: white;
+            padding: 100px 5% 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            margin-top: 100px;
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond';
+            font-size: 32px;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col h4 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: var(--accent);
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+            font-size: 13px;
+            opacity: 0.5;
+        }
+
+        .footer-col ul li a:hover {
+            opacity: 1;
+            color: var(--white);
+        }
+
+        .newsletter input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 0;
+            width: 100%;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .newsletter input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .footer-bottom {
+            grid-column: span 4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .copyright-text,
+        .footer-legal-links a {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* --- RESPONSIVE FIXES --- */
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            footer {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-bottom {
+                grid-column: span 2;
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .modal-content {
+                grid-template-columns: 1fr;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .quick-view-btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-filter-bar {
+                display: flex;
+            }
+
+            .shop-container {
+                padding-top: 30px;
+            }
+
+            .nav-desktop {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            footer {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-bottom {
+                grid-column: span 1;
+            }
+
+            .footer-legal-links {
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <style>
+        /* --- Mobile Bottom Nav Styles --- */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            flex: 1;
+            gap: 5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+            opacity: 0.7;
+        }
+
+        .nav-item span {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        .nav-item.active svg,
+        .nav-item.active span {
+            opacity: 1;
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: var(--black);
+            color: white;
+            font-family: 'Inter';
+            font-size: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            body {
+                padding-bottom: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-desktop mono">
+            <a href="#">Perfume</a>
+            <a href="#">Leather</a>
+        </div>
+        <a href="index.html" class="logo">L'ESSENCE</a>
+        <div class="nav-desktop mono">
+            <a href="#">Journal</a>
+            <a href="#">Cart (0)</a>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#">Perfumes</a>
+        <a href="#">Leather Goods</a>
+        <a href="#">Gifts</a>
+        <a href="#">Journal</a>
+    </div>
+
+    <header class="collection-header">
+        <p class="mono">New York Atelier</p>
+        <h1>The Collection</h1>
+    </header>
+
+    <div class="mobile-filter-bar">
+        <div class="filter-trigger-btn" id="openFilter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16M7 12h10m-7 6h4" />
+            </svg>
+            Filter By
+        </div>
+        <div class="mono" style="font-size: 9px;">16 Products</div>
+    </div>
+
+    <div class="shop-container">
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h4>Categories</h4>
+                <ul class="filter-list">
+                    <li><input type="checkbox"> Perfumes</li>
+                    <li><input type="checkbox"> Leather Bags</li>
+                    <li><input type="checkbox"> Gift Sets</li>
+                    <li><input type="checkbox"> Discovery</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h4>Scent Profile</h4>
+                <ul class="filter-list">
+                    <li><input type="checkbox"> Woody & Smoky</li>
+                    <li><input type="checkbox"> Fresh Citrus</li>
+                    <li><input type="checkbox"> Floral</li>
+                    <li><input type="checkbox"> Amber</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h4>Material</h4>
+                <ul class="filter-list">
+                    <li><input type="checkbox"> Full-Grain Leather</li>
+                    <li><input type="checkbox"> Vachetta</li>
+                    <li><input type="checkbox"> Glass</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h4>Price</h4>
+                <ul class="filter-list">
+                    <li><input type="checkbox"> Under $100</li>
+                    <li><input type="checkbox"> $100 — $250</li>
+                    <li><input type="checkbox"> $250+</li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="product-grid-container">
+            <div class="product-grid">
+                <!-- Row 1 -->
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge sale">Sale</span>
+                        <img src="images/perfume-05.jpg" alt="Noir Essence">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Noir Essence 01</a>
+                    <div class="p-price-container">
+                        <span class="p-price-sale">$135.00</span>
+                        <span class="p-price-regular">$165.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge">New</span>
+                        <img src="images/perfume-06.jpg" alt="Midnight Oud">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Midnight Oud</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$195.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge">New</span>
+                        <img src="images/perfume-07.jpg" alt="Vetiver Vert">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Vetiver Vert</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$145.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-08.jpg" alt="Citrus Bloom">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Citrus Bloom</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$155.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-13.jpg" alt="Amber Luxe">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Amber Luxe</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$175.00</span>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge sale">Sale</span>
+                        <img src="images/perfume-14.jpg" alt="Rose Sauvage">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Rose Sauvage</a>
+                    <div class="p-price-container">
+                        <span class="p-price-sale">$155.00</span>
+                        <span class="p-price-regular">$185.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-15.jpg" alt="Cedar & Smoke">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Cedar & Smoke</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$170.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-16.jpg" alt="White Musk">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">White Musk</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$140.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge sale">Sale</span>
+                        <img src="images/perfume-09.jpg" alt="Oud Satin">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Oud Satin</a>
+                    <div class="p-price-container">
+                        <span class="p-price-sale">$180.00</span>
+                        <span class="p-price-regular">$210.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-10.jpg" alt="Bergamot Rain">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Bergamot Rain</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$130.00</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-11.jpg" alt="Santal Fire">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Santal Fire</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$160.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <span class="p-badge">New</span>
+                        <img src="images/perfume-12.jpg" alt="Leather Luxe">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Leather Luxe</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$220.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-17.jpg" alt="Jasmine Noir">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Jasmine Noir</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$180.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-18.jpg" alt="Bergamot Fresh">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Bergamot Fresh</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$135.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-19.jpg" alt="Sandalwood Dream">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Sandalwood Dream</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$190.00</span>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-20.jpg" alt="Lavender Mist">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Lavender Mist</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$150.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-21.jpg" alt="Patchouli Earth">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Patchouli Earth</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$160.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-22.jpg" alt="Vanilla Orchid">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Vanilla Orchid</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$165.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-23.jpg" alt="Tobacco & Leather">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Tobacco & Leather</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$200.00</span>
+                    </div>
+                </div>
+
+                <div class="p-card">
+                    <a href="single-product.html" class="p-img">
+                        <img src="images/perfume-24.jpg" alt="Ocean Breeze">
+                        <div class="p-actions">
+                            <button class="action-btn" title="Quick View"><i class="ri-eye-line"></i></button>
+                            <button class="action-btn" title="Add to Cart"><i class="ri-shopping-bag-line"></i></button>
+                            <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
+                        </div>
+                    </a>
+                    <a href="single-product.html" class="p-title">Ocean Breeze</a>
+                    <div class="p-price-container">
+                        <span class="p-price">$145.00</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <div class="modal-overlay" id="quickViewModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-left">
+                <img id="modalImg" src="" alt="">
+            </div>
+            <div class="modal-right">
+                <p id="modalBrand"
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5;">L'ESSENCE NYC
+                </p>
+                <h2 id="modalTitle">Product Name</h2>
+                <p id="modalPrice" style="font-weight: 600;">$0.00</p>
+                <p class="modal-description">
+                    A sophisticated blend of raw elements, bottled in the heart of Manhattan. This signature piece
+                    reflects our commitment to artisan craftsmanship and olfactory storytelling.
+                </p>
+                <button class="add-to-cart">Add to Cart</button>
+                <a href="#"
+                    style="display: block; text-align: center; margin-top: 20px; font-size: 11px; text-transform: uppercase; color: #999; text-decoration: none;">View
+                    Full Details</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-overlay" id="filterOverlay"></div>
+    <div class="offcanvas-filter" id="offcanvasFilter">
+        <div class="offcanvas-header">
+            <h2 class="serif" style="font-size: 1.5rem;">Filter By</h2>
+            <div id="closeFilter" style="cursor: pointer; font-size: 24px;">&times;</div>
+        </div>
+        <div class="filter-section">
+            <h4>Categories</h4>
+            <ul class="filter-list">
+                <li><input type="checkbox"> Perfumes</li>
+                <li><input type="checkbox"> Leather Bags</li>
+                <li><input type="checkbox"> Gift Sets</li>
+            </ul>
+        </div>
+        <div class="filter-section">
+            <h4>Scent Profile</h4>
+            <ul class="filter-list">
+                <li><input type="checkbox"> Woody</li>
+                <li><input type="checkbox"> Fresh</li>
+                <li><input type="checkbox"> Floral</li>
+            </ul>
+        </div>
+        <button
+            style="width: 100%; background: var(--black); color: white; border: none; padding: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; margin-top: 20px;">Apply
+            Filters</button>
+    </div>
+
+    <footer>
+        <div class="footer-brand">
+            <div class="footer-logo">L'ESSENCE</div>
+            <p style="opacity: 0.5; font-size: 13px; max-width: 250px;">New York based studio dedicated to the art of
+                scent and objects.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a href="#">Fragrance</a></li>
+                <li><a href="#">Leather</a></li>
+                <li><a href="#">Gifts</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#">Shipping</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Newsletter</h4>
+            <div class="newsletter">
+                <input type="text" placeholder="Your email address">
+                <p style="font-size: 10px; opacity: 0.4; margin-top: 15px;">Join our inner circle for early access to
+                    limited editions.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="copyright-text">© 2025 L'ESSENCE NYC. BOTTLED IN MANHATTAN.</div>
+            <div class="footer-legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Main Nav Logic
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('mobileMenu');
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            menu.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        // Filter Drawer Logic
+        const openFilter = document.getElementById('openFilter');
+        const closeFilter = document.getElementById('closeFilter');
+        const offcanvas = document.getElementById('offcanvasFilter');
+        const overlay = document.getElementById('filterOverlay');
+
+        openFilter.addEventListener('click', () => {
+            offcanvas.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        closeFilter.addEventListener('click', () => {
+            offcanvas.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            offcanvas.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Quick View Logic Fix
+        const cards = document.querySelectorAll('.p-card');
+        const modal = document.getElementById('quickViewModal');
+        const closeModal = document.getElementById('closeModal');
+
+        cards.forEach(card => {
+            const btn = card.querySelector('.quick-view-btn');
+            if (btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation(); // Prevents clicking the card link
+
+                    document.getElementById('modalTitle').innerText = card.dataset.name;
+                    document.getElementById('modalPrice').innerText = card.dataset.price;
+                    document.getElementById('modalImg').src = card.dataset.img;
+
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target == modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="shop.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>Shop</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="cart-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                <span class="cart-badge">0</span>
+            </div>
+            <span>Bag</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Account</span>
+        </a>
+    </div>
+</body>
+
+</html>
