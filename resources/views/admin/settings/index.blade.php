@@ -13,6 +13,7 @@
         <button @click="tab = 'navigation'" :class="{'border-luxury-black text-luxury-black font-semibold': tab === 'navigation'}" class="px-6 py-4 text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 border-b-2 border-transparent transition-all whitespace-nowrap">Navigation</button>
         <button @click="tab = 'footer'" :class="{'border-luxury-black text-luxury-black font-semibold': tab === 'footer'}" class="px-6 py-4 text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 border-b-2 border-transparent transition-all whitespace-nowrap">Footer</button>
         <button @click="tab = 'tax'" :class="{'border-luxury-black text-luxury-black font-semibold': tab === 'tax'}" class="px-6 py-4 text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 border-b-2 border-transparent transition-all whitespace-nowrap">Tax</button>
+        <button @click="tab = 'announcement'" :class="{'border-luxury-black text-luxury-black font-semibold': tab === 'announcement'}" class="px-6 py-4 text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100 border-b-2 border-transparent transition-all whitespace-nowrap">Announcement Bar</button>
     </div>
 
     @if(session('success'))
@@ -213,6 +214,51 @@
                     </label>
                 </div>
                 <button type="submit" class="py-4 px-8 bg-luxury-black text-white text-[11px] uppercase tracking-widest hover:bg-opacity-90 transition-all">Save Settings</button>
+            </form>
+        </div>
+
+        <!-- Announcement Tab -->
+        <div x-show="tab === 'announcement'" x-cloak>
+            <h3 class="font-serif text-xl mb-8 border-b border-black/5 pb-4">Announcement Bar Configuration</h3>
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-8">
+                @csrf
+                <input type="hidden" name="update_announcement_bar" value="1">
+                
+                <div class="flex items-center justify-between p-4 bg-gray-50 border border-black/5">
+                    <div>
+                        <h4 class="text-sm font-semibold mb-1">Show Announcement Bar</h4>
+                        <p class="text-[10px] opacity-60">Toggle the visibility of the top bar on the website.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="topbar_visible" value="1" class="sr-only peer" {{ \App\Models\Setting::get('topbar_visible', false) ? 'checked' : '' }}>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-luxury-black"></div>
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest mb-2 opacity-60">Background Color</label>
+                        <div class="flex items-center gap-4">
+                            <input type="color" name="topbar_bg" value="{{ $settings['topbar_bg'] ?? '#D4AF37' }}" class="w-12 h-12 border-none bg-transparent cursor-pointer">
+                            <input type="text" value="{{ $settings['topbar_bg'] ?? '#D4AF37' }}" class="flex-1 py-3 border-b border-black/10 focus:border-luxury-black outline-none bg-transparent text-sm font-mono" readonly>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest mb-2 opacity-60">Text Color</label>
+                        <div class="flex items-center gap-4">
+                            <input type="color" name="topbar_text_color" value="{{ $settings['topbar_text_color'] ?? '#000000' }}" class="w-12 h-12 border-none bg-transparent cursor-pointer">
+                            <input type="text" value="{{ $settings['topbar_text_color'] ?? '#000000' }}" class="flex-1 py-3 border-b border-black/10 focus:border-luxury-black outline-none bg-transparent text-sm font-mono" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-black/5">
+                     <a href="{{ route('admin.announcements.index') }}" class="text-[10px] uppercase tracking-widest text-luxury-accent hover:underline flex items-center gap-2">
+                         <i class="ri-edit-line"></i> Manage Announcements List
+                     </a>
+                </div>
+
+                <button type="submit" class="py-4 px-8 bg-luxury-black text-white text-[11px] uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-lg">Save Announcement Settings</button>
             </form>
         </div>
     </div>

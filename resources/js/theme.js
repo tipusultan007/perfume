@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     spaceBetween: 20,
                 },
                 1024: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 20,
                 },
                 1200: {
-                    slidesPerView: 5,
+                    slidesPerView: 4,
                     spaceBetween: 30,
                 }
             }
@@ -137,11 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     spaceBetween: 20,
                 },
                 1024: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 20,
                 },
                 1200: {
-                    slidesPerView: 5,
+                    slidesPerView: 4,
                     spaceBetween: 30,
                 }
             }
@@ -176,3 +176,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+// Global Helper Functions
+window.addToWishlist = function (productId) {
+    fetch('/wishlist/toggle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ product_id: productId })
+    })
+        .then(response => {
+            if (response.status === 401) {
+                toastr.error('Please login to add items to your wishlist');
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.status) {
+                // Find all buttons for this product
+                const buttons = document.querySelectorAll(`.wishlist-btn-${productId} i`);
+                buttons.forEach(icon => {
+                    if (data.status === 'added') {
+                        icon.classList.remove('fa-regular');
+                        icon.classList.add('fa-solid');
+                    } else {
+                        icon.classList.remove('fa-solid');
+                        icon.classList.add('fa-regular');
+                    }
+                });
+                // Update counter if exists
+                const wishlistCounts = document.querySelectorAll('.wishlist-count-display');
+                wishlistCounts.forEach(el => el.innerText = data.count);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+};
+

@@ -77,6 +77,14 @@ class SettingController extends Controller
             return back()->with('success', 'Tax settings updated');
         }
 
+        // Announcement Bar Settings
+        if ($request->has('update_announcement_bar')) {
+            Setting::set('topbar_visible', $request->has('topbar_visible') ? 1 : 0, 'announcement', 'boolean');
+            Setting::set('topbar_bg', $request->input('topbar_bg', '#D4AF37'), 'announcement');
+            Setting::set('topbar_text_color', $request->input('topbar_text_color', '#000000'), 'announcement');
+            return back()->with('success', 'Announcement bar settings updated.');
+        }
+
         return back();
     }
 }

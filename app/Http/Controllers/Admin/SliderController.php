@@ -40,10 +40,23 @@ class SliderController extends Controller
             'image' => 'required|image|max:2048',
             'display_order' => 'integer',
             'is_active' => 'boolean',
+            'bg_color' => 'nullable|string|max:20',
+            'accent_color' => 'nullable|string|max:20',
+            'title_color' => 'nullable|string|max:20',
+            'description_color' => 'nullable|string|max:20',
+            'price_color' => 'nullable|string|max:20',
+            'social_color' => 'nullable|string|max:20',
+            'nav_color' => 'nullable|string|max:20',
+            'line_color' => 'nullable|string|max:20',
+            'ui_theme' => 'nullable|string|in:light,dark',
+            'price' => 'nullable|string|max:255',
+            'top_notes' => 'nullable|string',
         ]);
 
         $slider = Slider::create($request->only([
-            'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active'
+            'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active',
+            'bg_color', 'accent_color', 'title_color', 'description_color', 'price_color', 'social_color',
+            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes'
         ]) + ['image_path' => 'placeholder']); // image_path is temporary since we use MediaLibrary
 
         if ($request->hasFile('image')) {
@@ -85,10 +98,23 @@ class SliderController extends Controller
             'image' => 'nullable|image|max:2048',
             'display_order' => 'integer',
             'is_active' => 'boolean',
+            'bg_color' => 'nullable|string|max:20',
+            'accent_color' => 'nullable|string|max:20',
+            'title_color' => 'nullable|string|max:20',
+            'description_color' => 'nullable|string|max:20',
+            'price_color' => 'nullable|string|max:20',
+            'social_color' => 'nullable|string|max:20',
+            'nav_color' => 'nullable|string|max:20',
+            'line_color' => 'nullable|string|max:20',
+            'ui_theme' => 'nullable|string|in:light,dark',
+            'price' => 'nullable|string|max:255',
+            'top_notes' => 'nullable|string',
         ]);
 
         $slider->update($request->only([
-            'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active'
+            'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active',
+            'bg_color', 'accent_color', 'title_color', 'description_color', 'price_color', 'social_color',
+            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes'
         ]));
 
         if ($request->hasFile('image')) {

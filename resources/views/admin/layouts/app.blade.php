@@ -71,6 +71,9 @@
             <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.settings.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
                 <i class="ri-settings-4-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Global Settings
             </a>
+            <a href="{{ route('admin.announcements.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.announcements.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-notification-badge-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Announcements
+            </a>
         </nav>
 
     </aside>

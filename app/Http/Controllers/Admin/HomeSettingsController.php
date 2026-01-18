@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HomeSection;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class HomeSettingsController extends Controller
@@ -16,8 +17,9 @@ class HomeSettingsController extends Controller
         $heritage = HomeSection::where('key', 'heritage')->first();
         $categories = Category::orderBy('name')->get();
         $products = Product::orderBy('name')->get();
+        $heroStyle = Setting::where('key', 'home_hero_style')->value('value') ?? 'default';
 
-        return view('admin.home-settings.index', compact('hero', 'heritage', 'categories', 'products'));
+        return view('admin.home-settings.index', compact('hero', 'heritage', 'categories', 'products', 'heroStyle'));
     }
 
     public function updateHero(Request $request)
@@ -28,12 +30,20 @@ class HomeSettingsController extends Controller
             'button_text' => 'nullable|string|max:255',
             'button_link' => 'nullable|string|max:255',
             'image_path' => 'nullable|string|max:1000',
+            'hero_style' => 'nullable|in:default,modern',
         ]);
 
         HomeSection::updateOrCreate(
             ['key' => 'hero'],
             $request->only(['title', 'subtitle', 'button_text', 'button_link', 'image_path'])
         );
+
+        if ($request->has('hero_style')) {
+            Setting::updateOrCreate(
+                ['key' => 'home_hero_style'],
+                ['value' => $request->hero_style, 'group' => 'home', 'type' => 'string']
+            );
+        }
 
         return back()->with('success', 'Hero section updated successfully.');
     }

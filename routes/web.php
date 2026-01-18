@@ -13,6 +13,7 @@ Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name
 Route::get('/product/{product:slug}/quick-view', [App\Http\Controllers\ShopController::class, 'quickView'])->name('shop.quickView');
 Route::get('/product/{product:slug}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product.show');
 Route::post('/product/{product:slug}/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.product.review');
+Route::get('/design-demo', [App\Http\Controllers\DesignController::class, 'index'])->name('design.demo');
 
 // Cart Routes
 Route::group(['prefix' => 'cart'], function () {
@@ -49,7 +50,20 @@ Route::middleware('auth')->prefix('account')->name('account.')->group(function (
     Route::get('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'editAddress'])->name('addresses.edit');
     Route::post('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'updateAddress']);
     Route::get('/details', [\App\Http\Controllers\AccountController::class, 'editDetails'])->name('details');
+    Route::get('/orders/{order}', [\App\Http\Controllers\AccountController::class, 'orderShow'])->name('orders.show');
+    Route::get('/addresses', [\App\Http\Controllers\AccountController::class, 'addresses'])->name('addresses');
+    Route::get('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'editAddress'])->name('addresses.edit');
+    Route::post('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'updateAddress']);
+    Route::get('/details', [\App\Http\Controllers\AccountController::class, 'editDetails'])->name('details');
     Route::post('/details', [\App\Http\Controllers\AccountController::class, 'updateDetails']);
+
+    // Wishlist Routes - REmoved from here
+});
+
+// Wishlist Routes (Separate from Account prefix)
+Route::middleware('auth')->group(function () {
+    Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/toggle', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
 
 // Admin Routes
@@ -70,6 +84,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('attributes', AttributeController::class);
         Route::resource('products', ProductController::class);
         Route::resource('sliders', SliderController::class);
+        Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
 
         // Home Page Settings

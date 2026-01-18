@@ -25,30 +25,33 @@
 @section('content')
 
     <!-- Hero Section (Animated Slider) -->
-    <section class="hero-section">
-        <div class="swiper hero-swiper">
-            <div class="swiper-wrapper">
-                @foreach($sliders as $slider)
-                <div class="swiper-slide hero-slide" style="background-image: url('{{ $slider->image_path }}');">
-                    <div class="container ">
-                        <div class="hero-content">
-                            <h4 class="hero-subtitle">{{ $slider->subtitle }}</h4>
-                            <h1 class="hero-title">{!! nl2br(e($slider->title)) !!}</h1>
-                            <p class="hero-desc">{{ $slider->description }}</p>
-                            @if($slider->button_text)
-                            <a href="{{ $slider->button_link ?? '#' }}" class="btn-shop">{{ $slider->button_text }}</a>
-                            @endif
+    @if(isset($heroStyle) && $heroStyle === 'modern')
+        @include('partials.hero-modern')
+    @else
+        <section class="hero-section">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper">
+                    @foreach($sliders as $slider)
+                        <div class="swiper-slide hero-slide" style="background-image: url('{{ asset('storage/' . $slider->image_path) }}');">
+                            <div class="container hero-content">
+                                <span class="hero-subtitle">{{ $slider->subtitle }}</span>
+                                <h1 class="hero-title">{{ $slider->title }}</h1>
+                                <p class="hero-description">{{ $slider->description }}</p>
+                                @if($slider->button_text)
+                                    <a href="{{ $slider->button_link }}" class="btn-hero">{{ $slider->button_text }}</a>
+                                @endif
+                            </div>
+                            <div class="hero-overlay"></div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-                @endforeach
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
             </div>
-            <!-- Navigation -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     <!-- Category Section -->
     <section class="category-section section-padding">
@@ -166,34 +169,8 @@
             <div class="swiper product-slider">
                 <div class="swiper-wrapper">
                     @forelse($recentProducts as $product)
-                    <div class="swiper-slide product-card">
-                        <div class="product-thumb">
-                            @if($product->base_price > 100)
-                            <span class="badge sale">NEW</span>
-                            @endif
-                            <a href="{{ route('shop.product.show', $product->slug) }}">
-                                <img src="{{ $product->getFirstMediaUrl('featured') ?: 'https://placehold.co/400x400/F5F1EE/885a39?text=' . urlencode($product->name) }}"
-                                    alt="{{ $product->name }}" class="main-img">
-                            </a>
-                            <div class="product-actions">
-                                <button class="action-btn" onclick="addToWishlist({{ $product->id }})"><i class="fa-regular fa-heart"></i></button>
-                                <button class="action-btn" onclick="openQuickView('{{ $product->slug }}')"><i class="fa-regular fa-eye"></i></button>
-                            </div>
-                        </div>
-                        <div class="product-info text-center">
-                            <h3 class="product-title font-serif"><a href="{{ route('shop.product.show', $product->slug) }}">{{ $product->name }}</a></h3>
-                            <div class="product-rating">
-                                @for($i=0; $i<5; $i++)
-                                <i class="fa-solid fa-star text-xs"></i>
-                                @endfor
-                            </div>
-                            <div class="product-price">
-                                <span class="price font-mono">${{ number_format($product->base_price, 2) }}</span>
-                            </div>
-                            <div class="product-action-btn mt-4">
-                                <button class="btn-add-cart w-full" onclick="quickAdd({{ $product->id }})">Add To Cart</button>
-                            </div>
-                        </div>
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="$product->base_price > 100 ? 'NEW' : null" />
                     </div>
                     @empty
                     <div class="swiper-slide text-center py-20">
@@ -230,34 +207,8 @@
             <div class="swiper featured-slider">
                 <div class="swiper-wrapper">
                     @forelse($bestSellers as $product)
-                    <div class="swiper-slide product-card">
-                        <div class="product-thumb">
-                            @if($product->is_featured)
-                            <span class="badge sale">BEST</span>
-                            @endif
-                            <a href="{{ route('shop.product.show', $product->slug) }}">
-                                <img src="{{ $product->getFirstMediaUrl('featured') ?: 'https://placehold.co/400x400/F5F1EE/885a39?text=' . urlencode($product->name) }}"
-                                    alt="{{ $product->name }}" class="main-img">
-                            </a>
-                            <div class="product-actions">
-                                <button class="action-btn" onclick="addToWishlist({{ $product->id }})"><i class="fa-regular fa-heart"></i></button>
-                                <button class="action-btn" onclick="openQuickView('{{ $product->slug }}')"><i class="fa-regular fa-eye"></i></button>
-                            </div>
-                        </div>
-                        <div class="product-info text-center">
-                            <h3 class="product-title font-serif"><a href="{{ route('shop.product.show', $product->slug) }}">{{ $product->name }}</a></h3>
-                            <div class="product-rating">
-                                @for($i=0; $i<5; $i++)
-                                <i class="fa-solid fa-star text-xs"></i>
-                                @endfor
-                            </div>
-                            <div class="product-price">
-                                <span class="price font-mono">${{ number_format($product->base_price, 2) }}</span>
-                            </div>
-                            <div class="product-action-btn mt-4">
-                                <button class="btn-add-cart w-full" onclick="quickAdd({{ $product->id }})">Add To Cart</button>
-                            </div>
-                        </div>
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="$product->is_featured ? 'BEST' : null" />
                     </div>
                     @empty
                     <div class="swiper-slide text-center py-20">

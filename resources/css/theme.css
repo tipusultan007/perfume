@@ -23,8 +23,6 @@
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
@@ -401,23 +399,31 @@ img {
     padding: 10px 0 50px;
 }
 
+/* Product Card - Sliding Content Style */
 .product-card {
-    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
 }
 
 .product-thumb {
     position: relative;
     background: #ebebeb;
     overflow: hidden;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    margin-bottom: 70px;
+    min-height: 352px;
+}
+
+.product-thumb a {
+    height: 100%;
 }
 
 .product-thumb img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
+    /* Allow height to adjust */
+    object-fit: cover;
     transition: transform 0.5s ease;
 }
 
@@ -432,26 +438,126 @@ img {
     background: #885a39;
     color: #fff;
     padding: 4px 10px;
-    font-size: 13px;
-    font-weight: 700;
-    z-index: 2;
+    font-size: 12px;
+    /* 12px requested */
+    font-weight: 400;
+    /* Regular requested */
+    z-index: 20;
+    /* High z-index to overlay image */
     border-radius: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Product Actions (Hover) */
-/* Product Actions (Hover - Vertical) */
+/* Updated Colors for Product Info */
+.product-title a {
+    color: #000;
+    text-decoration: none;
+    transition: 0.3s;
+    font-family: 'DM Sans', sans-serif;
+    /* DM Sans */
+    font-weight: 400;
+    /* Regular */
+    font-size: 16px;
+}
+
+.product-title a:hover {
+    color: #D4AF37;
+}
+
+.product-rating i {
+    color: #FFD700;
+    /* Gold/Yellow for stars */
+}
+
+.product-price .price {
+    font-family: 'DM Sans', sans-serif;
+    /* Changed to DM Sans */
+    font-weight: 600;
+    color: #885a39;
+    /* Brown brand color */
+    font-size: 16px;
+}
+
+/* Info container positioned at bottom, normally hiding the button */
+.product-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 15px 15px 15px 15px;
+    z-index: 10;
+    transform: translateY(45px);
+    /* Hide button initially */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    height: auto;
+}
+
+.product-card:hover .product-info {
+    transform: translateY(0);
+    /* Slide up to reveal button */
+}
+
+/* Button Styling */
+.product-action-btn {
+    overflow: hidden;
+    height: 45px;
+    margin-top: 10px;
+    position: relative;
+    /* Changed from absolute to relative */
+    width: 100%;
+}
+
+.btn-add-cart {
+    width: 100%;
+    height: 100%;
+    background: #D4AF37;
+    /* Golden */
+    color: #fff;
+    border: none;
+    padding: 0;
+    font-family: 'Crimson Text', serif;
+    /* Changed to Crimson Text */
+    font-size: 15px;
+    /* Slightly larger for serif */
+    font-weight: 400;
+    /* Regular requested */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    /* Default hidden */
+}
+
+.product-card:hover .btn-add-cart {
+    opacity: 1;
+    /* Show on hover */
+}
+
+.btn-add-cart:hover {
+    background: #000;
+}
+
+/* Ensure actions (icons) stay top-right */
 .product-actions {
     position: absolute;
     top: 15px;
     right: 15px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     opacity: 0;
     visibility: hidden;
     transform: translateX(20px);
     transition: all 0.3s ease;
-    z-index: 5;
+    z-index: 20;
+    /* Above info if overlaps */
 }
 
 .product-card:hover .product-actions {
@@ -472,142 +578,13 @@ img {
     color: #000;
     transition: all 0.3s ease;
     border-radius: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Added box shadow */
 }
 
 .action-btn:hover {
-    background: #885a39;
-    color: #fff;
-}
-
-/* Countdown */
-.countdown {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 10px 0;
-    z-index: 2;
-}
-
-.time-item {
-    text-align: center;
-    color: #e65540;
-}
-
-.time-item .val {
-    display: block;
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.time-item .label {
-    display: block;
-    font-size: 9px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-
-/* Product Info */
-.product-info {
-    padding: 20px 0 0;
-    text-align: left;
-    /* Left align text if it matches reference */
-}
-
-/* Stars */
-.product-rating {
-    color: #ffab00;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.product-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 18px;
-    margin-bottom: 8px;
-    line-height: 1.4;
-}
-
-.product-title a {
-    color: #000;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.product-title a:hover {
-    color: #885a39;
-}
-
-.product-price {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    color: #885a39;
-    font-weight: 500;
-}
-
-.product-price .old-price {
-    text-decoration: line-through;
-    color: #999;
-    margin-right: 8px;
-}
-
-/* Add to Cart Button (Bottom Bar) */
-.product-action-btn {
-    overflow: hidden;
-    margin-top: 15px;
-}
-
-.btn-add-cart {
-    width: 100%;
-    background: #885a39;
-    color: #fff;
-    border: none;
-    padding: 10px 0;
-    font-family: 'Crimson Text', serif;
-    font-size: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: capitalize;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(100%);
-}
-
-.product-card:hover .btn-add-cart {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.btn-add-cart:hover {
-    background: #000;
-}
-
-/* Swiper Navigation Customization */
-.product-slider .swiper-button-next,
-.product-slider .swiper-button-prev {
-    width: 40px;
-    height: 40px;
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    color: #000;
-    transition: all 0.3s;
-}
-
-.product-slider .swiper-button-next:after,
-.product-slider .swiper-button-prev:after {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.product-slider .swiper-button-next:hover,
-.product-slider .swiper-button-prev:hover {
-    background: #885a39;
-    border-color: #885a39;
+    background: #D4AF37;
+    /* Golden */
     color: #fff;
 }
 

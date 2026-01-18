@@ -19,6 +19,17 @@ class Slider extends Model implements HasMedia
         'image_path',
         'display_order',
         'is_active',
+        'bg_color',
+        'accent_color',
+        'title_color',
+        'description_color',
+        'price_color',
+        'social_color',
+        'nav_color',
+        'line_color',
+        'ui_theme',
+        'price',
+        'top_notes',
     ];
 
     protected $casts = [

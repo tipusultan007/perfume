@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', "L'ESSENCE NYC | Fragrance & Objects Atelier")</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
@@ -181,7 +182,6 @@
 
 
         /* Reset & Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; font-size: 16px; }
         h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; font-weight: 300; }
         .mono { font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 400; }
@@ -189,7 +189,7 @@
         ul { list-style: none; }
 
         /* Navigation */
-        nav { position: fixed; top: 0; width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 25px 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.3s ease; }
+        nav { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 25px 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; }
         nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
         .logo { font-size: 26px; font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
@@ -500,10 +500,20 @@
         }
     </style>
     @yield('styles')
+    @stack('styles')
 </head>
-<body>
-
+<body class="bg-white">
+    @include('partials.topbar')
+    @include('partials.topbar')
     <nav id="navbar">
+        @php
+            $cartCount = 0;
+            if(auth()->check()) {
+                $cartCount = \App\Models\CartItem::where('user_id', auth()->id())->count();
+            } else {
+                $cartCount = count(session('cart', []));
+            }
+        @endphp
         <div class="logo">{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}</div>
         
         <!-- Desktop Menu -->
@@ -541,10 +551,16 @@
 
         <div class="nav-actions flex gap-6 items-center">
             <a href="#" class="text-sm"><i class="ri-search-line"></i></a>
+            <a href="{{ Auth::check() ? route('wishlist.index') : route('login') }}" class="text-sm relative">
+                <i class="ri-heart-line"></i>
+                @auth
+                <span class="wishlist-count-display absolute -top-1 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{{ auth()->user()->wishlists()->count() }}</span>
+                @endauth
+            </a>
             <a href="{{ Auth::check() ? route('account.index') : route('login') }}" class="text-sm"><i class="ri-user-line"></i></a>
             <button class="hover:text-gray-500 transition-colors relative" onclick="toggleCart()">
                 <i class="ri-shopping-bag-line text-lg"></i>
-                <span class="cart-count-badge absolute -top-1 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{{ count(session('cart', [])) }}</span>
+                <span class="cart-count-badge absolute -top-1 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{{ $cartCount }}</span>
             </button>
             <div class="menu-toggle" onclick="toggleMenu()">
                 <span></span>
@@ -656,6 +672,17 @@
             </svg>
             <span>Shop</span>
         </a>
+        <a href="{{ route('wishlist.index') }}" class="nav-item {{ request()->routeIs('wishlist.index') ? 'active' : '' }}">
+            <div class="cart-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                @auth
+                <span class="cart-badge wishlist-count-display">{{ auth()->user()->wishlists()->count() }}</span>
+                @endauth
+            </div>
+            <span>Wishlist</span>
+        </a>
         <a href="#" class="nav-item" id="mobileCartTrigger">
             <div class="cart-icon-wrapper">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -663,7 +690,7 @@
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <path d="M16 10a4 4 0 0 1-8 0" />
                 </svg>
-                <span class="cart-badge">0</span>
+                <span class="cart-badge cart-count-badge">{{ $cartCount }}</span>
             </div>
             <span>Bag</span>
         </a>
@@ -986,5 +1013,6 @@
         }
     </script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 </html>

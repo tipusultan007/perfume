@@ -18,6 +18,22 @@
                 <h3 class="font-serif text-xl mb-6">Hero Section</h3>
                 <form action="{{ route('admin.home-settings.hero') }}" method="POST" class="space-y-4">
                     @csrf
+                    
+                    <!-- Style Selector -->
+                    <div class="space-y-2 pb-4 border-b border-gray-100">
+                         <label class="text-[10px] uppercase tracking-widest opacity-40">Slider Design</label>
+                         <div class="flex space-x-4">
+                             <label class="flex items-center space-x-2 cursor-pointer">
+                                 <input type="radio" name="hero_style" value="default" {{ ($heroStyle ?? 'default') == 'default' ? 'checked' : '' }} class="text-luxury-accent focus:ring-luxury-accent">
+                                 <span class="text-sm">Default Slider</span>
+                             </label>
+                             <label class="flex items-center space-x-2 cursor-pointer">
+                                 <input type="radio" name="hero_style" value="modern" {{ ($heroStyle ?? 'default') == 'modern' ? 'checked' : '' }} class="text-luxury-accent focus:ring-luxury-accent">
+                                 <span class="text-sm font-semibold text-luxury-accent">Modern 3D Concept (New)</span>
+                             </label>
+                         </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-[10px] uppercase tracking-widest opacity-40">Main Title</label>

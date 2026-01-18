@@ -66,6 +66,58 @@
             </div>
         </div>
 
+        <div class="space-y-4 pt-6 border-t border-black/5">
+            <h4 class="text-[11px] uppercase tracking-widest text-black/40 font-bold mb-4">Styling & Dynamic Content</h4>
+            
+            <div class="grid grid-cols-3 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Background Color</label>
+                    <input type="color" name="bg_color" value="{{ old('bg_color', '#FDFCF8') }}" class="w-full h-10 border border-black/10 focus:outline-none transition-colors">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">UI Theme (Icons/Nav)</label>
+                    <select name="ui_theme" class="w-full border-b border-black/10 py-3 focus:outline-none focus:border-luxury-accent transition-colors text-sm bg-transparent">
+                        <option value="dark" {{ old('ui_theme') == 'dark' ? 'selected' : '' }}>Dark (for light bg)</option>
+                        <option value="light" {{ old('ui_theme') == 'light' ? 'selected' : '' }}>Light (for dark bg)</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Accent Color</label>
+                    <input type="color" name="accent_color" value="{{ old('accent_color', '#D4AF37') }}" class="w-full h-10 border border-black/10 focus:outline-none transition-colors">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Social Color</label>
+                    <input type="color" name="social_color" value="{{ old('social_color', '#111827') }}" class="w-full h-8 border border-black/10">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Nav Button Color</label>
+                    <input type="color" name="nav_color" value="{{ old('nav_color', '#111827') }}" class="w-full h-8 border border-black/10">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Line/Counter Color</label>
+                    <input type="color" name="line_color" value="{{ old('line_color', '#111827') }}" class="w-full h-8 border border-black/10">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Content Color</label>
+                    <input type="color" name="title_color" value="{{ old('title_color', '#111827') }}" class="w-full h-8 border border-black/10">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 pt-4">
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Price (e.g. $145)</label>
+                    <input type="text" name="price" value="{{ old('price') }}" class="w-full border-b border-black/10 py-3 focus:outline-none focus:border-luxury-accent transition-colors text-sm" placeholder="$145">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Top Notes (e.g. Mint & Ozone)</label>
+                    <input type="text" name="top_notes" value="{{ old('top_notes') }}" class="w-full border-b border-black/10 py-3 focus:outline-none focus:border-luxury-accent transition-colors text-sm" placeholder="Top Notes...">
+                </div>
+            </div>
+        </div>
+
         <div class="space-y-4">
             <label class="text-[11px] uppercase tracking-widest text-black/40 font-medium">Slider Image</label>
             <div class="border-2 border-dashed border-black/5 p-10 text-center relative hover:border-luxury-accent/50 transition-colors">
