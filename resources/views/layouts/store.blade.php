@@ -7,6 +7,7 @@
     <title>@yield('title', "L'ESSENCE NYC | Fragrance & Objects Atelier")</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@200;300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- Toastr -->
@@ -17,12 +18,12 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         :root {
-            --black: #0a0a0a;
+            --black: #0A0A0A;
             --white: #ffffff;
-            --cream: #f9f7f2;
-            --accent: #b5a48b;
-            --border: rgba(0, 0, 0, 0.1);
-            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --cream: #fbf9f4;
+            --accent: #D4AF37;
+            --border: rgba(0, 0, 0, 0.08);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* ... keys ... */
@@ -189,7 +190,7 @@
         ul { list-style: none; }
 
         /* Navigation */
-        nav { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 25px 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; }
+        #navbar { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 25px 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; }
         nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
         .logo { font-size: 26px; font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
@@ -495,7 +496,7 @@
                 font-weight: 600;
             }
 
-            .mobile-bottom-nav { display: flex; }
+            .mobile-bottom-nav { display: flex; padding-top: 10px;}
             body { padding-bottom: 70px; }
         }
     </style>
@@ -504,12 +505,11 @@
 </head>
 <body class="bg-white">
     @include('partials.topbar')
-    @include('partials.topbar')
     <nav id="navbar">
         @php
             $cartCount = 0;
             if(auth()->check()) {
-                $cartCount = \App\Models\CartItem::where('user_id', auth()->id())->count();
+                $cartCount = \App\Models\CartItem::where('user_id', '=', auth()->id())->count();
             } else {
                 $cartCount = count(session('cart', []));
             }

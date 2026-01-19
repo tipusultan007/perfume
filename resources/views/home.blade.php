@@ -1,7 +1,6 @@
 @extends('layouts.store')
 
 @section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/frontend.css'])
     <style>
         /* Scoped adjustments to prevent homepage-v4 styles from breaking layouts.store navbar/footer */

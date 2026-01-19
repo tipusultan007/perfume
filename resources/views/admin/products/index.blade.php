@@ -12,10 +12,59 @@
 </div>
 
 @if(session('success'))
-    <div class="bg-emerald-50 text-emerald-700 p-4 mb-8 text-xs uppercase tracking-widest border border-emerald-100">
-        {{ session('success') }}
+    <div class="bg-emerald-50 text-emerald-700 p-4 mb-8 text-xs uppercase tracking-widest border border-emerald-100 flex justify-between items-center">
+        <span>{{ session('success') }}</span>
+        <button onclick="this.parentElement.remove()" class="text-emerald-400 hover:text-emerald-600">
+            <i class="ri-close-line"></i>
+        </button>
     </div>
 @endif
+
+<!-- Filters -->
+<div class="bg-white p-8 mb-10 shadow-sm border border-black/[0.03]">
+    <form action="{{ route('admin.products.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Search</label>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Name or SKU..." 
+                class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Category</label>
+            <select name="category_id" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+                <option value="">All Categories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Brand</label>
+            <select name="brand_id" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+                <option value="">All Brands</option>
+                @foreach($brands as $brand)
+                    <option value="{{ $brand->id }}" {{ request('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Type</label>
+            <select name="product_type" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+                <option value="">All Types</option>
+                <option value="simple" {{ request('product_type') == 'simple' ? 'selected' : '' }}>Simple</option>
+                <option value="variable" {{ request('product_type') == 'variable' ? 'selected' : '' }}>Variable</option>
+                <option value="bundle" {{ request('product_type') == 'bundle' ? 'selected' : '' }}>Bundle</option>
+            </select>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="flex-1 px-4 py-3 bg-luxury-accent text-white text-[11px] uppercase tracking-[0.2em] hover:bg-opacity-90 transition-all">
+                Filter
+            </button>
+            <a href="{{ route('admin.products.index') }}" class="px-4 py-3 bg-gray-100 text-black/60 text-[11px] uppercase tracking-[0.2em] hover:bg-gray-200 transition-all text-center">
+                Reset
+            </a>
+        </div>
+    </form>
+</div>
 
 <div class="bg-white p-10 shadow-sm border border-black/[0.03]">
 
@@ -57,13 +106,13 @@
                             <a href="{{ route('admin.products.edit', $product) }}" class="text-luxury-accent hover:text-luxury-black transition-colors">
                                 <i class="ri-edit-line text-lg"></i>
                             </a>
-                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                            <form id="delete-form-{{ $product->id }}" action="{{ route('admin.products.destroy', $product) }}" method="POST" class="hidden">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-400 hover:text-red-600 transition-colors">
-                                    <i class="ri-delete-bin-line text-lg"></i>
-                                </button>
                             </form>
+                            <button type="button" onclick="confirmDelete('{{ $product->id }}', '{{ addslashes($product->name) }}')" class="text-red-400 hover:text-red-600 transition-colors">
+                                <i class="ri-delete-bin-line text-lg"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -80,4 +129,30 @@
         {{ $products->links() }}
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'Delete Product?',
+            text: `Are you sure you want to delete "${name}"? This action cannot be undone.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0A0A0A',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                popup: 'rounded-none border-t-4 border-black',
+                confirmButton: 'rounded-none px-6 py-3 uppercase tracking-widest text-[11px]',
+                cancelButton: 'rounded-none px-6 py-3 uppercase tracking-widest text-[11px]'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection

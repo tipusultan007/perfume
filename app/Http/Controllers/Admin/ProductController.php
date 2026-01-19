@@ -15,10 +15,36 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'brand', 'variants'])->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $query = Product::query()->with(['category', 'brand', 'variants']);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('sku', 'LIKE', "%{$search}%");
+            });
+        }
+
+        if ($request->has('category_id') && $request->category_id != '') {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->has('brand_id') && $request->brand_id != '') {
+            $query->where('brand_id', $request->brand_id);
+        }
+
+        if ($request->has('product_type') && $request->product_type != '') {
+            $query->where('product_type', $request->product_type);
+        }
+
+        $products = $query->latest()->paginate(10)->withQueryString();
+        
+        $categories = Category::all();
+        $brands = Brand::all();
+
+        return view('admin.products.index', compact('products', 'categories', 'brands'));
     }
 
     public function create()

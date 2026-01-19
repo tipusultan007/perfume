@@ -7,11 +7,13 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
 Route::get('/product/{product:slug}/quick-view', [App\Http\Controllers\ShopController::class, 'quickView'])->name('shop.quickView');
 Route::get('/product/{product:slug}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product.show');
+Route::get('/shop/product/{product:slug}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product.show'); // Compatibility
 Route::post('/product/{product:slug}/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.product.review');
 Route::get('/design-demo', [App\Http\Controllers\DesignController::class, 'index'])->name('design.demo');
 
@@ -31,13 +33,6 @@ Route::post('/checkout/coupon', [\App\Http\Controllers\CheckoutController::class
 Route::delete('/checkout/coupon', [\App\Http\Controllers\CheckoutController::class, 'removeCoupon'])->name('checkout.remove-coupon');
 Route::get('/thank-you', [\App\Http\Controllers\CheckoutController::class, 'thankYou'])->name('checkout.thank-you');
 
-// Customer Auth Routes
-Route::get('/login', [\App\Http\Controllers\LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [\App\Http\Controllers\LoginController::class, 'login']);
-Route::get('/register', [\App\Http\Controllers\LoginController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [\App\Http\Controllers\LoginController::class, 'register']);
-Route::post('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
-
 // Customer Account Routes
 Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{email}/{hash}', [\App\Http\Controllers\NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
@@ -50,17 +45,17 @@ Route::middleware('auth')->prefix('account')->name('account.')->group(function (
     Route::get('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'editAddress'])->name('addresses.edit');
     Route::post('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'updateAddress']);
     Route::get('/details', [\App\Http\Controllers\AccountController::class, 'editDetails'])->name('details');
-    Route::get('/orders/{order}', [\App\Http\Controllers\AccountController::class, 'orderShow'])->name('orders.show');
-    Route::get('/addresses', [\App\Http\Controllers\AccountController::class, 'addresses'])->name('addresses');
-    Route::get('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'editAddress'])->name('addresses.edit');
-    Route::post('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'updateAddress']);
-    Route::get('/details', [\App\Http\Controllers\AccountController::class, 'editDetails'])->name('details');
     Route::post('/details', [\App\Http\Controllers\AccountController::class, 'updateDetails']);
-
-    // Wishlist Routes - REmoved from here
 });
 
-// Wishlist Routes (Separate from Account prefix)
+// Profile Routes (Breeze)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Wishlist Routes
 Route::middleware('auth')->group(function () {
     Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
@@ -117,3 +112,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 });
+
+require __DIR__.'/auth.php';

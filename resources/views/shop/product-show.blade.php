@@ -147,8 +147,8 @@
     }
 
     .option-item input:checked + label {
-        border-color: var(--black);
-        background: var(--black);
+        border-color: var(--accent);
+        background: var(--accent);
         color: white;
     }
 
@@ -194,21 +194,31 @@
         border: none;
         cursor: pointer;
         transition: 0.3s;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .btn-add-cart {
-        background: var(--black);
-        color: white;
+        background: var(--white);
+        color: var(--accent);
+        border: 1px solid var(--accent);
     }
 
     .btn-buy-now {
-        background: var(--cream);
-        color: var(--black);
-        border: 1px solid var(--black);
+        background: var(--accent);
+        color: white;
     }
 
-    .btn-add-cart:hover { opacity: 0.8; }
-    .btn-buy-now:hover { background: var(--black); color: white; }
+    .btn-add-cart:hover { 
+        background: var(--accent); 
+        color: white; 
+        transform: translateY(-2px);
+    }
+    .btn-buy-now:hover { 
+        background: var(--black);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+    }
 
     /* Meta: Categories, Tags, Share */
     .pdp-meta {
@@ -274,7 +284,7 @@
         left: 0;
         width: 0;
         height: 2px;
-        background: var(--black);
+        background: var(--accent);
         transition: 0.3s;
     }
 

@@ -147,6 +147,14 @@
         cursor: pointer;
     }
 
+    .p-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: var(--accent);
+        color: #fff;
+    }
+
     /* --- 5. Offcanvas Filter --- */
     .offcanvas-filter {
         position: fixed;
@@ -259,6 +267,94 @@
 
     .clear-all-filters:hover {
         border-bottom-color: var(--accent);
+    }
+
+    /* --- 6. Professional Pagination --- */
+    .pagination-container {
+        margin-top: 80px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Reset Laravel nav collision */
+    .pagination-container nav {
+        position: static !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        backdrop-filter: none !important;
+        width: auto !important;
+        display: block !important;
+    }
+
+    .pagination-container nav > div:first-child {
+        display: none !important; /* Hide mobile-only default view to use desktop one */
+    }
+
+    @media (min-width: 640px) {
+        .pagination-container nav > div:first-child {
+            display: none !important;
+        }
+        .pagination-container nav > div:nth-child(2) {
+            display: flex !important;
+        }
+    }
+
+    .pagination-container .flex-1.flex.justify-between {
+        display: none !important;
+    }
+
+    .pagination-container .hidden.sm\:flex-1.sm\:flex {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .pagination-container p.text-sm {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        opacity: 0.5;
+    }
+
+    .pagination-container span.relative.z-0.inline-flex.shadow-sm.rounded-md {
+        box-shadow: none !important;
+        gap: 8px;
+    }
+
+    .pagination-container [aria-current="page"] span {
+        background: var(--black) !important;
+        color: white !important;
+        border-color: var(--black) !important;
+    }
+
+    .pagination-container a, 
+    .pagination-container span.relative.inline-flex {
+        border-radius: 0 !important;
+        border: 1px solid var(--border) !important;
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        transition: all 0.3s ease;
+        margin: 0 !important;
+    }
+
+    .pagination-container a:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: transparent !important;
+    }
+
+    .pagination-container svg {
+        width: 16px;
+        height: 16px;
     }
 </style>
 @endsection
@@ -384,43 +480,12 @@
 
         <div class="product-grid">
             @foreach($products as $product)
-                <a href="{{ route('shop.product.show', $product->slug) }}" class="p-card group">
-                    <div class="p-img">
-                        @if($product->hasMedia('featured'))
-                            <img src="{{ $product->getFirstMediaUrl('featured') }}" alt="{{ $product->name }}">
-                        @else
-                            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?random={{ $product->id }}" alt="{{ $product->name }}">
-                        @endif
-                        
-                        @if($product->stock_quantity < 5 && $product->stock_quantity > 0)
-                            <span class="p-badge">Low Stock</span>
-                        @elseif($product->created_at->gt(now()->subDays(7)))
-                            <span class="p-badge">New</span>
-                        @endif
-
-                        <div class="p-actions">
-                            @if($product->variants->count() > 0)
-                                <button class="action-btn" title="Select Options" onclick="event.preventDefault(); openQuickView('{{ $product->slug }}')"><i class="ri-sound-module-line"></i></button>
-                            @else
-                                <button class="action-btn" title="Add to Cart" onclick="event.preventDefault(); quickAdd({{ $product->id }})"><i class="ri-shopping-cart-line"></i></button>
-                            @endif
-                            <button class="action-btn" title="Quick View" onclick="event.preventDefault(); event.stopPropagation(); openQuickView('{{ $product->slug }}')"><i class="ri-eye-line"></i></button>
-                        </div>
-                    </div>
-                    <h3 class="p-title">{{ $product->name }}</h3>
-                    <div class="p-price-container">
-                        @if($product->product_type == 'variable')
-                            <span class="p-price">From ${{ number_format($product->base_price, 2) }}</span>
-                        @else
-                            <span class="p-price">${{ number_format($product->base_price, 2) }}</span>
-                        @endif
-                    </div>
-                </a>
+                <x-product-card :product="$product" />
             @endforeach
         </div>
 
-        <div class="mt-20">
-            {{ $products->links() }}
+        <div class="pagination-container">
+            {{ $products->onEachSide(1)->links() }}
         </div>
     </main>
 </div>
