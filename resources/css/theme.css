@@ -15,11 +15,24 @@
     --clr-hero-bg: #F5F1EE;
 
     --font-heading: "Cormorant Garamond", serif;
-    --font-body: "Inter", sans-serif;
+    --font-body: "Montserrat", sans-serif;
     --font-logo: "Cormorant Garamond", serif;
+    --font-mono: "Space Mono", monospace;
 
     --header-height: 135px;
     --topbar-height: 40px;
+}
+
+.font-serif {
+    font-family: var(--font-heading);
+}
+
+.font-sans {
+    font-family: var(--font-body);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
 }
 
 * {
@@ -60,7 +73,7 @@ img {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1690px;
     margin: 0 auto;
     padding: 0 15px;
 }
@@ -118,6 +131,7 @@ img {
     gap: 5px;
     color: var(--clr-black);
     font-size: 16px;
+    letter-spacing: 0.5px;
     position: relative;
 }
 
@@ -335,6 +349,7 @@ img {
     font-weight: 600;
     text-transform: uppercase;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    letter-spacing: 2.5px;
     border-radius: 0;
     opacity: 0;
     transform: translateY(30px);
@@ -529,10 +544,13 @@ img {
 
 .product-title a {
     color: var(--clr-black);
-    font-size: 17px;
+    font-size: 16px;
     display: block;
     margin-bottom: 5px;
     transition: color 0.3s ease;
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }
 
 .product-title a:hover {
@@ -572,9 +590,9 @@ img {
     color: #fff;
     border: none;
     padding: 12px;
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     font-size: 13px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -649,9 +667,9 @@ img {
     width: 460px;
     height: 100%;
     background: var(--clr-white);
-    z-index: 1000;
+    z-index: 9999;
     transition: 0.3s ease;
-    padding: 30px;
+    padding: 0px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -1000,7 +1018,6 @@ img {
 }
 
 .testimonial-text {
-    font-family: 'DM Sans', sans-serif;
     font-size: 15px;
     line-height: 1.8;
     color: #4A5568;
@@ -1009,7 +1026,7 @@ img {
 }
 
 .testimonial-author .author-name {
-    font-family: 'Crimson Text', serif;
+    font-family: var(--font-heading);
     font-size: 16px;
     font-weight: 700;
     color: #000;
@@ -1112,16 +1129,57 @@ img {
     gap: 10px;
 }
 
+@media (max-width: 991px) {
+    .newsletter-wrapper {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .newsletter-form-container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .newsletter-section {
+        padding: 50px 0;
+    }
+
+    .newsletter-form .input-group {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .newsletter-form .input-group input[type="email"],
+    .newsletter-form .input-group .btn-submit {
+        width: 100%;
+        height: 50px;
+        min-height: 50px;
+        padding: 12px 20px;
+    }
+
+    .newsletter-text .heading {
+        font-size: 28px;
+    }
+}
+
 .newsletter-form input[type="email"] {
     flex: 1;
-    padding: 0 20px;
+    padding: 12px 20px;
     height: 50px;
+    min-height: 50px;
     border: 1px solid #ddd;
     font-family: var(--font-body);
     font-size: 15px;
     outline: none;
     transition: border-color 0.3s;
+    background: #fff;
 }
+
+
 
 .newsletter-form input[type="email"]:focus {
     border-color: var(--accent-color);

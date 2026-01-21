@@ -4,10 +4,10 @@
 @section('page_title', 'Discount Coupons')
 
 @section('content')
-<div class="bg-white border border-black/10">
-    <div class="p-6 border-b border-black/10 flex justify-between items-center bg-gray-50/30">
-        <h3 class="text-sm font-semibold uppercase tracking-widest text-black/60">Manage Coupons</h3>
-        <a href="{{ route('admin.coupons.create') }}" class="flex items-center gap-2 bg-luxury-black text-white px-6 py-3 text-[10px] uppercase tracking-widest hover:bg-black/80 transition-all">
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+        <h3 class="text-sm font-bold uppercase tracking-[0.15em] text-slate-500">Manage Coupons</h3>
+        <a href="{{ route('admin.coupons.create') }}" class="flex items-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
             <i class="ri-add-line text-lg"></i> Create New
         </a>
     </div>
@@ -15,62 +15,71 @@
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="border-b border-black/10 text-[10px] uppercase tracking-widest text-black/60 bg-gray-50/50">
-                    <th class="p-6 font-medium">Code</th>
-                    <th class="p-6 font-medium">Discount</th>
-                    <th class="p-6 font-medium">Expiry</th>
-                    <th class="p-6 font-medium text-center">Usage</th>
-                    <th class="p-6 font-medium">Status</th>
-                    <th class="p-6 font-medium text-right">Actions</th>
+                <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
+                    <th class="px-8 py-6">Code</th>
+                    <th class="px-8 py-6">Discount</th>
+                    <th class="px-8 py-6">Expiry</th>
+                    <th class="px-8 py-6 text-center">Usage</th>
+                    <th class="px-8 py-6">Status</th>
+                    <th class="px-8 py-6 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody class="text-sm">
                 @forelse($coupons as $coupon)
-                <tr class="border-b border-black/5 hover:bg-gray-50/30 transition-colors group">
-                    <td class="p-6 font-semibold font-mono text-black/80">{{ $coupon->code }}</td>
-                    <td class="p-6">
+                <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
+                    <td class="px-8 py-6">
+                        <span class="font-bold font-mono text-slate-900 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 uppercase">{{ $coupon->code }}</span>
+                    </td>
+                    <td class="px-8 py-6 font-medium text-slate-700">
                         @if($coupon->type === 'percent')
-                            {{ $coupon->value }}% Off
+                            <span class="text-slate-900 font-bold">{{ $coupon->value }}%</span> Off
                         @else
-                            ${{ number_format($coupon->value, 2) }} Off
+                            <span class="text-slate-900 font-bold">${{ number_format($coupon->value, 2) }}</span> Off
                         @endif
                         @if($coupon->min_spend)
-                            <span class="block text-[10px] text-black/40 mt-1">Min Spend: ${{ $coupon->min_spend }}</span>
+                            <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1.5">Min Spend: ${{ number_format($coupon->min_spend, 2) }}</span>
                         @endif
                     </td>
-                    <td class="p-6 text-black/60 text-xs">
+                    <td class="px-8 py-6 text-slate-500 text-xs font-semibold">
                         @if($coupon->expiry_date)
-                            <span class="{{ $coupon->expiry_date->isPast() ? 'text-red-500' : '' }}">
+                            <span class="{{ $coupon->expiry_date->isPast() ? 'text-rose-500' : '' }}">
                                 {{ $coupon->expiry_date->format('M d, Y') }}
                             </span>
                         @else
-                            <span class="text-black/30">No Expiry</span>
+                            <span class="text-slate-300 font-medium italic">No Expiry</span>
                         @endif
                     </td>
-                    <td class="p-6 text-center text-xs">
-                        {{ $coupon->used_count }} 
-                        @if($coupon->usage_limit)
-                            <span class="text-black/40">/ {{ $coupon->usage_limit }}</span>
-                        @endif
+                    <td class="px-8 py-6 text-center">
+                        <div class="inline-flex flex-col items-center">
+                            <span class="text-slate-900 font-bold">{{ $coupon->used_count }}</span>
+                            @if($coupon->usage_limit)
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">/ {{ $coupon->usage_limit }}</span>
+                            @endif
+                        </div>
                     </td>
-                    <td class="p-6">
+                    <td class="px-8 py-6">
                         @if(!$coupon->is_active)
-                            <span class="inline-flex items-center justify-center bg-gray-100 text-gray-500 px-2 py-1 rounded text-[10px] uppercase tracking-widest font-medium">Inactive</span>
+                            <span class="inline-flex items-center justify-center bg-slate-100 text-slate-500 px-4 py-1.5 border border-slate-200 rounded-full text-[10px] uppercase tracking-widest font-bold">Inactive</span>
                         @elseif($coupon->expiry_date && $coupon->expiry_date->isPast())
-                            <span class="inline-flex items-center justify-center bg-red-50 text-red-500 px-2 py-1 rounded text-[10px] uppercase tracking-widest font-medium">Expired</span>
+                            <span class="inline-flex items-center justify-center bg-rose-50 text-rose-500 px-4 py-1.5 border border-rose-100 rounded-full text-[10px] uppercase tracking-widest font-bold">Expired</span>
                         @else
-                            <span class="inline-flex items-center justify-center bg-green-50 text-green-700 px-2 py-1 rounded text-[10px] uppercase tracking-widest font-medium">Active</span>
+                            <span class="inline-flex items-center justify-center bg-emerald-50 text-emerald-600 px-4 py-1.5 border border-emerald-100 rounded-full text-[10px] uppercase tracking-widest font-bold">Active</span>
                         @endif
                     </td>
-                    <td class="p-6 text-right">
-                        <div class="flex justify-end gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <a href="{{ route('admin.coupons.edit', $coupon) }}" class="text-black hover:text-luxury-black" title="Edit">
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex justify-end gap-3">
+                            <a href="{{ route('admin.coupons.edit', $coupon) }}" 
+                                class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all shadow-sm" 
+                                title="Edit">
                                 <i class="ri-edit-line text-lg"></i>
                             </a>
-                            <form action="{{ route('admin.coupons.destroy', $coupon) }}" method="POST" onsubmit="return confirm('Delete this coupon?');" class="inline">
+                            <form action="{{ route('admin.coupons.destroy', $coupon) }}" method="POST" 
+                                onsubmit="return confirm('Delete this coupon?');" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-400 hover:text-red-600" title="Delete">
+                                <button type="submit" 
+                                    class="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all shadow-sm" 
+                                    title="Delete">
                                     <i class="ri-delete-bin-line text-lg"></i>
                                 </button>
                             </form>
@@ -79,10 +88,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="p-12 text-center text-black/40">
-                        <div class="flex flex-col items-center gap-2">
-                            <i class="ri-ticket-line text-3xl mb-2"></i>
-                            <p class="text-sm">No coupons found.</p>
+                    <td colspan="6" class="px-8 py-20 text-center text-slate-400">
+                        <div class="flex flex-col items-center gap-4">
+                            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
+                                <i class="ri-ticket-line text-4xl text-slate-200"></i>
+                            </div>
+                            <p class="text-sm font-bold uppercase tracking-widest">No coupons found</p>
+                            <a href="{{ route('admin.coupons.create') }}" class="text-slate-900 border-b-2 border-slate-900 pb-0.5 text-xs font-bold uppercase tracking-widest hover:text-slate-600 hover:border-slate-600 transition-all">Create your first coupon</a>
                         </div>
                     </td>
                 </tr>
@@ -92,7 +104,7 @@
     </div>
     
     @if($coupons->hasPages())
-    <div class="p-6 border-t border-black/10">
+    <div class="p-8 border-t border-slate-100 bg-slate-50/30">
         {{ $coupons->links() }}
     </div>
     @endif

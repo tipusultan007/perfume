@@ -6,7 +6,7 @@
 @section('content')
 <div class="flex justify-between items-center mb-10">
     <h3 class="font-sans font-semibold text-lg">All Products</h3>
-    <a href="{{ route('admin.products.create') }}" class="px-6 py-3 bg-luxury-black text-white text-[11px] uppercase tracking-widest hover:bg-opacity-90 transition-all">
+    <a href="{{ route('admin.products.create') }}" class="px-6 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-widest hover:bg-slate-800 transition-all rounded-lg shadow-sm">
         Add New Product
     </a>
 </div>
@@ -21,16 +21,16 @@
 @endif
 
 <!-- Filters -->
-<div class="bg-white p-8 mb-10 shadow-sm border border-black/[0.03]">
+<div class="bg-white p-8 mb-10 rounded-xl border border-slate-200 shadow-sm">
     <form action="{{ route('admin.products.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
         <div>
-            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Search</label>
+            <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-semibold">Search</label>
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Name or SKU..." 
-                class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+                class="w-full px-4 py-3 bg-white border border-slate-200 text-sm rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 transition-all outline-none">
         </div>
         <div>
-            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Category</label>
-            <select name="category_id" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+            <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-semibold">Category</label>
+            <select name="category_id" class="w-full px-4 py-3 bg-white border border-slate-200 text-sm rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 transition-all outline-none">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -38,8 +38,8 @@
             </select>
         </div>
         <div>
-            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Brand</label>
-            <select name="brand_id" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+            <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-semibold">Brand</label>
+            <select name="brand_id" class="w-full px-4 py-3 bg-white border border-slate-200 text-sm rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 transition-all outline-none">
                 <option value="">All Brands</option>
                 @foreach($brands as $brand)
                     <option value="{{ $brand->id }}" {{ request('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
@@ -47,8 +47,8 @@
             </select>
         </div>
         <div>
-            <label class="block text-[10px] uppercase tracking-widest text-black/40 mb-2">Type</label>
-            <select name="product_type" class="w-full px-4 py-3 bg-[#fcfaf7] border border-black/5 text-sm focus:border-luxury-accent transition-all outline-none">
+            <label class="block text-[10px] uppercase tracking-widest text-slate-500 mb-2 font-semibold">Type</label>
+            <select name="product_type" class="w-full px-4 py-3 bg-white border border-slate-200 text-sm rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 transition-all outline-none">
                 <option value="">All Types</option>
                 <option value="simple" {{ request('product_type') == 'simple' ? 'selected' : '' }}>Simple</option>
                 <option value="variable" {{ request('product_type') == 'variable' ? 'selected' : '' }}>Variable</option>
@@ -56,33 +56,33 @@
             </select>
         </div>
         <div class="flex gap-2">
-            <button type="submit" class="flex-1 px-4 py-3 bg-luxury-accent text-white text-[11px] uppercase tracking-[0.2em] hover:bg-opacity-90 transition-all">
+            <button type="submit" class="flex-1 px-4 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all rounded-lg shadow-sm font-semibold">
                 Filter
             </button>
-            <a href="{{ route('admin.products.index') }}" class="px-4 py-3 bg-gray-100 text-black/60 text-[11px] uppercase tracking-[0.2em] hover:bg-gray-200 transition-all text-center">
+            <a href="{{ route('admin.products.index') }}" class="px-4 py-3 bg-slate-50 text-slate-600 border border-slate-200 text-[11px] uppercase tracking-[0.2em] hover:bg-slate-100 transition-all text-center rounded-lg font-semibold">
                 Reset
             </a>
         </div>
     </form>
 </div>
 
-<div class="bg-white p-10 shadow-sm border border-black/[0.03]">
-
+<div class="bg-white p-0 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
-                <tr class="border-b border-black/5">
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Product</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Category</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Type</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Base Price</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium text-right">Action</th>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold">Product</th>
+                    <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold">Category</th>
+                    <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold">Type</th>
+                    <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold">Base Price</th>
+                    <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold text-center">Featured</th>
+                    <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-semibold text-right">Action</th>
                 </tr>
             </thead>
-            <tbody class="text-sm">
+            <tbody class="text-sm divide-y divide-slate-100">
                 @forelse($products as $product)
-                <tr class="border-b border-black/5 hover:bg-gray-50/50 transition-colors">
-                    <td class="py-6 font-medium">
+                <tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-8 py-6">
                         <div class="flex flex-col">
                             <span>{{ $product->name }}</span>
                             <span class="text-[10px] opacity-40 uppercase tracking-tighter">{{ $product->brand->name ?? 'No Brand' }}</span>
@@ -98,19 +98,26 @@
                         </span>
                     </td>
                     <td class="font-mono">${{ number_format($product->base_price, 2) }}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-4">
-                            <a href="{{ route('admin.products.show', $product) }}" class="text-blue-400 hover:text-blue-600 transition-colors">
+                    <td class="text-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" {{ $product->is_featured ? 'checked' : '' }} 
+                                onchange="toggleFeatured('{{ $product->slug }}', this)">
+                            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-900"></div>
+                        </label>
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex justify-end gap-3">
+                            <a href="{{ route('admin.products.show', $product) }}" class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:text-blue-500 hover:bg-blue-50 transition-all">
                                 <i class="ri-eye-line text-lg"></i>
                             </a>
-                            <a href="{{ route('admin.products.edit', $product) }}" class="text-luxury-accent hover:text-luxury-black transition-colors">
+                            <a href="{{ route('admin.products.edit', $product) }}" class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:text-amber-500 hover:bg-amber-50 transition-all">
                                 <i class="ri-edit-line text-lg"></i>
                             </a>
-                            <form id="delete-form-{{ $product->id }}" action="{{ route('admin.products.destroy', $product) }}" method="POST" class="hidden">
+                            <form id="delete-form-{{ $product->slug }}" action="{{ route('admin.products.destroy', $product) }}" method="POST" class="hidden">
                                 @csrf
                                 @method('DELETE')
                             </form>
-                            <button type="button" onclick="confirmDelete('{{ $product->id }}', '{{ addslashes($product->name) }}')" class="text-red-400 hover:text-red-600 transition-colors">
+                            <button type="button" onclick="confirmDelete('{{ $product->slug }}', '{{ addslashes($product->name) }}')" class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all">
                                 <i class="ri-delete-bin-line text-lg"></i>
                             </button>
                         </div>
@@ -125,7 +132,7 @@
         </table>
     </div>
     
-    <div class="mt-10">
+    <div class="px-8 py-6 border-t border-slate-100 bg-slate-50/30">
         {{ $products->links() }}
     </div>
 </div>
@@ -133,13 +140,64 @@
 
 @section('scripts')
 <script>
-    function confirmDelete(id, name) {
+    function toggleFeatured(id, checkbox) {
+        const isChecked = checkbox.checked;
+        
+        fetch(`/admin/products/${id}/toggle-featured`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ featured: isChecked })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: data.message
+                });
+            } else {
+                checkbox.checked = !isChecked; // Revert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message || 'Something went wrong.'
+                });
+            }
+        })
+        .catch(error => {
+            checkbox.checked = !isChecked; // Revert
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Internal Server Error'
+            });
+        });
+    }
+
+    function confirmDelete(slug, name) {
         Swal.fire({
             title: 'Delete Product?',
             text: `Are you sure you want to delete "${name}"? This action cannot be undone.`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#0A0A0A',
+            confirmButtonColor: '#0F172A',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'Cancel',
@@ -150,7 +208,7 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
+                document.getElementById('delete-form-' + slug).submit();
             }
         });
     }

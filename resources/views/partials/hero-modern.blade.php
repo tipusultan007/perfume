@@ -127,7 +127,7 @@
                 </div>
 
                 <div class="col-span-1 md:col-span-4 flex justify-center order-1 md:order-2">
-                    <img src="{{ asset('storage/' . $slider->image_path) }}" class="h-[40vh] md:h-[75vh] object-contain bottle transform origin-bottom">
+                    <img src="{{ $slider->getFirstMediaUrl('slider') }}" class="h-[40vh] md:h-[75vh] object-contain bottle transform origin-bottom">
                 </div>
 
                 <div class="col-span-1 md:col-span-4 md:pl-[3rem] space-y-8 md:space-y-12 slide-content order-3 text-center md:text-left">

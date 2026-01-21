@@ -42,7 +42,7 @@
         padding: 15px;
         border: 1px solid var(--border);
         background: transparent;
-        font-family: 'Inter';
+        font-family: 'Montserrat';
         font-size: 14px;
         outline: none;
         transition: var(--transition);

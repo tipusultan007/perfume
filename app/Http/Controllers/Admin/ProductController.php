@@ -342,4 +342,23 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
+
+    public function toggleFeatured(Product $product)
+    {
+        try {
+            $product->is_featured = !$product->is_featured;
+            $product->save();
+
+            return response()->json([
+                'success' => true,
+                'is_featured' => $product->is_featured,
+                'message' => 'Product featured status updated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update featured status.'
+            ], 500);
+        }
+    }
 }

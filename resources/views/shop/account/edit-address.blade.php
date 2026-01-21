@@ -52,7 +52,7 @@
             </div>
             <div class="form-group">
                 <label>Country</label>
-                <select name="country" class="form-control" style="width: 100%; padding: 12px; border: none; border-bottom: 1px solid var(--border); background: transparent; font-family: 'Inter'; font-size: 15px;">
+                <select name="country" class="form-control" style="width: 100%; padding: 12px; border: none; border-bottom: 1px solid var(--border); background: transparent; font-family: 'Montserrat'; font-size: 15px;">
                     <option value="US" {{ (old('country', $address['country'] ?? '') == 'US') ? 'selected' : '' }}>United States</option>
                     <option value="GB" {{ (old('country', $address['country'] ?? '') == 'GB') ? 'selected' : '' }}>United Kingdom</option>
                     <option value="CA" {{ (old('country', $address['country'] ?? '') == 'CA') ? 'selected' : '' }}>Canada</option>

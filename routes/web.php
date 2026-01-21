@@ -11,11 +11,17 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
+Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
 Route::get('/product/{product:slug}/quick-view', [App\Http\Controllers\ShopController::class, 'quickView'])->name('shop.quickView');
 Route::get('/product/{product:slug}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product.show');
 Route::get('/shop/product/{product:slug}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop.product.show'); // Compatibility
 Route::post('/product/{product:slug}/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.product.review');
 Route::get('/design-demo', [App\Http\Controllers\DesignController::class, 'index'])->name('design.demo');
+Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/privacy-policy', [App\Http\Controllers\PageController::class, 'privacy'])->name('privacy');
+Route::get('/terms-conditions', [App\Http\Controllers\PageController::class, 'terms'])->name('terms');
 
 // Cart Routes
 Route::group(['prefix' => 'cart'], function () {
@@ -25,6 +31,8 @@ Route::group(['prefix' => 'cart'], function () {
     Route::post('/remove', [\App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::post('/update', [\App\Http\Controllers\CartController::class, 'updateQuantity'])->name('cart.update');
 });
+
+Route::get('/api/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('api.search');
 
 // Checkout Routes
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
@@ -77,6 +85,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('brands', BrandController::class);
         Route::resource('attributes', AttributeController::class);
+        Route::post('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
         Route::resource('products', ProductController::class);
         Route::resource('sliders', SliderController::class);
         Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
@@ -110,6 +119,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/products', [\App\Http\Controllers\Admin\ReportController::class, 'products'])->name('products');
             Route::get('/customers', [\App\Http\Controllers\Admin\ReportController::class, 'customers'])->name('customers');
         });
+
+        // Contact Submissions
+        Route::resource('contact-submissions', \App\Http\Controllers\Admin\ContactSubmissionController::class)->only(['index', 'show', 'destroy']);
     });
 });
 

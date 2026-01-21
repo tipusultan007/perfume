@@ -45,17 +45,22 @@
     }
 
     .filter-section h4 {
-        font-size: 11px;
+        font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 20px;
         border-bottom: 1px solid var(--border);
         padding-bottom: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .filter-list li {
         margin-bottom: 12px;
-        font-size: 13px;
+        font-size: 14px;
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -75,11 +80,58 @@
         cursor: pointer;
     }
 
+    .filter-list.scrollable {
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+
+    /* Custom Scrollbar for Filters */
+    .filter-list.scrollable::-webkit-scrollbar {
+        width: 3px;
+    }
+    .filter-list.scrollable::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .filter-list.scrollable::-webkit-scrollbar-thumb {
+        background: #000;
+    }
+
+    .btn-filter-apply {
+        width: 100%;
+        padding: 15px;
+        background: var(--black);
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 11px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 10px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-filter-apply:hover {
+        background: var(--accent);
+        color: white;
+    }
+
     /* Search Box */
     .search-filter {
         margin-bottom: 40px;
     }
 
+    .search-filter h4{
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+        font-weight: 600;
+    }
     .search-input-wrapper {
         position: relative;
         display: flex;
@@ -98,9 +150,9 @@
         background: transparent;
         padding: 5px 30px 5px 0;
         width: 100%;
-        font-size: 13px;
+        font-size: 14px;
         outline: none;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .search-input-wrapper i {
@@ -277,84 +329,15 @@
         width: 100%;
     }
 
-    /* Reset Laravel nav collision */
     .pagination-container nav {
-        position: static !important;
-        background: transparent !important;
-        padding: 0 !important;
-        border: none !important;
-        backdrop-filter: none !important;
-        width: auto !important;
-        display: block !important;
+        width: 100%;
     }
 
-    .pagination-container nav > div:first-child {
-        display: none !important; /* Hide mobile-only default view to use desktop one */
-    }
-
-    @media (min-width: 640px) {
-        .pagination-container nav > div:first-child {
-            display: none !important;
+    /* Mobile Responsive Pagination */
+    @media (max-width: 640px) {
+        .pagination-container {
+            margin-top: 40px;
         }
-        .pagination-container nav > div:nth-child(2) {
-            display: flex !important;
-        }
-    }
-
-    .pagination-container .flex-1.flex.justify-between {
-        display: none !important;
-    }
-
-    .pagination-container .hidden.sm\:flex-1.sm\:flex {
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-    }
-
-    .pagination-container p.text-sm {
-        font-family: var(--font-mono);
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        opacity: 0.5;
-    }
-
-    .pagination-container span.relative.z-0.inline-flex.shadow-sm.rounded-md {
-        box-shadow: none !important;
-        gap: 8px;
-    }
-
-    .pagination-container [aria-current="page"] span {
-        background: var(--black) !important;
-        color: white !important;
-        border-color: var(--black) !important;
-    }
-
-    .pagination-container a, 
-    .pagination-container span.relative.inline-flex {
-        border-radius: 0 !important;
-        border: 1px solid var(--border) !important;
-        width: 42px;
-        height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-family: var(--font-mono);
-        font-size: 12px;
-        transition: all 0.3s ease;
-        margin: 0 !important;
-    }
-
-    .pagination-container a:hover {
-        border-color: var(--accent) !important;
-        color: var(--accent) !important;
-        background: transparent !important;
-    }
-
-    .pagination-container svg {
-        width: 16px;
-        height: 16px;
     }
 </style>
 @endsection
@@ -382,17 +365,23 @@
                 <input type="hidden" name="category" value="{{ request('category') }}">
             @endif
 
-            <div class="search-filter">
-                <h4>Search</h4>
-                <div class="search-input-wrapper">
+            <div class="search-filter" x-data="{ expanded: true }">
+                <h4 @click="expanded = !expanded">
+                    Search 
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <div class="search-input-wrapper" x-show="expanded">
                     <input type="text" name="search" placeholder="Type to search..." value="{{ $searchQuery }}">
                     <i class="ri-search-line"></i>
                 </div>
             </div>
 
-            <div class="filter-section">
-                <h4>Categories</h4>
-                <ul class="filter-list">
+            <div class="filter-section" x-data="{ expanded: true }">
+                <h4 @click="expanded = !expanded">
+                    Categories
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list" x-show="expanded">
                     <li class="{{ !request('category') ? 'active' : '' }}">
                         <a href="{{ route('shop', array_merge(request()->except(['category', 'page']))) }}">All Products</a>
                     </li>
@@ -405,45 +394,113 @@
             </div>
 
             @if($brands->count() > 0)
-            <div class="filter-section">
-                <h4>Brands</h4>
-                <ul class="filter-list">
+            <div class="filter-section" x-data="{ expanded: true }">
+                <h4 @click="expanded = !expanded">
+                    Brands
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list scrollable" x-show="expanded">
                     @foreach($brands as $brand)
                         <li>
                             <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
-                                {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}
-                                onchange="this.form.submit()">
+                                {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
                             {{ $brand->name }}
                         </li>
                     @endforeach
                 </ul>
             </div>
             @endif
-            
-            <!-- Scent Profile (Static) -->
-            <div class="filter-section">
-                <h4>Scent Profile</h4>
-                <ul class="filter-list">
-                    <li><input type="checkbox"> Woody & Smoky</li>
-                    <li><input type="checkbox"> Fresh Citrus</li>
-                    <li><input type="checkbox"> Floral</li>
-                    <li><input type="checkbox"> Amber</li>
+
+            @if($genders->count() > 0)
+            <div class="filter-section" x-data="{ expanded: {{ !empty($activeGenders) ? 'true' : 'false' }} }">
+                <h4 @click="expanded = !expanded">
+                    Gender
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list" x-show="expanded" style="display: none;">
+                    @foreach($genders as $gender)
+                        <li>
+                            <input type="checkbox" name="genders[]" value="{{ $gender }}" 
+                                {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
+                            {{ ucfirst($gender) }}
+                        </li>
+                    @endforeach
                 </ul>
+            </div>
+            @endif
+
+            @if($concentrations->count() > 0)
+            <div class="filter-section" x-data="{ expanded: {{ !empty($activeConcentrations) ? 'true' : 'false' }} }">
+                <h4 @click="expanded = !expanded">
+                    Concentration
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list" x-show="expanded" style="display: none;">
+                    @foreach($concentrations as $concentration)
+                        <li>
+                            <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
+                                {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
+                            {{ $concentration }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if($seasons->count() > 0)
+            <div class="filter-section" x-data="{ expanded: {{ !empty($activeSeasons) ? 'true' : 'false' }} }">
+                <h4 @click="expanded = !expanded">
+                    Best for Season
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list" x-show="expanded" style="display: none;">
+                    @foreach($seasons as $season)
+                        <li>
+                            <input type="checkbox" name="seasons[]" value="{{ $season }}" 
+                                {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
+                            {{ ucfirst($season) }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            @if($sizes->isNotEmpty())
+            <div class="filter-section" x-data="{ expanded: {{ !empty($activeSizes) ? 'true' : 'false' }} }">
+                <h4 @click="expanded = !expanded">
+                    Size
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <ul class="filter-list" x-show="expanded" style="display: none;">
+                    @foreach($sizes as $size)
+                        <li>
+                            <input type="checkbox" name="sizes[]" value="{{ $size->value }}" 
+                                {{ in_array($size->value, (array)$activeSizes) ? 'checked' : '' }}>
+                            {{ $size->value }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            
+            <div class="filter-section" x-data="{ expanded: {{ request('top_notes') || request('heart_notes') || request('base_notes') ? 'true' : 'false' }} }">
+                <h4 @click="expanded = !expanded">
+                    Fragrance Notes
+                    <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+                </h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;" x-show="expanded" style="display: none;">
+                    <input type="text" name="top_notes" value="{{ request('top_notes') }}" placeholder="Top Note (e.g. Citrus)" class="border border-slate-200 p-2 text-xs w-full outline-none focus:border-black">
+                    <input type="text" name="heart_notes" value="{{ request('heart_notes') }}" placeholder="Heart Note" class="border border-slate-200 p-2 text-xs w-full outline-none focus:border-black">
+                    <input type="text" name="base_notes" value="{{ request('base_notes') }}" placeholder="Base Note" class="border border-slate-200 p-2 text-xs w-full outline-none focus:border-black">
+                </div>
             </div>
 
-            <div class="filter-section">
-                <h4>Price Range</h4>
-                <ul class="filter-list">
-                    <li><input type="checkbox"> Under $100</li>
-                    <li><input type="checkbox"> $100 — $250</li>
-                    <li><input type="checkbox"> $250+</li>
-                </ul>
-            </div>
+            <button type="submit" class="btn-filter-apply">Apply Filters</button>
         </form>
     </aside>
 
     <main class="product-grid-container">
-        @if($activeCategory || !empty($activeBrands) || $searchQuery)
+        @if($activeCategory || !empty($activeBrands) || $searchQuery || !empty($activeGenders) || !empty($activeConcentrations) || !empty($activeSeasons) || !empty($activeSizes))
             <div class="active-filters-bar">
                 <span class="mono" style="font-size: 10px; opacity: 0.5; margin-right: 10px;">Active Filters:</span>
                 
@@ -466,12 +523,56 @@
                         <div class="filter-tag">
                             <span>Brand: {{ $brand->name }}</span>
                             @php
-                                $remainingBrands = array_diff((array)$activeBrands, [$brand->slug]);
-                                $brandParams = !empty($remainingBrands) ? ['brands' => $remainingBrands] : [];
+                                $remaining = array_diff((array)$activeBrands, [$brand->slug]);
+                                $params = array_merge(request()->except(['brands', 'page']), !empty($remaining) ? ['brands' => $remaining] : []);
                             @endphp
-                            <a href="{{ route('shop', array_merge(request()->except(['brands', 'page']), $brandParams)) }}" title="Remove Brand"><i class="ri-close-line"></i></a>
+                            <a href="{{ route('shop', $params) }}"><i class="ri-close-line"></i></a>
                         </div>
                     @endif
+                @endforeach
+
+                @foreach((array)$activeGenders as $gender)
+                    <div class="filter-tag">
+                        <span>Gender: {{ ucfirst($gender) }}</span>
+                        @php
+                            $remaining = array_diff((array)$activeGenders, [$gender]);
+                            $params = array_merge(request()->except(['genders', 'page']), !empty($remaining) ? ['genders' => $remaining] : []);
+                        @endphp
+                        <a href="{{ route('shop', $params) }}"><i class="ri-close-line"></i></a>
+                    </div>
+                @endforeach
+
+                @foreach((array)$activeConcentrations as $concentration)
+                    <div class="filter-tag">
+                        <span>Conc: {{ $concentration }}</span>
+                        @php
+                            $remaining = array_diff((array)$activeConcentrations, [$concentration]);
+                            $params = array_merge(request()->except(['concentrations', 'page']), !empty($remaining) ? ['concentrations' => $remaining] : []);
+                        @endphp
+                        <a href="{{ route('shop', $params) }}"><i class="ri-close-line"></i></a>
+                    </div>
+                @endforeach
+
+                @foreach((array)$activeSeasons as $season)
+                    <div class="filter-tag">
+                        <span>Season: {{ ucfirst($season) }}</span>
+                        @php
+                            $remaining = array_diff((array)$activeSeasons, [$season]);
+                            $params = array_merge(request()->except(['seasons', 'page']), !empty($remaining) ? ['seasons' => $remaining] : []);
+                        @endphp
+                        <a href="{{ route('shop', $params) }}"><i class="ri-close-line"></i></a>
+                    </div>
+                @endforeach
+
+                @foreach((array)$activeSizes as $size)
+                    <div class="filter-tag">
+                        <span>Size: {{ $size }}</span>
+                        @php
+                            $remaining = array_diff((array)$activeSizes, [$size]);
+                            $params = array_merge(request()->except(['sizes', 'page']), !empty($remaining) ? ['sizes' => $remaining] : []);
+                        @endphp
+                        <a href="{{ route('shop', $params) }}"><i class="ri-close-line"></i></a>
+                    </div>
                 @endforeach
 
                 <a href="{{ route('shop') }}" class="clear-all-filters">Clear All</a>
@@ -485,7 +586,7 @@
         </div>
 
         <div class="pagination-container">
-            {{ $products->onEachSide(1)->links() }}
+            {{ $products->onEachSide(2)->links() }}
         </div>
     </main>
 </div>
@@ -503,17 +604,23 @@
             <input type="hidden" name="category" value="{{ request('category') }}">
         @endif
 
-        <div class="search-filter">
-            <h4>Search</h4>
-            <div class="search-input-wrapper">
+        <div class="search-filter" x-data="{ expanded: true }">
+            <h4 @click="expanded = !expanded">
+                Search
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <div class="search-input-wrapper" x-show="expanded">
                 <input type="text" name="search" placeholder="Type to search..." value="{{ $searchQuery }}">
                 <i class="ri-search-line"></i>
             </div>
         </div>
 
-        <div class="filter-section">
-            <h4>Categories</h4>
-            <ul class="filter-list">
+        <div class="filter-section" x-data="{ expanded: true }">
+            <h4 @click="expanded = !expanded">
+                Categories
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list" x-show="expanded">
                 <li class="{{ !request('category') ? 'active' : '' }}">
                     <a href="{{ route('shop', array_merge(request()->except(['category', 'page']))) }}">All Products</a>
                 </li>
@@ -526,14 +633,16 @@
         </div>
 
         @if($brands->count() > 0)
-        <div class="filter-section">
-            <h4>Brands</h4>
-            <ul class="filter-list">
+        <div class="filter-section" x-data="{ expanded: true }">
+            <h4 @click="expanded = !expanded">
+                Brands
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list scrollable" x-show="expanded">
                 @foreach($brands as $brand)
                     <li>
                         <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
-                            {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}
-                            onchange="this.form.submit()">
+                            {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
                         {{ $brand->name }}
                     </li>
                 @endforeach
@@ -541,14 +650,85 @@
         </div>
         @endif
 
-        <div class="filter-section">
-            <h4>Scent Profile</h4>
-            <ul class="filter-list">
-                <li><input type="checkbox"> Woody & Smoky</li>
-                <li><input type="checkbox"> Fresh Citrus</li>
-                <li><input type="checkbox"> Floral</li>
-                <li><input type="checkbox"> Amber</li>
+        @if($sizes->isNotEmpty())
+        <div class="filter-section" x-data="{ expanded: {{ !empty($activeSizes) ? 'true' : 'false' }} }">
+            <h4 @click="expanded = !expanded">
+                Size
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list" x-show="expanded" style="display: none;">
+                @foreach($sizes as $size)
+                    <li>
+                        <input type="checkbox" name="sizes[]" value="{{ $size->value }}" 
+                            {{ in_array($size->value, (array)$activeSizes) ? 'checked' : '' }}>
+                        {{ $size->value }}
+                    </li>
+                @endforeach
             </ul>
+        </div>
+        @endif
+
+        @if($genders->count() > 0)
+        <div class="filter-section" x-data="{ expanded: {{ !empty($activeGenders) ? 'true' : 'false' }} }">
+            <h4 @click="expanded = !expanded">Gender
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list" x-show="expanded" style="display: none;">
+                @foreach($genders as $gender)
+                    <li>
+                        <input type="checkbox" name="genders[]" value="{{ $gender }}" 
+                            {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
+                        {{ ucfirst($gender) }}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if($concentrations->count() > 0)
+        <div class="filter-section" x-data="{ expanded: {{ !empty($activeConcentrations) ? 'true' : 'false' }} }">
+            <h4 @click="expanded = !expanded">Concentration
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list" x-show="expanded" style="display: none;">
+                @foreach($concentrations as $concentration)
+                    <li>
+                        <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
+                            {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
+                        {{ $concentration }}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if($seasons->count() > 0)
+        <div class="filter-section" x-data="{ expanded: {{ !empty($activeSeasons) ? 'true' : 'false' }} }">
+            <h4 @click="expanded = !expanded">Best for Season
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <ul class="filter-list" x-show="expanded" style="display: none;">
+                @foreach($seasons as $season)
+                    <li>
+                        <input type="checkbox" name="seasons[]" value="{{ $season }}" 
+                            {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
+                        {{ ucfirst($season) }}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <div class="filter-section" x-data="{ expanded: {{ request('top_notes') || request('heart_notes') || request('base_notes') ? 'true' : 'false' }} }">
+            <h4 @click="expanded = !expanded">
+                Fragrance Notes
+                <i class="ri-arrow-down-s-line" :class="{ 'rotate-180': !expanded }" style="transition: 0.3s;"></i>
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 10px;" x-show="expanded" style="display: none;">
+                <input type="text" name="top_notes" value="{{ request('top_notes') }}" placeholder="Top Note" class="border border-slate-200 p-2 text-xs w-full">
+                <input type="text" name="heart_notes" value="{{ request('heart_notes') }}" placeholder="Heart Note" class="border border-slate-200 p-2 text-xs w-full">
+                <input type="text" name="base_notes" value="{{ request('base_notes') }}" placeholder="Base Note" class="border border-slate-200 p-2 text-xs w-full">
+            </div>
         </div>
 
         <button type="submit" class="btn-luxe bg-black text-white w-full py-4 mt-6">Apply Filters</button>

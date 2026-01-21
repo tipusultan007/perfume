@@ -3,23 +3,27 @@
 @section('title', 'Edit Campaign')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
+<div class="max-w-4xl mx-auto">
+    <div class="mb-10 flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-serif text-black">Edit Campaign</h1>
-            <p class="text-sm text-gray-500 mt-1">Update campaign details</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Edit Campaign</h1>
+            <p class="text-slate-500 font-medium mt-1">Refine your message and update recipient targeting</p>
         </div>
-        <a href="{{ route('admin.newsletter.index') }}" class="text-sm text-gray-500 hover:text-black transition-colors">
-            <i class="ri-arrow-left-line"></i> Back to list
+        <a href="{{ route('admin.newsletter.index') }}" 
+            class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
+            <i class="ri-arrow-left-line text-lg"></i>
         </a>
     </div>
 
     <!-- Form -->
-    <div class="bg-white rounded-2xl border border-black/5 shadow-sm p-8">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-10">
         @if ($errors->any())
-            <div class="mb-6 bg-red-50 text-red-600 p-4 rounded-xl text-sm">
-                <ul class="list-disc list-inside">
+            <div class="mb-10 bg-rose-50 border border-rose-100 text-rose-600 p-6 rounded-xl">
+                <div class="flex items-center gap-3 mb-3">
+                    <i class="ri-error-warning-fill text-xl"></i>
+                    <span class="text-xs font-bold uppercase tracking-widest">Action Required</span>
+                </div>
+                <ul class="list-disc list-inside text-sm space-y-1 font-medium">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -27,71 +31,92 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.newsletter.update', $campaign->id) }}" method="POST">
+        <form action="{{ route('admin.newsletter.update', $campaign->id) }}" method="POST" class="space-y-10">
             @csrf
             @method('PUT')
             
-            <div class="space-y-6">
+            <div class="space-y-10">
                 <!-- Subject -->
-                <div>
-                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Email Subject</label>
-                    <input type="text" name="subject" id="subject" value="{{ old('subject', $campaign->subject) }}"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black focus:ring-0 transition-colors"
+                <div class="space-y-4">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Email Subject Line</label>
+                    <input type="text" name="subject" value="{{ old('subject', $campaign->subject) }}"
+                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold"
                         placeholder="Enter email subject" required>
-                    @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('subject') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Content -->
-                <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                    <textarea name="content" id="content" rows="12"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black focus:ring-0 transition-colors"
+                <div class="space-y-4">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Campaign Content</label>
+                    <textarea name="content" rows="12"
+                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium leading-relaxed"
                         placeholder="Write your email content here (HTML supported)..." required>{{ old('content', $campaign->content) }}</textarea>
-                    <p class="text-xs text-gray-400 mt-2">Basic HTML tags are allowed. An unsubscribe link will be automatically appended.</p>
-                    @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    <div class="flex items-center gap-2 text-slate-400">
+                        <i class="ri-information-line"></i>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Basic HTML tags are allowed. An unsubscribe link will be automatically appended.</p>
+                    </div>
+                    @error('content') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Recipients -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Recipients</label>
-                    <div class="space-y-3">
-                        <label class="flex items-center gap-2 cursor-pointer">
+                <div class="space-y-6">
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Target Audience</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="relative flex items-center p-5 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-50 transition-all group">
                             <input type="radio" name="recipient_type" value="all" {{ old('recipient_type', $campaign->recipient_type) == 'all' ? 'checked' : '' }}
-                                onchange="toggleSubscribersList(false)" class="text-black focus:ring-black">
-                            <span>All Subscribers ({{ $subscribers->count() }})</span>
+                                onchange="toggleSubscribersList(false)" class="w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300">
+                            <div class="ml-4">
+                                <span class="block text-sm font-bold text-slate-900">Broadcast to All</span>
+                                <span class="text-xs text-slate-400 font-medium">All {{ $subscribers->count() }} active subscribers</span>
+                            </div>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
+                        <label class="relative flex items-center p-5 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-50 transition-all group">
                             <input type="radio" name="recipient_type" value="select" {{ old('recipient_type', $campaign->recipient_type) == 'select' ? 'checked' : '' }}
-                                onchange="toggleSubscribersList(true)" class="text-black focus:ring-black">
-                            <span>Select Subscribers</span>
+                                onchange="toggleSubscribersList(true)" class="w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300">
+                            <div class="ml-4">
+                                <span class="block text-sm font-bold text-slate-900">Targeted Selection</span>
+                                <span class="text-xs text-slate-400 font-medium">Select specific subscribers manually</span>
+                            </div>
                         </label>
                     </div>
-                    @error('recipient_type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('recipient_type') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
 
                     @php
                         $targetRecipients = $campaign->target_recipients ?? [];
                         $oldRecipients = old('recipients', $targetRecipients);
                     @endphp
 
-                    <div id="subscribersList" class="{{ old('recipient_type', $campaign->recipient_type) == 'select' ? '' : 'hidden' }} mt-4 pl-6 space-y-2 max-h-60 overflow-y-auto border border-gray-100 p-4 rounded-xl">
-                        @foreach($subscribers as $subscriber)
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="recipients[]" value="{{ $subscriber->id }}" 
-                                class="subscriber-checkbox text-black focus:ring-black" 
-                                {{ (is_array($oldRecipients) && in_array($subscriber->id, $oldRecipients)) ? 'checked' : '' }}
-                                {{ old('recipient_type', $campaign->recipient_type) == 'select' ? '' : 'disabled' }}>
-                            <span class="text-sm">{{ $subscriber->email }} <span class="text-xs text-gray-400">({{ $subscriber->created_at->format('M d, Y') }})</span></span>
-                        </label>
-                        @endforeach
+                    <div id="subscribersList" class="transition-all duration-300 {{ old('recipient_type', $campaign->recipient_type) == 'select' ? 'block' : 'hidden' }}">
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6">
+                            <div class="max-h-80 overflow-y-auto pr-4 custom-scrollbar">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    @foreach($subscribers as $subscriber)
+                                    <label class="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-xl cursor-pointer hover:border-slate-900 transition-all group shadow-sm">
+                                        <input type="checkbox" name="recipients[]" value="{{ $subscriber->id }}" 
+                                            class="subscriber-checkbox w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded" 
+                                            {{ (is_array($oldRecipients) && in_array($subscriber->id, $oldRecipients)) ? 'checked' : '' }}
+                                            {{ old('recipient_type', $campaign->recipient_type) == 'select' ? '' : 'disabled' }}>
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-bold text-slate-900">{{ $subscriber->email }}</span>
+                                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Joined {{ $subscriber->created_at->format('M d, Y') }}</span>
+                                        </div>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    @error('recipients') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('recipients') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Actions -->
-                <div class="pt-4 flex justify-end gap-3">
-                    <a href="{{ route('admin.newsletter.index') }}" class="px-6 py-3 border border-gray-200 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors">Cancel</a>
-                    <button type="submit" class="px-6 py-3 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-900 transition-colors shadow-lg shadow-black/10">
-                        <i class="ri-save-line mr-2"></i> Update Campaign
+                <div class="pt-10 flex flex-col md:flex-row justify-end gap-4 border-t border-slate-100">
+                    <a href="{{ route('admin.newsletter.index') }}" 
+                        class="px-10 py-4 bg-slate-50 border border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-slate-200 transition-all text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-10 py-4 bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/20 active:scale-[0.98]">
+                        <i class="ri-refresh-line mr-2"></i> Update Campaign Details
                     </button>
                 </div>
             </div>
@@ -106,11 +131,29 @@
 
         if (show) {
             list.classList.remove('hidden');
+            list.classList.add('block');
             checkboxes.forEach(cb => cb.disabled = false);
         } else {
             list.classList.add('hidden');
+            list.classList.remove('block');
             checkboxes.forEach(cb => cb.disabled = true);
         }
     }
 </script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>
 @endsection

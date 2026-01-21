@@ -6,7 +6,7 @@
         /* Scoped adjustments to prevent homepage-v4 styles from breaking layouts.store navbar/footer */
         .site-header, .site-footer {
             /* Ensure old header/footer keep their expected behavior if theme.css overrides them */
-            font-family: 'Inter', sans-serif !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
         
         /* Remove top padding from main since store layout might have different spacing needs */
@@ -14,9 +14,124 @@
             position: fixed !important;
         }
         
-        /* Prevent theme.css from overriding topbar/header height globally if possible */
-        :root {
-            --header-height: 80px; /* Adjust if needed for store layout */
+        /* Redesigned Banner Styles (150-200px) */
+        .lux-banner {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin: 30px 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .banner-bg-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: transform 10s linear;
+            z-index: 1;
+        }
+        
+        .lux-banner:hover .banner-bg-img {
+            transform: scale(1.15);
+        }
+        
+        .banner-shimmer {
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-25deg);
+            animation: shimmer-anim 4s infinite;
+            z-index: 2;
+        }
+        
+        @keyframes shimmer-anim {
+            0% { left: -100%; }
+            50% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .banner-content-lux {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            padding: 0 40px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            color: #fff;
+        }
+        
+        .banner-text-group {
+            text-align: right;
+            animation: slide-in-right 1s ease-out;
+        }
+        
+        @keyframes slide-in-right {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .banner-title-lux-v2 {
+            font-family: var(--font-primary);
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .banner-desc-lux {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn-pill-lux {
+            border: 1px solid rgba(255,255,255,0.8);
+            padding: 4px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+        
+        .btn-pill-lux:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .banner-tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-family: var(--font-secondary);
+        }
+
+        @media (max-width: 991px) {
+            .banner-title-lux-v2 { font-size: 1.8rem; }
+        }
+
+        @media (max-width: 768px) {
+            .lux-banner { height: 160px; margin: 20px 0; }
+            .banner-title-lux-v2 { font-size: 1.4rem; margin-bottom: 5px; }
+            .banner-tagline { font-size: 0.85rem; }
+            .banner-content-lux { padding: 0 25px; }
+            .btn-pill-lux { padding: 3px 15px; font-size: 0.75rem; }
+        }
+
+        @media (max-width: 480px) {
+            .lux-banner { height: auto; min-height: 140px; padding: 20px 0; }
+            .banner-content-lux { justify-content: center; text-align: center; }
+            .banner-text-group { text-align: center; }
+            .banner-desc-lux { justify-content: center; flex-direction: column; gap: 8px; }
+            .banner-title-lux-v2 { font-size: 1.2rem; }
         }
     </style>
 @endsection
@@ -161,6 +276,24 @@
             </div>
         </div>
     </section>
+
+      <!-- Banner 2: Signature Scents -->
+    <div class="container">
+        <div class="lux-banner">
+            <img src="{{ asset('images/banners/wide_2.png') }}" alt="" class="banner-bg-img">
+            <div class="banner-shimmer"></div>
+            <div class="banner-content-lux">
+                <div class="banner-text-group">
+                    <h2 class="banner-title-lux-v2">Signature Scents</h2>
+                    <div class="banner-desc-lux">
+                        <span class="btn-pill-lux">Free Shipping</span>
+                        <span class="banner-tagline">Excellence in every single drop.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="new-collection section-padding">
         <div class="container">
             <h2 class="section-title">Recent Arrivals</h2>
@@ -199,11 +332,11 @@
         </div>
     </section>
 
-    <!-- Featured Collection -->
+    {{-- <!-- Featured Collection -->
     <section class="featured-collection section-padding">
         <div class="container">
             <h2 class="section-title">Best Sellers</h2>
-            <div class="swiper featured-slider">
+            <div class="swiper product-slider">
                 <div class="swiper-wrapper">
                     @forelse($bestSellers as $product)
                     <div class="swiper-slide">
@@ -221,7 +354,127 @@
                 <div class="swiper-button-prev"></div>
             </div>
         </div>
+    </section> --}}
+
+    <!-- Featured Highlights -->
+    <section class="featured-highlights section-padding">
+        <div class="container">
+            <h2 class="section-title">Featured Highlights</h2>
+            <div class="swiper product-slider">
+                <div class="swiper-wrapper">
+                    @forelse($featuredProducts as $product)
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="'FEATURED'" />
+                    </div>
+                    @empty
+                    <div class="swiper-slide text-center py-20">
+                        <p class="opacity-50">No featured highlights found.</p>
+                    </div>
+                    @endforelse
+                </div>
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
     </section>
+
+    <!-- Banner 3: Seasonal Picks -->
+    <div class="container">
+        <div class="lux-banner">
+            <img src="{{ asset('images/banners/wide_3.png') }}" alt="" class="banner-bg-img">
+            <div class="banner-shimmer"></div>
+            <div class="banner-content-lux">
+                <div class="banner-text-group">
+                    <h2 class="banner-title-lux-v2">Seasonal Picks</h2>
+                    <div class="banner-desc-lux">
+                        <span class="btn-pill-lux">Limited Edition</span>
+                        <span class="banner-tagline">Captured for the cooling breeze.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Offers -->
+    <section class="special-offers section-padding">
+        <div class="container">
+            <h2 class="section-title">Special Offers</h2>
+            <div class="swiper product-slider">
+                <div class="swiper-wrapper">
+                    @forelse($onSaleProducts as $product)
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="'SALE'" />
+                    </div>
+                    @empty
+                    <div class="swiper-slide text-center py-20">
+                        <p class="opacity-50">No special offers found.</p>
+                    </div>
+                    @endforelse
+                </div>
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner 4: Exclusive Engraving -->
+    <div class="container">
+        <div class="lux-banner">
+            <img src="{{ asset('images/banners/wide_4.png') }}" alt="" class="banner-bg-img">
+            <div class="banner-shimmer"></div>
+            <div class="banner-content-lux">
+                <div class="banner-text-group">
+                    <h2 class="banner-title-lux-v2">Exclusive Engraving</h2>
+                    <div class="banner-desc-lux">
+                        <span class="btn-pill-lux">Claim Offer</span>
+                        <span class="banner-tagline">Make your gift truly unforgettable.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Limited Remaining -->
+    <section class="limited-remaining section-padding">
+        <div class="container">
+            <h2 class="section-title">Limited Remaining</h2>
+            <div class="swiper product-slider">
+                <div class="swiper-wrapper">
+                    @forelse($clearanceProducts as $product)
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="'CLEARANCE'" />
+                    </div>
+                    @empty
+                    <div class="swiper-slide text-center py-20">
+                        <p class="opacity-50">No clearance items found.</p>
+                    </div>
+                    @endforelse
+                </div>
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner 5: Final Call -->
+    <div class="container">
+        <div class="lux-banner">
+            <img src="{{ asset('images/banners/wide_5.png') }}" alt="" class="banner-bg-img">
+            <div class="banner-shimmer"></div>
+            <div class="banner-content-lux">
+                <div class="banner-text-group">
+                    <h2 class="banner-title-lux-v2">Final Call</h2>
+                    <div class="banner-desc-lux">
+                        <span class="btn-pill-lux">Up to 40% Off</span>
+                        <span class="banner-tagline">Secure your favorites before they're gone.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Testimonials Section -->
@@ -317,7 +570,22 @@
             </div>
         </div>
     </section>
-
+ <!-- Banner 1: Elite Collection -->
+    <div class="container">
+        <div class="lux-banner">
+            <img src="{{ asset('images/banners/wide_1.png') }}" alt="" class="banner-bg-img">
+            <div class="banner-shimmer"></div>
+            <div class="banner-content-lux">
+                <div class="banner-text-group">
+                    <h2 class="banner-title-lux-v2">Elite Collection</h2>
+                    <div class="banner-desc-lux">
+                        <span class="btn-pill-lux">20% Off Storewide</span>
+                        <span class="banner-tagline">Crafted with Passion & Precision.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Services Section -->
     <section class="services-section section-padding">
         <div class="container">
@@ -438,8 +706,4 @@
             });
         });
     </script>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

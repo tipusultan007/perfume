@@ -9,70 +9,73 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('styles')
 </head>
-<body class="bg-[#fcfaf7] font-sans text-luxury-black antialiased">
+<body class="bg-[#F8FAFC] font-sans text-slate-900 antialiased">
 
     <!-- Sidebar -->
-    <aside class="fixed inset-y-0 left-0 w-64 bg-luxury-black z-50 flex flex-col shadow-2xl">
+    <aside class="fixed inset-y-0 left-0 w-64 bg-[#0F172A] z-50 flex flex-col shadow-xl border-r border-slate-800">
 
-        <div class="p-8 border-b border-white/5">
-            <a href="{{ route('admin.dashboard') }}" class="font-serif text-xl tracking-[0.2em] font-medium text-luxury-cream">L'ESSENCE</a>
+        <div class="p-8 border-b border-slate-800 bg-slate-900/50">
+            <a href="{{ route('admin.dashboard') }}" class="font-serif text-xl tracking-[0.2em] font-medium text-white">L'ESSENCE</a>
         </div>
 
         
-        <nav class="flex-1 p-6 overflow-y-auto space-y-1">
-            <span class="block px-3 text-[10px] uppercase tracking-widest text-white/40 mt-6 mb-2">General</span>
+        <nav class="flex-1 p-6 overflow-y-auto space-y-1 custom-scrollbar">
+            <span class="block px-3 text-[10px] uppercase tracking-widest text-slate-500 mt-6 mb-2 font-semibold">General</span>
             <a href="{{ route('admin.dashboard') }}" 
-                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-dashboard-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Dashboard
+                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.dashboard') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-dashboard-line mr-3 text-lg {{ request()->routeIs('admin.dashboard') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Dashboard
             </a>
             <a href="{{ route('admin.home-settings.index') }}" 
-                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.home-settings.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-home-7-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Home Settings
+                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.home-settings.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-home-7-line mr-3 text-lg {{ request()->routeIs('admin.home-settings.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Home Settings
             </a>
             <a href="{{ route('admin.sliders.index') }}" 
-                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.sliders.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-gallery-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Hero Sliders
+                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.sliders.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-gallery-line mr-3 text-lg {{ request()->routeIs('admin.sliders.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Hero Sliders
             </a>
             
-            <span class="block px-3 text-[10px] uppercase tracking-widest text-white/40 mt-6 mb-2">Catalog</span>
-            <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.products.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-archive-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Products
+            <span class="block px-3 text-[10px] uppercase tracking-widest text-slate-500 mt-8 mb-2 font-semibold">Catalog</span>
+            <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.products.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-archive-line mr-3 text-lg {{ request()->routeIs('admin.products.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Products
             </a>
-            <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.categories.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-stack-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Categories
+            <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.categories.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-stack-line mr-3 text-lg {{ request()->routeIs('admin.categories.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Categories
             </a>
-            <a href="{{ route('admin.brands.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.brands.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-medal-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Brands
+            <a href="{{ route('admin.brands.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.brands.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-medal-line mr-3 text-lg {{ request()->routeIs('admin.brands.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Brands
             </a>
-            <a href="{{ route('admin.attributes.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.attributes.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-list-settings-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Attributes
+            <a href="{{ route('admin.attributes.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.attributes.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-list-settings-line mr-3 text-lg {{ request()->routeIs('admin.attributes.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Attributes
             </a>
 
-            <span class="block px-3 text-[10px] uppercase tracking-widest text-white/40 mt-6 mb-2">Sales</span>
-            <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.orders.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-shopping-bag-3-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Orders
+            <span class="block px-3 text-[10px] uppercase tracking-widest text-slate-500 mt-8 mb-2 font-semibold">Sales</span>
+            <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.orders.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-shopping-bag-3-line mr-3 text-lg {{ request()->routeIs('admin.orders.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Orders
             </a>
-            <a href="{{ route('admin.customers.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.customers.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-user-heart-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Customers
+            <a href="{{ route('admin.customers.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.customers.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-luxury-cream font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-user-heart-line mr-3 text-lg {{ request()->routeIs('admin.customers.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Customers
             </a>
-            <a href="{{ route('admin.coupons.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.coupons.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-ticket-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Coupons
+            <a href="{{ route('admin.coupons.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.coupons.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-ticket-line mr-3 text-lg {{ request()->routeIs('admin.coupons.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Coupons
             </a>
-            <a href="{{ route('admin.reports.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.reports.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-bar-chart-2-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Reports
+            <a href="{{ route('admin.reports.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.reports.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-bar-chart-2-line mr-3 text-lg {{ request()->routeIs('admin.reports.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Reports
             </a>
-            <a href="{{ route('admin.newsletter.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.newsletter.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-mail-send-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Newsletter
+            <a href="{{ route('admin.newsletter.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.newsletter.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-mail-send-line mr-3 text-lg {{ request()->routeIs('admin.newsletter.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Newsletter
             </a>
-            <span class="block px-3 text-[10px] uppercase tracking-widest text-white/40 mt-6 mb-2">Configuration</span>
-            <a href="{{ route('admin.taxes.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.taxes.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-percent-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Tax Rates
+            <a href="{{ route('admin.contact-submissions.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.contact-submissions.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-question-answer-line mr-3 text-lg {{ request()->routeIs('admin.contact-submissions.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Contact Inquiries
             </a>
-            <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.settings.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-settings-4-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Global Settings
+            <span class="block px-3 text-[10px] uppercase tracking-widest text-slate-500 mt-8 mb-2 font-semibold">Configuration</span>
+            <a href="{{ route('admin.taxes.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.taxes.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-percent-line mr-3 text-lg {{ request()->routeIs('admin.taxes.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Tax Rates
             </a>
-            <a href="{{ route('admin.announcements.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.announcements.*') ? 'bg-white/10 text-luxury-cream' : 'text-white/60 hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-notification-badge-line mr-3 text-lg opacity-70 group-hover:opacity-100"></i> Announcements
+            <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.settings.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-settings-4-line mr-3 text-lg {{ request()->routeIs('admin.settings.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Global Settings
+            </a>
+            <a href="{{ route('admin.announcements.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.announcements.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-notification-badge-line mr-3 text-lg {{ request()->routeIs('admin.announcements.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Announcements
             </a>
         </nav>
 
@@ -80,7 +83,7 @@
 
     <div class="pl-64 flex-1">
         <!-- Header -->
-        <header class="sticky top-0 h-20 bg-white/80 backdrop-blur-md border-b border-black/5 z-40 flex items-center justify-between px-10">
+        <header class="sticky top-0 h-20 bg-white/95 backdrop-blur-md border-b border-slate-200 z-40 flex items-center justify-between px-10">
             <h2 class="font-sans font-semibold text-xl">@yield('page_title', 'Overview')</h2>
 
             

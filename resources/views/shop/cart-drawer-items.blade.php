@@ -1,11 +1,11 @@
 @forelse($cart as $key => $item)
-<div class="cart-item flex gap-5 mb-8 pb-8 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+<div class="cart-item flex gap-5 mb-4 pb-8 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
     <div class="item-img w-[90px] aspect-[2/2.8] bg-[#f9f7f2] overflow-hidden flex-shrink-0">
         <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
     </div>
     <div class="item-info flex-1 flex flex-col">
         <div class="flex justify-between items-start">
-            <h4 class="font-serif text-[1.3rem] mb-1 leading-tight"><a href="{{ $item['url'] }}">{{ $item['name'] }}</a></h4>
+            <h4 class="text-[1rem] mb-1 leading-tight"><a href="{{ $item['url'] }}">{{ $item['name'] }}</a></h4>
             <button class="text-gray-400 hover:text-black transition-colors" onclick="removeFromCart('{{ $key }}')">&times;</button>
         </div>
         

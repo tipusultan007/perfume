@@ -153,7 +153,7 @@
         border: none;
         border-bottom: 1px solid var(--border);
         background: transparent;
-        font-family: 'Inter';
+        font-family: 'Montserrat';
         font-size: 15px;
         outline: none;
         transition: var(--transition);

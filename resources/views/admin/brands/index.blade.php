@@ -5,50 +5,57 @@
 
 @section('content')
 <div class="flex justify-between items-center mb-10">
-    <h3 class="font-serif text-xl">All Brands</h3>
-    <a href="{{ route('admin.brands.create') }}" class="px-6 py-3 bg-luxury-black text-white text-[11px] uppercase tracking-widest hover:bg-opacity-90 transition-all">
+    <h3 class="font-bold text-2xl text-slate-900">Brands</h3>
+    <a href="{{ route('admin.brands.create') }}" class="px-6 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-widest font-bold rounded-lg shadow-xl hover:bg-slate-800 transition-all">
         Add New Brand
     </a>
 </div>
 
 @if(session('success'))
-    <div class="bg-emerald-50 text-emerald-700 p-4 mb-8 text-xs uppercase tracking-widest border border-emerald-100">
-        {{ session('success') }}
+    <div class="bg-emerald-50 text-emerald-700 p-6 mb-10 rounded-xl border border-emerald-100 shadow-sm flex items-center space-x-3">
+        <i class="ri-checkbox-circle-line text-xl"></i>
+        <span class="text-[11px] uppercase tracking-widest font-bold">{{ session('success') }}</span>
     </div>
 @endif
 
-<div class="bg-white border border-black/5 p-10">
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden text-slate-900 font-bold">
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
-                <tr class="border-b border-black/5">
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Logo</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Name</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium">Slug</th>
-                    <th class="py-4 text-[11px] uppercase tracking-widest text-black/40 font-medium text-right">Action</th>
+                <tr class="bg-slate-50/50 border-b border-slate-100">
+                    <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Identity</th>
+                    <th class="py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Brand Name</th>
+                    <th class="py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Slug</th>
+                    <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold text-right">Action</th>
                 </tr>
             </thead>
             <tbody class="text-sm">
                 @forelse($brands as $brand)
-                <tr class="border-b border-black/5 hover:bg-gray-50/50 transition-colors">
-                    <td class="py-4">
+                <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
+                    <td class="px-8 py-6">
                         @if($brand->getFirstMediaUrl('logo'))
-                            <img src="{{ $brand->getFirstMediaUrl('logo') }}" alt="{{ $brand->name }}" class="w-10 h-10 object-contain border border-black/5 p-1">
+                            <div class="w-12 h-12 rounded-lg border border-slate-100 p-2 bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <img src="{{ $brand->getFirstMediaUrl('logo') }}" alt="{{ $brand->name }}" class="max-w-full max-h-full object-contain">
+                            </div>
                         @else
-                            <div class="w-10 h-10 bg-gray-50 flex items-center justify-center text-[10px] opacity-40 border border-black/5">NO LOGO</div>
+                            <div class="w-12 h-12 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-[8px] text-slate-400 font-bold tracking-tighter">NO LOGO</div>
                         @endif
                     </td>
-                    <td class="py-6 font-medium">{{ $brand->name }}</td>
-                    <td class="opacity-60">{{ $brand->slug }}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-4">
-                            <a href="{{ route('admin.brands.edit', $brand) }}" class="text-luxury-accent hover:text-luxury-black transition-colors">
+                    <td class="py-6">
+                        <span class="text-sm font-bold text-slate-900 uppercase tracking-wide">{{ $brand->name }}</span>
+                    </td>
+                    <td class="py-6 font-mono text-[11px] text-slate-400 font-bold uppercase tracking-tight">{{ $brand->slug }}</td>
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex justify-end items-center gap-3">
+                            <a href="{{ route('admin.brands.edit', $brand) }}" 
+                                class="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-900 hover:shadow-lg transition-all shadow-sm">
                                 <i class="ri-edit-line text-lg"></i>
                             </a>
                             <form action="{{ route('admin.brands.destroy', $brand) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-400 hover:text-red-600 transition-colors">
+                                <button type="submit" 
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white hover:shadow-lg transition-all shadow-sm">
                                     <i class="ri-delete-bin-line text-lg"></i>
                                 </button>
                             </form>
@@ -64,7 +71,7 @@
         </table>
     </div>
     
-    <div class="mt-10">
+    <div class="px-8 py-8 border-t border-slate-50 bg-slate-50/30">
         {{ $brands->links() }}
     </div>
 </div>

@@ -34,13 +34,12 @@
     .cart-item {
         display: flex;
         gap: 30px;
-        padding: 40px 0;
+        padding: 20px 0;
         border-bottom: 1px solid rgba(0,0,0,0.1);
     }
 
     .item-img {
-        width: 140px;
-        aspect-ratio: 2/2.8;
+        aspect-ratio: 1/1.2;
         background: #f9f7f2;
         overflow: hidden;
     }
@@ -65,9 +64,9 @@
 
     .item-title h3 {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 1.8rem;
+        font-size: 1.2rem;
         margin-bottom: 5px;
-        font-weight: 300;
+        font-weight: 500;
     }
 
     .item-meta {

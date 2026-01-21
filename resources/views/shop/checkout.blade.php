@@ -69,7 +69,7 @@
         width: 100%;
         padding: 15px;
         border: 1px solid rgba(0,0,0,0.1);
-        font-family: 'Inter', sans-serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: 14px;
         outline: none;
         transition: border-color 0.3s;

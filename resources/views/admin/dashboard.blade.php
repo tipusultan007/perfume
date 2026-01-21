@@ -8,82 +8,82 @@
     <!-- Stats Widgets -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Revenue -->
-        <div class="bg-white p-6 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Revenue</p>
-                    <h3 class="text-2xl font-serif font-medium mt-1">${{ number_format($totalRevenue, 2) }}</h3>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Total Revenue</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-2">${{ number_format($totalRevenue, 2) }}</h3>
                 </div>
-                <div class="p-3 bg-luxury-cream text-luxury-accent rounded-xl">
+                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
                     <i class="ri-money-dollar-circle-line text-xl"></i>
                 </div>
             </div>
             <div class="mt-4 flex items-center text-xs">
-                <span class="text-green-600 font-medium flex items-center">
-                    <i class="ri-arrow-up-line mr-1"></i> +12.5%
+                <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">
+                    +12.5%
                 </span>
-                <span class="text-gray-400 ml-2">from last month</span>
+                <span class="text-slate-400 ml-2 font-medium">from last month</span>
             </div>
         </div>
 
         <!-- Orders -->
-        <div class="bg-white p-6 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">New Orders</p>
-                    <h3 class="text-2xl font-serif font-medium mt-1">{{ $newOrdersCount }}</h3>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">New Orders</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ $newOrdersCount }}</h3>
                 </div>
-                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
                     <i class="ri-shopping-bag-3-line text-xl"></i>
                 </div>
             </div>
             <div class="mt-4 flex items-center text-xs">
-                <span class="text-gray-400">Today's orders</span>
+                <span class="text-slate-400 font-medium">Today's active orders</span>
             </div>
         </div>
 
         <!-- Customers -->
-        <div class="bg-white p-6 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Customers</p>
-                    <h3 class="text-2xl font-serif font-medium mt-1">{{ number_format($totalCustomers) }}</h3>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Total Customers</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ number_format($totalCustomers) }}</h3>
                 </div>
-                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
                     <i class="ri-user-heart-line text-xl"></i>
                 </div>
             </div>
             <div class="mt-4 flex items-center text-xs">
-                <span class="text-green-600 font-medium flex items-center">
-                    <i class="ri-arrow-up-line mr-1"></i> +5.2%
+                <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">
+                    +5.2%
                 </span>
-                <span class="text-gray-400 ml-2">new growth</span>
+                <span class="text-slate-400 ml-2 font-medium">new growth</span>
             </div>
         </div>
         
         <!-- Products -->
-        <div class="bg-white p-6 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
             <div class="flex justify-between items-start">
                 <div>
-                    <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Top Products</p>
-                    <h3 class="text-2xl font-serif font-medium mt-1">{{ $topProducts->count() }}</h3>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Top Products</p>
+                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ $topProducts->count() }}</h3>
                 </div>
-                <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
                     <i class="ri-star-smile-line text-xl"></i>
                 </div>
             </div>
             <div class="mt-4 flex items-center text-xs">
-                <span class="text-gray-400">Best sellers</span>
+                <span class="text-slate-400 font-medium">Best sellers available</span>
             </div>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Chart -->
-        <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-black/5 shadow-sm">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-serif text-lg">Revenue Overview</h3>
-                <select class="text-xs border-none bg-gray-50 rounded-lg px-3 py-1 text-gray-500 focus:ring-0 cursor-pointer hover:bg-gray-100 transition-colors">
+        <div class="lg:col-span-2 bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="font-bold text-slate-900">Revenue Overview</h3>
+                <select class="text-xs border border-slate-200 bg-slate-50 rounded-lg px-4 py-2 text-slate-600 focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none cursor-pointer hover:bg-slate-100 transition-colors">
                     <option>Last 12 Months</option>
                     <option>Last 30 Days</option>
                     <option>This Year</option>
@@ -95,77 +95,77 @@
         </div>
 
         <!-- Top Products List -->
-        <div class="bg-white p-6 rounded-2xl border border-black/5 shadow-sm">
-            <h3 class="font-serif text-lg mb-6">Top Selling Products</h3>
+        <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-slate-900 mb-8">Top Selling Products</h3>
             <div class="space-y-4">
                 @foreach($topProducts as $index => $product)
-                <div class="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors">
-                    <div class="w-8 h-8 rounded-full bg-luxury-cream text-luxury-accent flex items-center justify-center font-serif font-medium text-sm flex-shrink-0">
+                <div class="flex items-center gap-4 p-4 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-100">
+                    <div class="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
                         {{ $index + 1 }}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-medium text-gray-900 truncate">{{ $product->product_name }}</h4>
-                        <p class="text-xs text-gray-500">{{ $product->total_qty }} sold</p>
+                        <h4 class="text-sm font-bold text-slate-900 truncate">{{ $product->product_name }}</h4>
+                        <p class="text-[11px] text-slate-500 font-medium">{{ $product->total_qty }} units sold</p>
                     </div>
                     <div class="text-right">
-                        <span class="text-sm font-medium block">${{ number_format($product->revenue, 0) }}</span>
+                        <span class="text-sm font-bold text-slate-900 block">${{ number_format($product->revenue, 0) }}</span>
                     </div>
                 </div>
                 @endforeach
             </div>
-            <a href="{{ route('admin.reports.products') }}" class="block mt-6 text-center text-xs text-luxury-accent hover:underline uppercase tracking-wider font-medium">View All Products</a>
+            <a href="{{ route('admin.reports.products') }}" class="block mt-8 text-center text-[11px] text-slate-500 hover:text-slate-900 uppercase tracking-[0.2em] font-bold border border-slate-200 py-3 rounded-lg hover:bg-slate-50 transition-all">View All Products</a>
         </div>
     </div>
 
     <!-- Recent Orders -->
-    <div class="bg-white p-8 rounded-2xl border border-black/5 shadow-sm">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="font-serif text-lg">Recent Orders</h3>
-            <a href="{{ route('admin.orders.index') }}" class="text-xs text-gray-500 hover:text-black transition-colors">View All Orders</a>
+    <div class="bg-white p-0 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+            <h3 class="font-bold text-slate-900">Recent Orders</h3>
+            <a href="{{ route('admin.orders.index') }}" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-[11px] text-slate-600 font-bold uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">View All Orders</a>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-black/5">
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium pl-4">Order ID</th>
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium">Customer</th>
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium">Date</th>
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium">Amount</th>
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium">Status</th>
-                        <th class="py-4 text-[11px] uppercase tracking-widest text-gray-400 font-medium pr-4 text-right">Action</th>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Order ID</th>
+                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Customer</th>
+                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Date</th>
+                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Amount</th>
+                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Status</th>
+                        <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold text-right">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-sm">
+                <tbody class="text-sm divide-y divide-slate-100">
                     @forelse($recentOrders as $order)
-                    <tr class="border-b border-black/5 hover:bg-gray-50/50 transition-colors group">
-                        <td class="py-4 pl-4 font-medium text-black group-hover:text-luxury-accent transition-colors">{{ $order->order_number }}</td>
-                        <td class="py-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs text-gray-500">
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="px-8 py-5 font-bold text-slate-900">{{ $order->order_number }}</td>
+                        <td class="py-5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 border border-slate-200">
                                     {{ substr($order->shipping_address['first_name'] ?? 'G', 0, 1) }}
                                 </div>
-                                <span>{{ $order->shipping_address['first_name'] ?? 'Guest' }}</span>
+                                <span class="font-medium text-slate-700">{{ $order->shipping_address['first_name'] ?? 'Guest' }}</span>
                             </div>
                         </td>
-                        <td class="py-4 text-gray-500">{{ $order->created_at->format('M d, Y') }}</td>
-                        <td class="py-4 font-medium">${{ number_format($order->grand_total, 2) }}</td>
-                        <td class="py-4">
+                        <td class="py-5 text-slate-500 font-medium">{{ $order->created_at->format('M d, Y') }}</td>
+                        <td class="py-5 font-bold text-slate-900">${{ number_format($order->grand_total, 2) }}</td>
+                        <td class="py-5">
                             @php
                                 $statusClasses = [
-                                    'pending' => 'bg-orange-50 text-orange-600',
-                                    'processing' => 'bg-blue-50 text-blue-600',
-                                    'completed' => 'bg-green-50 text-green-600',
-                                    'cancelled' => 'bg-red-50 text-red-600',
+                                    'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
+                                    'processing' => 'bg-blue-50 text-blue-600 border-blue-100',
+                                    'completed' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                    'cancelled' => 'bg-rose-50 text-rose-600 border-rose-100',
                                 ];
-                                $class = $statusClasses[$order->status] ?? 'bg-gray-100 text-gray-600';
+                                $class = $statusClasses[$order->status] ?? 'bg-slate-50 text-slate-600 border-slate-100';
                             @endphp
-                            <span class="inline-block px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded-full {{ $class }}">
+                            <span class="inline-flex px-2.5 py-1 text-[10px] uppercase tracking-widest font-bold rounded-md border {{ $class }}">
                                 {{ $order->status }}
                             </span>
                         </td>
-                        <td class="py-4 pr-4 text-right">
-                            <a href="{{ route('admin.orders.show', $order->id) }}" class="text-luxury-accent hover:text-black transition-colors text-xs font-medium border-b border-transparent hover:border-black">View Details</a>
+                        <td class="px-8 py-5 text-right">
+                            <a href="{{ route('admin.orders.show', $order->id) }}" class="inline-flex items-center px-3 py-1.5 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-900 hover:text-white transition-all shadow-sm border border-slate-200">View</a>
                         </td>
                     </tr>
                     @empty

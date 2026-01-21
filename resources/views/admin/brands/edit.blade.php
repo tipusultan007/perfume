@@ -6,49 +6,57 @@
 @section('content')
 <div class="max-w-2xl">
     <div class="flex items-center gap-4 mb-10">
-        <a href="{{ route('admin.brands.index') }}" class="w-10 h-10 border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all">
+        <a href="{{ route('admin.brands.index') }}" class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
             <i class="ri-arrow-left-line"></i>
         </a>
-        <h3 class="font-serif text-xl">Edit Brand: {{ $brand->name }}</h3>
+        <h3 class="font-bold text-2xl text-slate-900">Edit Brand: <span class="text-slate-400 font-medium">{{ $brand->name }}</span></h3>
     </div>
 
-    <div class="bg-white border border-black/5 p-10">
+    <div class="bg-white border border-slate-200 p-10 rounded-xl shadow-sm">
         <form action="{{ route('admin.brands.update', $brand) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
             @csrf
             @method('PUT')
             <div>
-                <label class="block text-[10px] uppercase tracking-widest mb-3 opacity-60">Brand Name</label>
+                <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Brand Name</label>
                 <input type="text" name="name" value="{{ old('name', $brand->name) }}" required
-                    class="w-full py-4 border-b border-black/10 focus:border-luxury-black outline-none transition-colors text-sm bg-transparent">
+                    class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
                 @error('name')
-                    <span class="text-red-500 text-[10px] mt-2 block tracking-widest">{{ $message }}</span>
+                    <span class="text-rose-500 text-[10px] mt-2 block font-bold tracking-widest">{{ $message }}</span>
                 @enderror
             </div>
 
             <div>
-                <label class="block text-[10px] uppercase tracking-widest mb-3 opacity-60">Brand Logo</label>
-                @if($brand->getFirstMediaUrl('logo'))
-                    <div class="mb-4">
-                        <img src="{{ $brand->getFirstMediaUrl('logo') }}" alt="{{ $brand->name }}" class="w-20 h-20 object-contain border border-black/5 p-2">
+                <label class="block text-[10px] uppercase tracking-widest mb-4 text-slate-500 font-bold">Brand Logo</label>
+                <div class="flex items-start gap-6">
+                    @if($brand->getFirstMediaUrl('logo'))
+                        <div class="relative group">
+                            <div class="w-24 h-24 rounded-xl border border-slate-200 p-3 bg-white shadow-sm flex items-center justify-center group-hover:border-slate-900 transition-all">
+                                <img src="{{ $brand->getFirstMediaUrl('logo') }}" alt="{{ $brand->name }}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <div class="absolute -top-2 -right-2 bg-slate-900 text-white text-[8px] px-2 py-1 rounded font-bold uppercase tracking-widest shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">Current</div>
+                        </div>
+                    @endif
+                    <div class="flex-1">
+                        <input type="file" name="logo" class="w-full px-5 py-6 bg-slate-50 border border-dashed border-slate-300 rounded-xl text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-slate-900 file:text-white hover:border-slate-900 transition-all cursor-pointer">
+                        <div class="mt-2 text-[9px] text-slate-400 uppercase tracking-widest font-bold">Upload to replace existing logo (PNG/SVG)</div>
                     </div>
-                @endif
-                <input type="file" name="logo" class="w-full py-4 text-xs">
+                </div>
                 @error('logo')
-                    <span class="text-red-500 text-[10px] mt-2 block tracking-widest">{{ $message }}</span>
+                    <span class="text-rose-500 text-[10px] mt-2 block font-bold tracking-widest">{{ $message }}</span>
                 @enderror
             </div>
 
             <div>
-                <label class="block text-[10px] uppercase tracking-widest mb-3 opacity-60">Description</label>
+                <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Description</label>
                 <textarea name="description" rows="4" 
-                    class="w-full py-4 border border-black/10 focus:border-luxury-black outline-none transition-colors text-sm bg-transparent px-4">{{ old('description', $brand->description) }}</textarea>
+                    class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">{{ old('description', $brand->description) }}</textarea>
                 @error('description')
-                    <span class="text-red-500 text-[10px] mt-2 block tracking-widest">{{ $message }}</span>
+                    <span class="text-rose-500 text-[10px] mt-2 block font-bold tracking-widest">{{ $message }}</span>
                 @enderror
             </div>
 
-            <div class="pt-6">
-                <button type="submit" class="px-10 py-4 bg-luxury-black text-white text-[11px] uppercase tracking-widest hover:bg-opacity-90 transition-all">
+            <div class="pt-6 border-t border-slate-100 mt-10">
+                <button type="submit" class="w-full py-4 bg-slate-900 text-white text-[11px] uppercase tracking-widest font-bold rounded-lg hover:bg-slate-800 transition-all shadow-xl">
                     Update Brand
                 </button>
             </div>
