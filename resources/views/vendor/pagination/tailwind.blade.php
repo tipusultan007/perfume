@@ -25,7 +25,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0] hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-300">
+                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </a>
             @endif
@@ -41,9 +41,9 @@
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <span class="w-10 h-10 flex items-center justify-center bg-[#D4AF37] text-white  text-xs">{{ $page }}</span>
+                            <span class="w-10 h-10 flex items-center justify-center bg-[var(--accent)] text-white  text-xs">{{ $page }}</span>
                         @else
-                            <a href="{{ $url }}" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0]  text-xs hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-300">{{ $page }}</a>
+                            <a href="{{ $url }}" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0]  text-xs hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300">{{ $page }}</a>
                         @endif
                     @endforeach
                 @endif
@@ -51,7 +51,7 @@
 
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0] hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-300">
+                <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="w-10 h-10 flex items-center justify-center border border-[#e2e8f0] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </a>
             @else

@@ -139,6 +139,7 @@
 @section('content')
 
     <!-- Hero Section (Animated Slider) -->
+    @if(\App\Models\Setting::get('home_show_hero', 1))
     @if(isset($heroStyle) && $heroStyle === 'modern')
         @include('partials.hero-modern')
     @else
@@ -166,9 +167,11 @@
             </div>
         </section>
     @endif
+    @endif
 
     <!-- Category Section -->
-    <section class="category-section section-padding">
+    @if(\App\Models\Setting::get('home_show_categories', 1))
+    <section class="category-section section-padding bg-accent-soft">
         <div class="container">
             <h2 class="section-title">New Collection</h2>
             <div class="swiper category-slider">
@@ -240,8 +243,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Promo Banners Section -->
+    @if(\App\Models\Setting::get('home_show_promo_banners', 1))
     <section class="promo-banners">
         <div class="container banner-grid">
             <!-- Banner 1 -->
@@ -276,8 +281,10 @@
             </div>
         </div>
     </section>
+    @endif
 
       <!-- Banner 2: Signature Scents -->
+    @if(\App\Models\Setting::get('home_show_banner_signature', 1))
     <div class="container">
         <div class="lux-banner">
             <img src="{{ asset('images/banners/wide_2.png') }}" alt="" class="banner-bg-img">
@@ -293,7 +300,9 @@
             </div>
         </div>
     </div>
+    @endif
 
+    @if(\App\Models\Setting::get('home_show_recent_arrivals', 1))
     <section class="new-collection section-padding">
         <div class="container">
             <h2 class="section-title">Recent Arrivals</h2>
@@ -317,9 +326,11 @@
             </div>
         </div>
     </section>
+    @endif
 
 
     <!-- CTA Section -->
+    @if(\App\Models\Setting::get('home_show_cta', 1))
     <section class="cta-section"
         style="background-image: url('https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/CMS-banner-2.1.jpg');">
         <div class="container">
@@ -331,6 +342,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- <!-- Featured Collection -->
     <section class="featured-collection section-padding">
@@ -357,6 +369,7 @@
     </section> --}}
 
     <!-- Featured Highlights -->
+    @if(\App\Models\Setting::get('home_show_featured', 1))
     <section class="featured-highlights section-padding">
         <div class="container">
             <h2 class="section-title">Featured Highlights</h2>
@@ -378,8 +391,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Banner 3: Seasonal Picks -->
+    @if(\App\Models\Setting::get('home_show_banner_seasonal', 1))
     <div class="container">
         <div class="lux-banner">
             <img src="{{ asset('images/banners/wide_3.png') }}" alt="" class="banner-bg-img">
@@ -395,8 +410,10 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Special Offers -->
+    @if(\App\Models\Setting::get('home_show_special_offers', 1))
     <section class="special-offers section-padding">
         <div class="container">
             <h2 class="section-title">Special Offers</h2>
@@ -418,8 +435,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Banner 4: Exclusive Engraving -->
+    @if(\App\Models\Setting::get('home_show_banner_engraving', 1))
     <div class="container">
         <div class="lux-banner">
             <img src="{{ asset('images/banners/wide_4.png') }}" alt="" class="banner-bg-img">
@@ -435,8 +454,10 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Limited Remaining -->
+    @if(\App\Models\Setting::get('home_show_clearance', 1))
     <section class="limited-remaining section-padding">
         <div class="container">
             <h2 class="section-title">Limited Remaining</h2>
@@ -458,8 +479,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Banner 5: Final Call -->
+    @if(\App\Models\Setting::get('home_show_banner_final', 1))
     <div class="container">
         <div class="lux-banner">
             <img src="{{ asset('images/banners/wide_5.png') }}" alt="" class="banner-bg-img">
@@ -475,16 +498,18 @@
             </div>
         </div>
     </div>
+    @endif
 
 
     <!-- Testimonials Section -->
+    @if(\App\Models\Setting::get('home_show_testimonials', 1))
     <section class="testimonials-section section-padding">
         <div class="container">
             <h2 class="section-title">What Customer says About Us!</h2>
             <div class="swiper testimonials-slider">
                 <div class="swiper-wrapper">
                     <!-- Testimonial 1 -->
-                    <div class="swiper-slide testimonial-card">
+                    <div class="swiper-slide testimonial-card bg-accent-soft">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -500,7 +525,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 2 -->
-                    <div class="swiper-slide testimonial-card">
+                    <div class="swiper-slide testimonial-card bg-accent-soft">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -516,7 +541,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 3 -->
-                    <div class="swiper-slide testimonial-card">
+                    <div class="swiper-slide testimonial-card bg-accent-soft">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -532,7 +557,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 4 -->
-                    <div class="swiper-slide testimonial-card">
+                    <div class="swiper-slide testimonial-card bg-accent-soft">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -548,7 +573,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 5 -->
-                    <div class="swiper-slide testimonial-card">
+                    <div class="swiper-slide testimonial-card bg-accent-soft">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -570,7 +595,9 @@
             </div>
         </div>
     </section>
+    @endif
  <!-- Banner 1: Elite Collection -->
+    @if(\App\Models\Setting::get('home_show_banner_elite', 1))
     <div class="container">
         <div class="lux-banner">
             <img src="{{ asset('images/banners/wide_1.png') }}" alt="" class="banner-bg-img">
@@ -586,7 +613,10 @@
             </div>
         </div>
     </div>
+    @endif
+
     <!-- Services Section -->
+    @if(\App\Models\Setting::get('home_show_services', 1))
     <section class="services-section section-padding">
         <div class="container">
             <div class="services-grid">
@@ -633,8 +663,10 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Newsletter Section -->
+    @if(\App\Models\Setting::get('home_show_newsletter', 1))
     <section class="newsletter-section">
         <div class="container">
             <div class="newsletter-wrapper">
@@ -655,6 +687,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     <script>
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {

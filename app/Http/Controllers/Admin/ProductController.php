@@ -12,6 +12,8 @@ use App\Models\Attribute;
 use App\Models\ProductVariant;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
@@ -76,6 +78,7 @@ class ProductController extends Controller
             'stock' => 'nullable|integer',
             'gender' => 'nullable|in:Male,Female,Unisex',
             'concentration' => 'nullable|string',
+            'size' => 'nullable|string|max:50',
             'season' => 'nullable|string',
             'top_notes' => 'nullable|string',
             'heart_notes' => 'nullable|string',
@@ -105,6 +108,7 @@ class ProductController extends Controller
                 'stock_quantity' => $request->stock ?? 0,
                 'gender' => $request->gender,
                 'concentration' => $request->concentration,
+                'size' => $request->size,
                 'season' => $request->season,
                 'top_notes' => $request->top_notes,
                 'heart_notes' => $request->heart_notes,
@@ -204,6 +208,7 @@ class ProductController extends Controller
             'stock' => 'nullable|integer',
             'gender' => 'nullable|in:Male,Female,Unisex',
             'concentration' => 'nullable|string',
+            'size' => 'nullable|string|max:50',
             'season' => 'nullable|string',
             'top_notes' => 'nullable|string',
             'heart_notes' => 'nullable|string',
@@ -231,6 +236,7 @@ class ProductController extends Controller
                 'short_description' => $request->short_description,
                 'gender' => $request->gender,
                 'concentration' => $request->concentration,
+                'size' => $request->size,
                 'season' => $request->season,
                 'top_notes' => $request->top_notes,
                 'heart_notes' => $request->heart_notes,
@@ -359,6 +365,25 @@ class ProductController extends Controller
                 'success' => false,
                 'message' => 'Failed to update featured status.'
             ], 500);
+        }
+    }
+
+    public function import()
+    {
+        return view('admin.products.import');
+    }
+
+    public function processImport(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        try {
+            Excel::import(new ProductsImport, $request->file('file'));
+            return redirect()->route('admin.products.index')->with('success', 'Products imported successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Import failed: ' . $e->getMessage()]);
         }
     }
 }

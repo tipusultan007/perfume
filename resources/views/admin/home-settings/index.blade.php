@@ -12,6 +12,57 @@
     @endif
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Section Visibility Control -->
+        <div class="lg:col-span-3">
+             <div class="bg-white p-8 border border-black/5 rounded-2xl shadow-sm">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="font-serif text-xl">Home Page Sections</h3>
+                        <p class="text-xs text-slate-400 mt-1">Toggle which sections are visible on your live homepage.</p>
+                    </div>
+                </div>
+                
+                <form action="{{ route('admin.home-settings.visibility') }}" method="POST">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @php
+                            $sections = [
+                                'hero' => 'Hero Slider',
+                                'categories' => 'Category Collection',
+                                'promo_banners' => 'Promo Banners (Top)',
+                                'banner_signature' => 'Banner: Signature Scents',
+                                'recent_arrivals' => 'Recent Arrivals',
+                                'cta' => 'CTA Section (Confidence)',
+                                'featured' => 'Featured Highlights',
+                                'banner_seasonal' => 'Banner: Seasonal Picks',
+                                'special_offers' => 'Special Offers',
+                                'banner_engraving' => 'Banner: Exclusive Engraving',
+                                'clearance' => 'Limited/Clearance',
+                                'banner_final' => 'Banner: Final Call',
+                                'testimonials' => 'Testimonials',
+                                'banner_elite' => 'Banner: Elite Collection',
+                                'services' => 'Services (Footer)',
+                                'newsletter' => 'Newsletter Form'
+                            ];
+                        @endphp
+
+                        @foreach($sections as $key => $label)
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <span class="text-xs font-bold uppercase tracking-widest text-slate-600">{{ $label }}</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="show_{{ $key }}" value="1" {{ \App\Models\Setting::get('home_show_'.$key, 1) ? 'checked' : '' }} class="sr-only peer">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none ring-0 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-luxury-accent"></div>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-8 flex justify-end">
+                        <button type="submit" class="bg-luxury-black text-white px-8 py-3 rounded-lg text-xs uppercase tracking-widest hover:opacity-90 transition-all shadow-lg">Save Visibility Settings</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Hero Section -->
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white p-8 border border-black/5 rounded-2xl shadow-sm">

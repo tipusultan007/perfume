@@ -33,10 +33,17 @@
                 class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.sliders.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
                 <i class="ri-gallery-line mr-3 text-lg {{ request()->routeIs('admin.sliders.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Hero Sliders
             </a>
+            <a href="{{ route('admin.popups.index') }}" 
+                class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.popups.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-window-line mr-3 text-lg {{ request()->routeIs('admin.popups.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Offers Popups
+            </a>
             
             <span class="block px-3 text-[10px] uppercase tracking-widest text-slate-500 mt-8 mb-2 font-semibold">Catalog</span>
-            <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.products.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
-                <i class="ri-archive-line mr-3 text-lg {{ request()->routeIs('admin.products.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Products
+            <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.products.index') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-archive-line mr-3 text-lg {{ request()->routeIs('admin.products.index') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Products
+            </a>
+            <a href="{{ route('admin.products.import') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.products.import') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
+                <i class="ri-file-upload-line mr-3 text-lg {{ request()->routeIs('admin.products.import') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Import Products
             </a>
             <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-sm {{ request()->routeIs('admin.categories.*') ? 'bg-luxury-accent text-luxury-black font-bold' : '!text-slate-300 font-medium hover:bg-white/5' }} rounded-lg transition-all group">
                 <i class="ri-stack-line mr-3 text-lg {{ request()->routeIs('admin.categories.*') ? 'text-luxury-black' : 'text-slate-400 group-hover:text-white' }}"></i> Categories

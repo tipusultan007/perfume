@@ -26,6 +26,7 @@ class Product extends Model implements HasMedia
         'product_type',
         'gender',
         'concentration',
+        'size',
         'season',
         'meta_title',
         'meta_description',
@@ -43,10 +44,6 @@ class Product extends Model implements HasMedia
 
     public function getDetail($key, $default = null)
     {
-        if ($key == 'intensity_percent') {
-            return ($this->intensity ?? 50) . '%';
-        }
-        
         return $this->{$key} ?? $default;
     }
 

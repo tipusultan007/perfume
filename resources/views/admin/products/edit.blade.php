@@ -94,7 +94,7 @@
             <div class="bg-white border border-slate-200 p-10 rounded-xl shadow-sm">
                 <h3 class="font-bold text-xl text-slate-900 mb-8 border-b border-slate-100 pb-6">Scent Profile</h3>
                 <div class="space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div>
                             <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Gender</label>
                             <select name="gender" class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
@@ -114,6 +114,11 @@
                                 <option value="EDC" {{ old('concentration', $product->concentration) == 'EDC' ? 'selected' : '' }}>Eau de Cologne (EDC)</option>
                                 <option value="Oil" {{ old('concentration', $product->concentration) == 'Oil' ? 'selected' : '' }}>Perfume Oil</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Size (e.g. 100ml)</label>
+                            <input type="text" name="size" value="{{ old('size', $product->size) }}" placeholder="100ml"
+                                class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
                         </div>
                         <div>
                             <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Season</label>
@@ -141,6 +146,11 @@
                             <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Base Notes</label>
                             <textarea name="base_notes" rows="2" placeholder="Musk, Amber..." class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">{{ old('base_notes', $product->base_notes) }}</textarea>
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Intensity/Sillage</label>
+                        <input type="text" name="intensity" value="{{ old('intensity', $product->intensity) }}" placeholder="e.g. Moderate, Strong, Heavy"
+                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
                     </div>
                 </div>
             </div>

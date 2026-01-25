@@ -6,9 +6,14 @@
 @section('content')
 <div class="flex justify-between items-center mb-10">
     <h3 class="font-sans font-semibold text-lg">All Products</h3>
-    <a href="{{ route('admin.products.create') }}" class="px-6 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-widest hover:bg-slate-800 transition-all rounded-lg shadow-sm">
-        Add New Product
-    </a>
+    <div class="flex gap-3">
+        <a href="{{ route('admin.products.import') }}" class="px-6 py-3 bg-white text-slate-900 border border-slate-200 text-[11px] uppercase tracking-widest hover:bg-slate-50 transition-all rounded-lg shadow-sm font-bold">
+            Import Products
+        </a>
+        <a href="{{ route('admin.products.create') }}" class="px-6 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-widest hover:bg-slate-800 transition-all rounded-lg shadow-sm font-bold">
+            Add New Product
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
@@ -85,7 +90,12 @@
                     <td class="px-8 py-6">
                         <div class="flex flex-col">
                             <span>{{ $product->name }}</span>
-                            <span class="text-[10px] opacity-40 uppercase tracking-tighter">{{ $product->brand->name ?? 'No Brand' }}</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-[10px] opacity-40 uppercase tracking-tighter">{{ $product->brand->name ?? 'No Brand' }}</span>
+                                @if($product->size)
+                                    <span class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 font-bold uppercase tracking-tighter">{{ $product->size }}</span>
+                                @endif
+                            </div>
                         </div>
                     </td>
                     <td class="opacity-60">{{ $product->category->name }}</td>

@@ -6,7 +6,7 @@
 <style>
     /* --- 2. Collection Header --- */
     .collection-header {
-        padding: 140px 5% 40px;
+        padding: 180px 5% 40px;
         text-align: center;
         background: var(--cream);
         border-bottom: 1px solid var(--border);

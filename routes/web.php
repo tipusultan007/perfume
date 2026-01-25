@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
@@ -85,6 +86,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('brands', BrandController::class);
         Route::resource('attributes', AttributeController::class);
+        Route::post('products/import', [ProductController::class, 'processImport'])->name('products.import.process');
+        Route::get('products/import', [ProductController::class, 'import'])->name('products.import');
         Route::post('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
         Route::resource('products', ProductController::class);
         Route::resource('sliders', SliderController::class);
@@ -96,6 +99,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/home-settings/hero', [\App\Http\Controllers\Admin\HomeSettingsController::class, 'updateHero'])->name('home-settings.hero');
         Route::post('/home-settings/heritage', [\App\Http\Controllers\Admin\HomeSettingsController::class, 'updateHeritage'])->name('home-settings.heritage');
         Route::post('/home-settings/curation', [\App\Http\Controllers\Admin\HomeSettingsController::class, 'updateCuration'])->name('home-settings.curation');
+        Route::post('/home-settings/visibility', [\App\Http\Controllers\Admin\HomeSettingsController::class, 'updateVisibility'])->name('home-settings.visibility');
 
         // Tax & Settings
         Route::resource('taxes', \App\Http\Controllers\Admin\TaxController::class);
@@ -112,6 +116,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/newsletter/{id}/send', [\App\Http\Controllers\Admin\NewsletterController::class, 'send'])->name('newsletter.send');
         Route::resource('newsletter', \App\Http\Controllers\Admin\NewsletterController::class);
 
+        // Popups
+        Route::resource('popups', \App\Http\Controllers\Admin\PopupController::class);
+
         // Reports
         Route::prefix('reports')->name('reports.')->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('index');
@@ -126,3 +133,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::middleware(['auth'])->group(function () {
+    Route::get('/create-storage-link', function () {
+        try {
+            // Check if symlink already exists
+            if (file_exists(public_path('storage'))) {
+                // Remove existing symlink if it exists
+                if (is_link(public_path('storage'))) {
+                    unlink(public_path('storage'));
+                } else {
+                    return "A 'storage' directory already exists in public folder (not a symlink).";
+                }
+            }
+
+            // Create the symlink
+            Artisan::call('storage:link');
+
+            // Get the output
+            $output = Artisan::output();
+
+            return "Storage link created successfully!<br>" . nl2br($output);
+
+        } catch (\Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    })->name('storage.link');
+});

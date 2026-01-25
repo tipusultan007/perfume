@@ -5,6 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', "L'ESSENCE NYC | Fragrance & Objects Atelier")</title>
+
+    <!-- Google Analytics -->
+    @php $gaId = \App\Models\Setting::get('google_analytics_id'); @endphp
+    @if($gaId)
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $gaId }}');
+            
+            @if(\App\Models\Setting::get('google_ads_id'))
+                gtag('config', '{{ \App\Models\Setting::get('google_ads_id') }}');
+            @endif
+        </script>
+    @elseif(\App\Models\Setting::get('google_ads_id'))
+        <!-- Google Ads (Standalone if no GA4) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ \App\Models\Setting::get('google_ads_id') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ \App\Models\Setting::get('google_ads_id') }}');
+        </script>
+    @endif
+
+    <!-- Meta Pixel Code -->
+    @php $pixelId = \App\Models\Setting::get('facebook_pixel_id'); @endphp
+    @if($pixelId)
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '{{ $pixelId }}');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id={{ $pixelId }}&ev=PageView&noscript=1"
+        /></noscript>
+    @endif
+
+    <!-- Google reCAPTCHA -->
+    @php $recaptchaKey = \App\Models\Setting::get('recaptcha_site_key'); @endphp
+    @if($recaptchaKey)
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Montserrat:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,9 +73,14 @@
             --white: #ffffff;
             --cream: #fbf9f4;
             --accent: #D4AF37;
+            --accent-hover: #b8962e; /* Matching darker shade for hover */
+            --page-bg: #ffffff;
+            --accent-bg-soft: #FBEACD;
             --border: rgba(0, 0, 0, 0.08);
             --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
+        .bg-accent-soft { background-color: var(--accent-bg-soft); }
 
         /* ... keys ... */
 
@@ -160,7 +216,7 @@
         .checkout-btn {
             width: 100%;
             padding: 20px;
-            background: var(--black);
+            background: var(--accent);
             color: var(--white);
             border: none;
             text-transform: uppercase;
@@ -171,7 +227,8 @@
         }
 
         .checkout-btn:hover {
-            opacity: 0.9;
+            background: var(--accent-hover);
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
@@ -183,16 +240,18 @@
 
 
         /* Reset & Base */
-        body { font-family: 'Montserrat', sans-serif; background: var(--white); color: var(--black); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; font-size: 16px; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--page-bg); color: var(--black); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; font-size: 16px; }
        
         .mono { font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 400; }
         a { text-decoration: none; color: inherit; transition: var(--transition); }
         ul { list-style: none; }
 
         /* Navigation */
-        #navbar { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 25px 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; }
+        #navbar { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.10);}
         nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
-        .logo { font-size: 26px; font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
+        .logo { font-size: 26px; font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
+        .logo img { max-height: 110px; width: auto; }
         
         /* Desktop Menu (UL/LI) */
         .nav-desktop { display: flex; gap: 40px; align-items: center; list-style: none; margin: 0; padding: 0; }
@@ -526,8 +585,8 @@
 
         /* Utility */
         .section-padding { padding: 100px 8%; }
-        .btn-luxe { display: inline-block; padding: 18px 45px; border: 1px solid white; color: white; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-luxe:hover { background: white; color: var(--black); }
+        .btn-luxe { display: inline-block; padding: 18px 45px; border: 1px solid var(--accent); background: var(--accent); color: var(--white); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-luxe:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--white); }
 
         /* Hide Mobile Nav on Desktop */
         .mobile-bottom-nav { display: none; }
@@ -730,7 +789,16 @@
                 $cartCount = count(session('cart', []));
             }
         @endphp
-        <div class="logo">{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}</div>
+        <div class="logo">
+            @php $siteLogo = \App\Models\Setting::get('site_logo'); @endphp
+            <a href="{{ url('/') }}">
+                @if($siteLogo)
+                    <img src="{{ asset($siteLogo) }}" alt="{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}">
+                @else
+                    {{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}
+                @endif
+            </a>
+        </div>
         
         <!-- Desktop Menu -->
         <ul class="nav-desktop">
@@ -1322,6 +1390,8 @@
             if(input && parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
         }
     </script>
+    @include('components.popup')
+    
     @yield('scripts')
     @stack('scripts')
     <script>

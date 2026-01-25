@@ -20,6 +20,12 @@ class SettingController extends Controller
         if ($request->has('update_general')) {
             Setting::set('site_name', $request->input('site_name'), 'general');
             Setting::set('site_description', $request->input('site_description'), 'general');
+
+            if ($request->hasFile('site_logo')) {
+                $path = $request->file('site_logo')->store('settings', 'public');
+                Setting::set('site_logo', 'storage/' . $path, 'general');
+            }
+            
             return back()->with('success', 'General settings updated.');
         }
 
@@ -83,6 +89,16 @@ class SettingController extends Controller
             Setting::set('topbar_bg', $request->input('topbar_bg', '#D4AF37'), 'announcement');
             Setting::set('topbar_text_color', $request->input('topbar_text_color', '#000000'), 'announcement');
             return back()->with('success', 'Announcement bar settings updated.');
+        }
+
+        // Integrations Settings
+        if ($request->has('update_integrations')) {
+            Setting::set('google_analytics_id', $request->input('google_analytics_id'), 'integration');
+            Setting::set('recaptcha_site_key', $request->input('recaptcha_site_key'), 'integration');
+            Setting::set('recaptcha_secret_key', $request->input('recaptcha_secret_key'), 'integration');
+            Setting::set('google_ads_id', $request->input('google_ads_id'), 'integration');
+            Setting::set('facebook_pixel_id', $request->input('facebook_pixel_id'), 'integration');
+            return back()->with('success', 'Integration settings updated.');
         }
 
         return back();

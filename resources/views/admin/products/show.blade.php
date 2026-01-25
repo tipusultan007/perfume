@@ -89,7 +89,7 @@
             <div class="bg-white border border-black/5 p-10">
                 <h4 class="font-serif text-lg mb-6 border-b border-black/5 pb-4">Scent Profile</h4>
                 <div class="space-y-8">
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                         <div>
                             <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Gender</span>
                             <span class="font-medium">{{ $product->gender ?? 'N/A' }}</span>
@@ -97,6 +97,10 @@
                         <div>
                             <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Concentration</span>
                             <span class="font-medium">{{ $product->concentration ?? 'N/A' }}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Size</span>
+                            <span class="font-medium">{{ $product->size ?? 'N/A' }}</span>
                         </div>
                         <div>
                             <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Season</span>

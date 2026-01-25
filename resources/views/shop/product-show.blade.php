@@ -336,8 +336,8 @@
 
 @section('content')
 <main class="pdp-main-section pb-20">
-    <div class="pdp-container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div class="pdp-container ">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-10 mt-10">
             
             {{-- Left Side: Gallery --}}
             <div class="pdp-gallery">
@@ -403,7 +403,12 @@
                     @endif
                 </div>
 
-                <h1 class="pdp-title">{{ $product->name }}</h1>
+                <h1 class="pdp-title">
+                    {{ $product->name }}
+                    @if($product->size)
+                        <span class="text-xl opacity-40">({{ $product->size }})</span>
+                    @endif
+                </h1>
                 <div class="pdp-price" id="main-price-display">
                     ${{ number_format($product->base_price, 2) }}
                 </div>
@@ -571,16 +576,11 @@
                         </div>
                         <div>
                             <h4 class="serif text-xl mb-4">Scent Intensity</h4>
-                            @if($product->getDetail('intensity'))
+                            @if($product->intensity)
                                 <div class="mb-4">
-                                    <div class="h-1 bg-gray-100 w-full relative mb-2">
-                                        <div class="absolute inset-0 bg-black" style="width: {{ $product->getDetail('intensity_percent', '50%') }}"></div>
-                                    </div>
-                                    <div class="flex justify-between text-[10px] uppercase tracking-wider opacity-50">
-                                        <span>Subtle</span>
-                                        <span>Powerful</span>
-                                    </div>
+                                     <span class="text-lg font-medium">{{ $product->intensity }}</span>
                                 </div>
+                    
                             @endif
                             <p class="text-sm opacity-60">Every fragrance reveals different facets over time. We recommend testing on skin to experience the complete dry-down.</p>
                         </div>
@@ -657,27 +657,9 @@
 @if(count($relatedProducts) > 0)
 <section class="related-products">
     <h2 class="serif">You May Also Like</h2>
-    <div class="product-grid">
+    <div class="product-grid section-padding">
         @foreach($relatedProducts as $rel)
-        <div class="p-card group">
-            <div class="p-img">
-                @if($rel->created_at->gt(now()->subDays(7)))
-                    <span class="p-badge">New</span>
-                @endif
-                <a href="{{ route('shop.product.show', $rel->slug) }}">
-                    <img src="{{ $rel->getFirstMediaUrl('featured') ?: 'https://via.placeholder.com/400x500' }}" alt="{{ $rel->name }}">
-                </a>
-                <div class="p-actions">
-                    <button class="action-btn" title="Quick View" onclick="openQuickView('{{ $rel->slug }}')"><i class="ri-eye-line"></i></button>
-                    <button class="action-btn" title="Add to Cart" onclick="quickAdd({{ $rel->id }})"><i class="ri-shopping-bag-line"></i></button>
-                    <button class="action-btn" title="Wishlist"><i class="ri-heart-line"></i></button>
-                </div>
-            </div>
-            <a href="{{ route('shop.product.show', $rel->slug) }}" class="p-title">{{ $rel->name }}</a>
-            <div class="p-price-container">
-                <span class="p-price">${{ number_format($rel->base_price, 2) }}</span>
-            </div>
-        </div>
+            <x-product-card :product="$rel" />
         @endforeach
     </div>
 </section>

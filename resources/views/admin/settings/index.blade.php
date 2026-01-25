@@ -4,7 +4,7 @@
 @section('page_title', 'Configuration')
 
 @section('content')
-<div class="max-w-4xl" x-data="{ tab: 'general' }">
+<div class="w-full" x-data="{ tab: 'general' }">
     <!-- Tabs Nav -->
     <div class="flex flex-wrap items-center gap-3 mb-10">
         <button @click="tab = 'general'" 
@@ -42,6 +42,11 @@
             class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
             <i class="ri-notification-badge-line text-sm"></i> Announcement
         </button>
+        <button @click="tab = 'integrations'" 
+            :class="tab === 'integrations' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
+            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
+            <i class="ri-puzzle-line text-sm"></i> Integrations
+        </button>
     </div>
 
     @if(session('success'))
@@ -59,7 +64,7 @@
                 <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Standard Branding & Identity</p>
             </div>
             
-            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-8">
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-8" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="update_general" value="1">
                 <div>
@@ -71,6 +76,17 @@
                     <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Site Description</label>
                     <textarea name="site_description" rows="4" 
                         class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">{{ $settings['site_description'] ?? '' }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Site Logo</label>
+                    @if(isset($settings['site_logo']))
+                        <div class="mb-4 p-4 bg-slate-50 border border-slate-200 rounded-xl w-fit">
+                            <img src="{{ asset($settings['site_logo']) }}" alt="Current Logo" class="h-12 object-contain">
+                        </div>
+                    @endif
+                    <input type="file" name="site_logo" accept="image/*"
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    <p class="text-[10px] text-slate-400 mt-2 font-medium">Recommended height: 40-60px. Format: PNG, JPG, SVG.</p>
                 </div>
                 <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
                     Save General Changes
@@ -367,6 +383,100 @@
                         Update Announcement Styling
                     </button>
                 </div>
+            </form>
+        </div>
+
+        <!-- Integrations Tab -->
+        <div x-show="tab === 'integrations'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+             <div class="border-b border-slate-100 pb-6 mb-8">
+                <h3 class="text-lg font-bold text-slate-900">Third-Party Integrations</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Connect External Services</p>
+            </div>
+
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-10">
+                @csrf
+                <input type="hidden" name="update_integrations" value="1">
+                
+                <!-- Google Analytics -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="ri-google-fill text-2xl text-slate-700"></i>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Google Analytics 4</h4>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Measurement ID (G-XXXXXXXXXX)</label>
+                        <input type="text" name="google_analytics_id" value="{{ \App\Models\Setting::get('google_analytics_id') ?? '' }}" placeholder="G-XXXXXXXXXX"
+                            class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-mono">
+                    </div>
+                </div>
+
+                <!-- Google reCAPTCHA -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl space-y-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="ri-shield-check-fill text-2xl text-slate-700"></i>
+                         <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Google reCAPTCHA v2</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Site Key</label>
+                            <input type="text" name="recaptcha_site_key" value="{{ \App\Models\Setting::get('recaptcha_site_key') ?? '' }}" 
+                                class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Secret Key</label>
+                            <input type="password" name="recaptcha_secret_key" value="{{ \App\Models\Setting::get('recaptcha_secret_key') ?? '' }}" 
+                                class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-mono">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Ads -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="ri-advertisement-fill text-2xl text-slate-700"></i>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Google Ads Conversion Tracking</h4>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Conversion ID (AW-XXXXXXXXX)</label>
+                        <input type="text" name="google_ads_id" value="{{ \App\Models\Setting::get('google_ads_id') ?? '' }}" placeholder="AW-XXXXXXXXX"
+                            class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-mono">
+                        
+                        <div class="mt-3 bg-white p-4 rounded-xl border border-dashed border-slate-200">
+                            <h5 class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-1">
+                                <i class="ri-information-line"></i> How to find your ID:
+                            </h5>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Go to <strong>Google Ads > Goals > Conversions > Summary</strong>. Select a conversion action, click <strong>Tag Setup</strong>, then choose "Install the tag yourself" or "Use Google Tag Manager". Your ID starts with <strong>AW-</strong> (e.g., AW-123456789).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta Pixel -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="ri-facebook-circle-fill text-2xl text-slate-700"></i>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Meta (Facebook) Pixel</h4>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Pixel ID</label>
+                        <input type="text" name="facebook_pixel_id" value="{{ \App\Models\Setting::get('facebook_pixel_id') ?? '' }}" placeholder="1234567890"
+                            class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-mono">
+                        
+                         <div class="mt-3 bg-white p-4 rounded-xl border border-dashed border-slate-200">
+                            <h5 class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-1">
+                                <i class="ri-information-line"></i> How to find your ID:
+                            </h5>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Go to <strong>Meta Events Manager > Data Sources</strong>. Select your Pixel from the list. Go to the <strong>Settings</strong> tab. Copy the long numeric string under <strong>Pixel ID</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
+                    Save Integration Keys
+                </button>
             </form>
         </div>
     </div>

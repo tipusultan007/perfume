@@ -84,4 +84,30 @@ class HomeSettingsController extends Controller
 
         return back()->with('success', 'Home page curation updated successfully.');
     }
+    public function updateVisibility(Request $request)
+    {
+        $sections = [
+            'hero', 'categories', 'promo_banners', 'banner_signature', 
+            'recent_arrivals', 'cta', 'featured', 'banner_seasonal', 
+            'special_offers', 'banner_engraving', 'clearance', 
+            'banner_final', 'testimonials', 'banner_elite', 
+            'services', 'newsletter'
+        ];
+
+        foreach ($sections as $section) {
+            $key = 'home_show_' . $section;
+            // If checkbox is unchecked, it won't be in request, so we default to 0. 
+            // However, we need to know if the form was actually submitted. 
+            // Assuming this method is called via POST form submission where all checkboxes are present or missing.
+            
+            $value = $request->has('show_' . $section) ? '1' : '0';
+            
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value, 'group' => 'home_visibility', 'type' => 'boolean']
+            );
+        }
+
+        return back()->with('success', 'Section visibility updated successfully.');
+    }
 }
