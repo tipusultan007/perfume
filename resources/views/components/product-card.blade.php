@@ -45,8 +45,8 @@
         <div class="product-info-content">
             <h3 class="product-title font-sans">
                 <a href="{{ route('shop.product.show', $product->slug) }}">{{ $product->name }}</a>
-                @if($product->size)
-                    <span class="text-[10px] opacity-100 uppercase tracking-wider">({{ $product->size }})</span>
+                @if($product->brand)
+                    <span class="text-[10px] opacity-100 uppercase tracking-wider block -mt-1">{{ $product->brand->name }}</span>
                 @endif
             </h3>
             {{-- <div class="product-rating">
@@ -54,7 +54,7 @@
                     <i class="fa-solid fa-star text-xs"></i>
                 @endfor
             </div> --}}
-            <div class="product-price">
+            <div class="product-price mt-2">
                 @if($product->product_type == 'variable')
                     <span class="price font-sans">From ${{ number_format($product->base_price, 2) }}</span>
                 @else
@@ -64,6 +64,9 @@
         </div>
     </div>
     <div class="product-action-btn-slide">
-        <button class="btn-add-cart w-full" onclick="quickAdd({{ $product->id }})">Add To Cart</button>
+        <button class="btn-add-cart w-full" onclick="quickAdd({{ $product->id }})">
+            <span class="btn-text">Add To Cart</span>
+            <span class="btn-icon"><i class="ri-shopping-cart-line"></i></span>
+        </button>
     </div>
 </div>

@@ -465,7 +465,7 @@
             </div>
             @endif
 
-            @if($sizes->isNotEmpty())
+            @if(count($sizes) > 0)
             <div class="filter-section" x-data="{ expanded: {{ !empty($activeSizes) ? 'true' : 'false' }} }">
                 <h4 @click="expanded = !expanded">
                     Size
@@ -474,9 +474,9 @@
                 <ul class="filter-list" x-show="expanded" style="display: none;">
                     @foreach($sizes as $size)
                         <li>
-                            <input type="checkbox" name="sizes[]" value="{{ $size->value }}" 
-                                {{ in_array($size->value, (array)$activeSizes) ? 'checked' : '' }}>
-                            {{ $size->value }}
+                            <input type="checkbox" name="sizes[]" value="{{ $size }}" 
+                                {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
+                            {{ $size }}
                         </li>
                     @endforeach
                 </ul>
@@ -650,7 +650,7 @@
         </div>
         @endif
 
-        @if($sizes->isNotEmpty())
+        @if(count($sizes) > 0)
         <div class="filter-section" x-data="{ expanded: {{ !empty($activeSizes) ? 'true' : 'false' }} }">
             <h4 @click="expanded = !expanded">
                 Size
@@ -659,9 +659,9 @@
             <ul class="filter-list" x-show="expanded" style="display: none;">
                 @foreach($sizes as $size)
                     <li>
-                        <input type="checkbox" name="sizes[]" value="{{ $size->value }}" 
-                            {{ in_array($size->value, (array)$activeSizes) ? 'checked' : '' }}>
-                        {{ $size->value }}
+                        <input type="checkbox" name="sizes[]" value="{{ $size }}" 
+                            {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
+                        {{ $size }}
                     </li>
                 @endforeach
             </ul>

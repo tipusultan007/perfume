@@ -522,7 +522,7 @@ img {
 .product-thumb img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
     transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -614,7 +614,7 @@ img {
     margin-bottom: 5px;
     transition: color 0.3s ease;
     font-family: var(--font-body);
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.3px;
 }
 
@@ -675,6 +675,34 @@ img {
     font-size: 13px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-add-cart .btn-text {
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.btn-add-cart .btn-icon {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
+    font-size: 18px;
+}
+
+.btn-add-cart:hover .btn-text {
+    transform: translateY(-150%);
+}
+
+.btn-add-cart:hover .btn-icon {
+    transform: translateY(-100%);
 }
 
 .btn-add-cart:hover {

@@ -122,9 +122,13 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Size (e.g. 100ml)</label>
-                            <input type="text" name="size" value="{{ old('size') }}" placeholder="100ml"
-                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
+                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Size</label>
+                            <select name="size" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium cursor-pointer appearance-none">
+                                <option value="">Select Size</option>
+                                @foreach(['0.07FL.OZ/2ML', '0.17FL.OZ/5ML', '0.34FL.OZ/10ML', '1FL.OZ/30ML', '1.7FL.OZ/50ML', '2.5FL.OZ/75ML', '3.4FL.OZ/100ML', '4.2FL.OZ/125ML', '5FL.OZ/150ML', '6.8FL.OZ/200ML'] as $sizeOption)
+                                    <option value="{{ $sizeOption }}" {{ old('size') == $sizeOption ? 'selected' : '' }}>{{ $sizeOption }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div>
                             <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Season</label>

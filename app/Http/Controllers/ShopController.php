@@ -67,17 +67,10 @@ class ShopController extends Controller
             }
         }
 
-        // --- Filter: Size (Attribute via Variants) ---
+        // --- Filter: Size (Column) ---
         $activeSizes = $request->input('sizes', []);
         if (!empty($activeSizes)) {
-            $query->whereHas('variants', function($q) use ($activeSizes) {
-                $q->whereHas('attributeValues', function($qv) use ($activeSizes) {
-                    $qv->whereIn('value', $activeSizes)
-                       ->whereHas('attribute', function($qa) {
-                           $qa->where('name', 'Size');
-                       });
-                });
-            });
+            $query->whereIn('size', $activeSizes);
         }
 
         // --- Filter: Price Range ---
@@ -99,8 +92,19 @@ class ShopController extends Controller
         $concentrations = Product::select('concentration')->whereNotNull('concentration')->distinct()->pluck('concentration');
         $seasons = Product::select('season')->whereNotNull('season')->distinct()->pluck('season');
         
-        $sizeAttribute = \App\Models\Attribute::where('name', 'Size')->first();
-        $sizes = $sizeAttribute ? $sizeAttribute->values : collect();
+        // Fixed array of sizes as requested
+        $sizes = [
+            '0.07FL.OZ/2ML',
+            '0.17FL.OZ/5ML',
+            '0.34FL.OZ/10ML',
+            '1FL.OZ/30ML',
+            '1.7FL.OZ/50ML',
+            '2.5FL.OZ/75ML',
+            '3.4FL.OZ/100ML',
+            '4.2FL.OZ/125ML',
+            '5FL.OZ/150ML',
+            '6.8FL.OZ/200ML'
+        ];
 
         return view('shop.index', compact(
             'products', 'categories', 'brands', 'activeCategory', 
