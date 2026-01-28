@@ -1,30 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f9f9f9; color: #333; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; text-decoration: none; color: black; font-family: 'Garamond', serif; text-transform: uppercase; letter-spacing: 2px; }
-        .content { line-height: 1.6; margin-bottom: 40px; }
-        .footer { font-size: 12px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
-        .btn { display: inline-block; padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .btn:hover { background-color: #333; }
-        .order-details { margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 5px; }
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background-color: #fdfcf8; 
+            color: #111827; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-text-size-adjust: none;
+            width: 100% !important;
+        }
+        .wrapper {
+            width: 100%;
+            background-color: #fdfcf8;
+            padding: 40px 0;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 60px 40px; 
+            border: 1px solid #f3f4f6;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 50px; 
+        }
+        .logo { 
+            font-size: 28px; 
+            font-weight: 400; 
+            text-decoration: none; 
+            color: #111111; 
+            font-family: 'Georgia', serif; 
+            text-transform: uppercase; 
+            letter-spacing: 6px; 
+            display: block;
+        }
+        .brand-accent {
+            height: 1px;
+            width: 40px;
+            background-color: #d4af37;
+            margin: 20px auto;
+        }
+        .content { 
+            line-height: 1.8; 
+            margin-bottom: 50px; 
+            font-size: 15px;
+            color: #4b5563;
+        }
+        .footer { 
+            font-size: 11px; 
+            color: #9ca3af; 
+            text-align: center; 
+            margin-top: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn { 
+            display: inline-block; 
+            padding: 18px 40px; 
+            background-color: #111827; 
+            color: #ffffff !important; 
+            text-decoration: none; 
+            font-size: 11px;
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover { background-color: #374151; }
+        
+        /* Heading Styles */
+        h1, h2, h3 { 
+            color: #111827; 
+            font-family: 'Georgia', serif; 
+            font-weight: 400;
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="{{ url('/') }}" class="logo">{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}</a>
-        </div>
-        
-        <div class="content">
-            @yield('content')
-        </div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <a href="{{ url('/') }}" class="logo">
+                    {{ \App\Models\Setting::get('site_name', 'NewKirk') }}
+                </a>
+                <div class="brand-accent"></div>
+            </div>
+            
+            <div class="content">
+                @yield('content')
+            </div>
 
-        <div class="footer">
-            <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}. All rights reserved.</p>
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'NewKirk') }}. All rights reserved.</p>
+                <div style="margin-top: 20px; color: #d1d5db;">Fragrance & Objects Atelier</div>
+            </div>
         </div>
     </div>
 </body>

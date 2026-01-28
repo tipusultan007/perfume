@@ -116,4 +116,51 @@ class AccountController extends Controller
 
         return back()->with('success', 'Account details updated successfully.');
     }
+
+    public function downloadInvoice(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->load(['items.product', 'items.variant', 'user']);
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('shop.account.invoice', compact('order'));
+        
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
+    }
+
+    public function reorder(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        foreach ($order->items as $item) {
+            // Check if product still exists
+            $product = \App\Models\Product::find($item->product_id);
+            if (!$product) continue;
+
+            $variantId = $item->variant_id;
+            
+            // Add to DB cart (order history implies user is logged in)
+            $cartItem = \App\Models\CartItem::where('user_id', '=', Auth::id())
+                ->where('product_id', '=', $product->id)
+                ->where('variant_id', '=', $variantId)
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->increment('quantity', $item->quantity);
+            } else {
+                \App\Models\CartItem::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $product->id,
+                    'variant_id' => $variantId,
+                    'quantity' => $item->quantity
+                ]);
+            }
+        }
+
+        return redirect()->route('cart.index')->with('success', 'Items from order #' . $order->order_number . ' have been added to your cart.');
+    }
 }

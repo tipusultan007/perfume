@@ -28,4 +28,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function orderNotes()
+    {
+        return $this->hasMany(OrderNote::class, 'order_id')->latest();
+    }
 }

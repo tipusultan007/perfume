@@ -101,6 +101,60 @@ class SettingController extends Controller
             return back()->with('success', 'Integration settings updated.');
         }
 
+        // Site Status Settings
+        if ($request->has('update_site_status')) {
+            Setting::set('site_status', $request->input('site_status', 'live'), 'status');
+            return back()->with('success', 'Site visibility status updated.');
+        }
+
+        // Mail Settings
+        if ($request->has('update_mail')) {
+            Setting::set('mail_mailer', $request->input('mail_mailer'), 'mail');
+            Setting::set('mail_host', $request->input('mail_host'), 'mail');
+            Setting::set('mail_port', $request->input('mail_port'), 'mail');
+            Setting::set('mail_username', $request->input('mail_username'), 'mail');
+            Setting::set('mail_password', $request->input('mail_password'), 'mail');
+            Setting::set('mail_encryption', $request->input('mail_encryption'), 'mail');
+            Setting::set('mail_from_address', $request->input('mail_from_address'), 'mail');
+            Setting::set('mail_from_name', $request->input('mail_from_name'), 'mail');
+            return back()->with('success', 'Mail settings updated.');
+        }
+
         return back();
+    }
+
+    public function clearCache()
+    {
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        
+        return back()->with('success', 'Application cache cleared successfully.');
+    }
+
+    public function createStorageLink()
+    {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        
+        return back()->with('success', 'Storage symbolic link created successfully.');
+    }
+
+    public function testSmtp(Request $request)
+    {
+        $request->validate([
+            'test_email' => 'required|email'
+        ]);
+
+        try {
+            \Illuminate\Support\Facades\Mail::raw('This is a test email to verify your SMTP settings at ' . config('app.name'), function ($message) use ($request) {
+                $message->to($request->test_email)
+                    ->subject('SMTP Connection Test');
+            });
+
+            return back()->with('success', 'Test email sent successfully! Please check your inbox.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'SMTP Error: ' . $e->getMessage());
+        }
     }
 }

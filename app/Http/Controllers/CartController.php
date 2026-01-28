@@ -65,9 +65,11 @@ class CartController extends Controller
         }
 
         $html = view('shop.cart-drawer-items', ['cart' => $cartItems])->render();
+        $pageHtml = view('shop.partials.cart-items', ['cartItems' => $cartItems])->render();
 
         return response()->json([
             'html' => $html,
+            'page_html' => $pageHtml,
             'count' => count($cartItems),
             'subtotal' => number_format($total, 2)
         ]);

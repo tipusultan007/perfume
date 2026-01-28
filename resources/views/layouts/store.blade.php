@@ -57,13 +57,19 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @endif
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Montserrat:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+    <!-- Global Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
     <!-- Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -77,12 +83,45 @@
             --page-bg: #ffffff;
             --accent-bg-soft: #FBEACD;
             --border: rgba(0, 0, 0, 0.08);
+            --accent-border: #d4af37;
             --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .bg-accent-soft { background-color: var(--accent-bg-soft); }
 
-        /* ... keys ... */
+        /* Modern Luxury Utilities */
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .glass-panel-dark { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        #scroll-progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--accent); z-index: 9999; transition: width 0.1s ease; }
+
+        /* Custom Toastr Branding */
+        #toast-container > .toast {
+            border-radius: 0;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #toast-container > .toast-success {
+            background-image: linear-gradient(135deg, #d4af37 0%, #b8962e 100%) !important;
+            background-color: #d4af37 !important;
+            color: #000 !important;
+            opacity: 1 !important;
+        }
+
+        #toast-container > .toast-success .toast-message {
+            font-weight: 500;
+        }
+
+        #toast-container > .toast-success .toast-progress {
+            background-color: #000 !important;
+            opacity: 0.2 !important;
+        }
+
+        #toast-container > .toast-success .toast-close-button {
+            color: #000 !important;
+            text-shadow: none;
+        }
 
         /* Cart Drawer Styles from Static Template */
         .cart-overlay {
@@ -247,25 +286,24 @@
         ul { list-style: none; }
 
         /* Navigation */
-        #navbar { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid transparent; transition: all 0.4s ease; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.10);}
-        nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
-        nav.scrolled { padding: 18px 6%; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
-        .logo { font-size: 26px; font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #0a0a0a 0%, #3a3a3a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
-        .logo img { max-height: 110px; width: auto; }
+        #navbar { position: fixed; top: var(--topbar-height, 0); width: 100%; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 6%; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);}
+        nav.scrolled { padding: 10px 6%; background: rgba(10, 10, 10, 0.98); }
+        .logo { font-size: clamp(20px, 4vw, 26px); font-weight: 600; letter-spacing: 5px; font-family: 'Cormorant Garamond'; background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; }
+        .logo img { max-height: 90px; width: auto; }
         
         /* Desktop Menu (UL/LI) */
         .nav-desktop { display: flex; gap: 40px; align-items: center; list-style: none; margin: 0; padding: 0; }
         .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
         .nav-link { 
             position: relative; 
-            font-size: 14px; 
-            letter-spacing: 2px; 
+            font-size: 13px; 
+            letter-spacing: 1.5px; 
             text-transform: uppercase; 
             padding: 10px 0;
             display: flex;
             align-items: center;
             gap: 4px;
-            color: var(--black);
+            color: rgba(255, 255, 255, 0.85);
             font-weight: 500;
         }
         .nav-link::after { 
@@ -275,18 +313,18 @@
             left: 0; 
             width: 0; 
             height: 1px; 
-            background: var(--black); 
+            background: var(--accent); 
             transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
         }
         .nav-item:hover .nav-link::after { width: 100%; }
-        .nav-link:hover { color: var(--black); }
+        .nav-link:hover { color: var(--accent); }
 
         /* Dropdown Menu */
         .dropdown-menu {
             position: absolute;
             top: 100%;
             left: -20px;
-            background: rgba(255, 255, 255, 0.98);
+            background: #1a1a1a;
             backdrop-filter: blur(20px);
             min-width: 260px;
             padding: 25px 0;
@@ -294,8 +332,8 @@
             visibility: hidden;
             transform: translateY(10px);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             z-index: 1001;
             margin-top: 10px;
         }
@@ -306,10 +344,10 @@
             left: 30px;
             width: 12px;
             height: 12px;
-            background: white;
+            background: #1a1a1a;
             transform: rotate(45deg);
-            border-top: 1px solid rgba(0,0,0,0.05);
-            border-left: 1px solid rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-left: 1px solid rgba(255,255,255,0.05);
         }
 
         .nav-item:hover .dropdown-menu {
@@ -320,23 +358,22 @@
         .dropdown-item {
             display: block;
             padding: 12px 30px;
-            font-size: 14px;
-            color: rgba(0,0,0,0.6);
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
             transition: all 0.3s ease;
             position: relative;
             text-transform: none;
             font-weight: 500;
         }
         .dropdown-item:hover {
-            color: var(--black);
+            color: var(--accent);
             padding-left: 35px;
-            background: rgba(0,0,0,0.02);
-            font-weight: 500;
+            background: rgba(255,255,255,0.05);
         }
 
         /* Mobile Menu & Toggle */
         .menu-toggle { display: none; cursor: pointer; flex-direction: column; gap: 6px; z-index: 1002; width: 25px; }
-        .menu-toggle span { display: block; width: 100%; height: 1px; background: black; transition: var(--transition); }
+        .menu-toggle span { display: block; width: 100%; height: 1px; background: #d4af37; transition: var(--transition); }
         .menu-toggle.active span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
         .menu-toggle.active span:nth-child(2) { opacity: 0; }
         .menu-toggle.active span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
@@ -367,7 +404,7 @@
             width: 100%; 
             max-width: 380px;
             height: 100vh; 
-            background: var(--white); 
+            background: #111111; 
             display: flex; 
             flex-direction: column; 
             padding: 40px;
@@ -375,7 +412,8 @@
             transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
             z-index: 2000; 
             overflow-y: auto;
-            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.05);
+            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+            color: white;
         }
         .mobile-menu.active { right: 0; }
         
@@ -395,11 +433,12 @@
             padding: 12px 15px;
             padding-left: 0;
             border: none;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             font-size: 13px;
             letter-spacing: 1px;
             background: transparent;
             outline: none;
+            color: white;
         }
         .mobile-search button {
             position: absolute;
@@ -408,19 +447,20 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            opacity: 0.5;
+            opacity: 0.8;
+            color: white;
         }
 
         .mobile-nav-link { 
             font-family: 'Cormorant Garamond', serif; 
             font-size: 28px; 
             line-height: 1.2;
-            color: var(--black);
+            color: rgba(255,255,255,0.9);
             transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(0,0,0,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             padding: 18px 0;
             cursor: pointer;
             opacity: 0;
@@ -449,20 +489,21 @@
             margin-top: 5px;
             margin-bottom: 15px;
             overflow: hidden;
-            border-left: 1px solid rgba(0,0,0,0.05);
+            border-left: 1px solid rgba(255,255,255,0.05);
         }
         
         .mobile-sub-link {
             font-family: 'Montserrat', sans-serif;
             font-size: 13px; 
-            opacity: 0.6;
+            opacity: 0.5;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: block;
             padding: 6px 0;
             transition: all 0.3s;
+            color: white;
         }
-        .mobile-sub-link:hover { opacity: 1; color: var(--black); transform: translateX(5px); }
+        .mobile-sub-link:hover { opacity: 1; color: var(--accent); transform: translateX(5px); }
 
         .mobile-footer {
             margin-top: auto;
@@ -526,8 +567,8 @@
         .p-actions { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; display: flex; justify-content: center; gap: 10px; background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent); transform: translateY(100%); transition: var(--transition); opacity: 0; }
         .p-card:hover .p-actions { transform: translateY(0); opacity: 1; }
         .p-card:hover .p-img img { transform: scale(1.05); }
-        .action-btn { width: 35px; height: 35px; background: var(--white); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--black); font-size: 16px; transition: all 0.3s ease; }
-        .action-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+        .action-btn { width: 35px; height: 35px; background: var(--white); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--accent-border); font-size: 16px; transition: all 0.3s ease; }
+        .action-btn:hover { background: var(--accent); color: var(--white); border-color: var(--accent-border); }
         .p-title { font-family: 'Inter', sans-serif; font-size: 14px; margin-top: 5px; letter-spacing: 0.5px; font-weight: 400; color: var(--black); opacity: 0.9; }
         .p-price-container { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
         .p-price { font-size: 13px; opacity: 0.6; }
@@ -664,7 +705,7 @@
                 position: absolute;
                 top: -5px;
                 right: -8px;
-                background: var(--black);
+                background: var(--accent);
                 color: white;
                 font-family: 'Inter';
                 font-size: 8px;
@@ -690,7 +731,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(10, 10, 10, 0.98);
             backdrop-filter: blur(20px);
             z-index: 2000;
             display: flex;
@@ -699,6 +740,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
         }
         .search-overlay.active {
             opacity: 1;
@@ -721,14 +763,15 @@
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 2px solid #eee;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
             font-size: 40px;
             font-family: 'Cormorant Garamond';
             padding: 20px 0;
             outline: none;
             transition: border-color 0.3s ease;
+            color: white;
         }
-        .search-input:focus { border-color: var(--black); }
+        .search-input:focus { border-color: var(--accent); }
         .search-results {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -778,7 +821,8 @@
     @yield('styles')
     @stack('styles')
 </head>
-<body class="bg-white">
+<body class="bg-white overflow-x-hidden antialiased">
+    <div id="scroll-progress"></div>
     @include('partials.topbar')
     <nav id="navbar">
         @php
@@ -833,18 +877,18 @@
             </li>
         </ul>
 
-        <div class="nav-actions flex gap-3 items-center" x-data="{}">
-            <a href="javascript:void(0)" @click="$dispatch('open-search')" class="text-xl"><i class="ri-search-line"></i></a>
-            <a href="{{ Auth::check() ? route('wishlist.index') : route('login') }}" class="text-xl relative">
+        <div class="nav-actions flex gap-4 items-center text-[#d4af37]" x-data="{}">
+            <a href="javascript:void(0)" @click="$dispatch('open-search')" class="text-xl hover:text-accent transition-colors"><i class="ri-search-line"></i></a>
+            <a href="{{ Auth::check() ? route('wishlist.index') : route('login') }}" class="text-xl relative hover:text-accent transition-colors">
                 <i class="ri-heart-line"></i>
                 @auth
-                <span class="wishlist-count-display absolute -top-1 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{{ auth()->user()->wishlists()->count() }}</span>
+                <span class="wishlist-count-display absolute -top-1 -right-2 bg-accent text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-black">{{ auth()->user()->wishlists()->count() }}</span>
                 @endauth
             </a>
-            <a href="{{ Auth::check() ? route('account.index') : route('login') }}" class="text-xl"><i class="ri-user-line"></i></a>
-            <button class="hover:text-gray-500 transition-colors relative" onclick="toggleCart()">
+            <a href="{{ Auth::check() ? route('account.index') : route('login') }}" class="text-xl hover:text-accent transition-colors"><i class="ri-user-line"></i></a>
+            <button class="hover:text-accent transition-colors relative" onclick="toggleCart()">
                 <i class="ri-shopping-bag-line text-2xl"></i>
-                <span class="cart-count-badge absolute -top-1 -right-2 bg-black text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{{ $cartCount }}</span>
+                <span class="cart-count-badge absolute -top-1 -right-2 bg-accent text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-black">{{ $cartCount }}</span>
             </button>
             <div class="menu-toggle" onclick="toggleMenu()">
                 <span></span>
@@ -859,7 +903,7 @@
     <div class="mobile-menu" id="mobileMenu" x-data="{ openSub: null }">
         <div class="mobile-header">
             <div class="logo">MENU</div>
-            <button onclick="toggleMenu()" class="text-3xl"><i class="ri-close-line"></i></button>
+            <button onclick="toggleMenu()" class="text-3xl text-[#d4af37]"><i class="ri-close-line"></i></button>
         </div>
 
         <div class="mobile-search">
@@ -925,7 +969,7 @@
         @open-search.window="openSearch()"
         @keydown.escape.window="closeSearch()"
     >
-        <div class="search-close" @click="closeSearch()">
+        <div class="search-close text-[#d4af37]" @click="closeSearch()">
             <i class="ri-close-line"></i>
         </div>
 
@@ -1150,6 +1194,7 @@
             }
         }
 
+        // Quick View Initialization
         const modal = document.getElementById('quickViewModal');
         const content = document.getElementById('quickViewContent');
 
@@ -1271,8 +1316,7 @@
                     if(!document.getElementById('quickViewModal').classList.contains('hidden')) {
                         closeQuickView();
                     }
-                    // toggleCart(); // Disabled auto-open
-                    toastr.success(data.message); // Show toast
+                    toastr.success(data.message);
                     refreshCart();
                 }
             })
@@ -1379,7 +1423,6 @@
             }
         }
 
-        // Fallback
         function qvIncrement() {
             const input = document.getElementById('qv-qty');
             if(input) input.value = parseInt(input.value) + 1;
@@ -1390,10 +1433,12 @@
             if(input && parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
         }
     </script>
+
     @include('components.popup')
     
     @yield('scripts')
     @stack('scripts')
+
     <script>
         function searchComponent() {
             return {
@@ -1427,6 +1472,33 @@
                 }
             }
         }
+
+        // Initialize AOS & Scroll Progress
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                once: true,
+                easing: 'ease-out-cubic',
+                offset: 50
+            });
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                const progressBar = document.getElementById("scroll-progress");
+                if(progressBar) progressBar.style.width = scrolled + "%";
+            });
+        });
+
+        // Force a refresh after all assets (images, sliders) are fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                AOS.refresh();
+                // Force a layout recalculation for libraries like Swiper & AOS
+                window.dispatchEvent(new Event('resize'));
+            }, 800);
+        });
     </script>
 </body>
 </html>

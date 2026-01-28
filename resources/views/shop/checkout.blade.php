@@ -7,8 +7,6 @@
     /* Checkout Specific Styles */
     /* Container Styles */
     .checkout-wrapper {
-        padding: 5%;
-        padding-top: 130px; /* Space for fixed navbar */
         padding-bottom: 80px;
     }
 
@@ -18,6 +16,7 @@
         display: grid;
         grid-template-columns: 1.2fr 0.8fr;
         min-height: 100vh;
+        padding: 0 5%;
     }
 
     /* Left Side: Forms */
@@ -53,21 +52,21 @@
     .btn-apple { background: black; color: white; }
     .btn-shop { background: #5a31f4; color: white; }
 
-    .form-section { margin-bottom: 50px; }
+    .form-section { margin-bottom: 35px; }
     .form-section h2 {
         font-family: 'Cormorant Garamond', serif;
         font-size: 24px;
-        margin-bottom: 25px;
-        border-bottom: 1px solid rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+        border-bottom: 1px solid var(--accent);
         padding-bottom: 10px;
     }
 
-    .input-row { display: flex; gap: 15px; margin-bottom: 15px; }
-    .input-group { margin-bottom: 15px; flex: 1; }
+    .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .input-group { margin-bottom: 10px; flex: 1; }
 
     input, select, textarea {
         width: 100%;
-        padding: 15px;
+        padding: 12px;
         border: 1px solid rgba(0,0,0,0.1);
         font-family: 'Montserrat', sans-serif;
         font-size: 14px;
@@ -76,7 +75,7 @@
         background: transparent; /* match theme */
     }
 
-    input:focus { border-color: black; }
+    input:focus { border-color: var(--accent); }
 
     .payment-box {
         border: 1px solid rgba(0,0,0,0.1);
@@ -116,13 +115,13 @@
         flex-shrink: 0;
     }
 
-    .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .item-thumb img { width: 100%; height: 100%; object-fit: contain; }
 
     .item-count {
         position: absolute;
         top: 0px;
         right: -10px;
-        background: #707070;
+        background: #d4af37;
         color: white;
         font-size: 10px;
         width: 22px;
@@ -160,7 +159,7 @@
     .complete-purchase-btn {
         width: 100%;
         padding: 22px;
-        background: black;
+        background: linear-gradient(135deg, #d4af37 0%, #aa8429 100%);
         color: white;
         border: none;
         text-transform: uppercase;
@@ -170,9 +169,10 @@
         cursor: pointer;
         margin-top: 40px;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
     }
 
-    .complete-purchase-btn:hover { opacity: 0.9; letter-spacing: 3px; }
+    .complete-purchase-btn:hover { opacity: 0.9; letter-spacing: 3px; transform: translateY(-1px); }
 
     /* Custom Radio Buttons */
     .radio-container {
@@ -186,7 +186,7 @@
         position: relative;
     }
 
-    .radio-container:hover { border-color: black; }
+    .radio-container:hover { border-color: var(--accent); }
     .radio-container input { display: none; }
 
     .radio-check {
@@ -203,8 +203,8 @@
     }
 
     .radio-container input:checked + .radio-check {
-        border-color: black;
-        background: black;
+        border-color: var(--accent);
+        background: var(--accent);
     }
 
     .radio-container input:checked + .radio-check::after {
@@ -215,16 +215,16 @@
         border-radius: 50%;
     }
 
-    .radio-container.active { border-color: black; background: #fafafa; }
+    .radio-container.active { border-color: var(--accent); background: #fafafa; }
     .radio-label-text { flex: 1; }
     .radio-label-text strong { display: block; font-size: 13px; margin-bottom: 2px; }
     .radio-label-text p { font-size: 12px; opacity: 0.5; }
 
     .coupon-btn {
-        background: black;
+        background: linear-gradient(135deg, #d4af37 0%, #aa8429 100%);
         color: white;
         min-width: 120px;
-        height: 52px;
+        height: 48px;
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 11px;
@@ -235,9 +235,23 @@
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
     }
-    .coupon-btn:hover { opacity: 0.9; }
-    .coupon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .coupon-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .coupon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .checkout-header-section {
+        background: var(--cream);
+        padding: 180px 5% 60px; /* 130px for navbar + 50px spacing */
+        margin-bottom: 50px;
+        border-bottom: 1px solid var(--border);
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
 
     /* Responsive */
     @media (max-width: 1100px) {
@@ -258,19 +272,40 @@
 
 @section('content')
 <div class="checkout-wrapper"> <!-- Added padding for navbar -->
+    <div class="checkout-header-section text-center">
+        <h1 class="font-serif text-5xl mb-2">Checkout</h1>
+        <p class="mono opacity-50 text-xs">Complete your order</p>
+        <div class="w-20 h-[1px] bg-accent mx-auto mt-6"></div>
+    </div>
+    
     <div class="checkout-content-container">
         <!-- Left Side: Forms -->
         <section class="checkout-main">
+            @if(session('error'))
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <p class="text-red-700 text-sm">{{ session('error') }}</p>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                    <p class="text-green-700 text-sm">{{ session('success') }}</p>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <ul class="list-disc list-inside text-red-700 text-sm">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('checkout.process') }}" method="POST">
                 @csrf
-                <div class="express-checkout">
-                    <p class="mono opacity-50">Express Checkout</p>
-                    <div class="express-btns">
-                        <button type="button" class="express-btn btn-apple"><i class="ri-apple-fill"></i> Apple Pay</button>
-                        <button type="button" class="express-btn btn-shop">Shop Pay</button>
-                    </div>
-                </div>
-
+                
                 <div class="form-section">
                     <div class="flex justify-between items-center">
                         <h2>Contact</h2>
@@ -307,44 +342,31 @@
                     @endif
 
                     <div id="new-address-fields" @if(auth()->check() && $savedShipping) style="display: none;" @endif>
-                        <div class="input-group">
+                        <div class="input-row">
                             <select name="country">
                                 <option value="US" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'US') ? 'selected' : '' }}>United States</option>
                                 <option value="UK" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'UK') ? 'selected' : '' }}>United Kingdom</option>
                                 <option value="CA" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'CA') ? 'selected' : '' }}>Canada</option>
                             </select>
+                            <input type="tel" name="phone" placeholder="Phone" value="{{ $savedShipping['phone'] ?? '' }}" required>
                         </div>
                         <div class="input-row">
                             <input type="text" name="first_name" placeholder="First name" value="{{ $savedShipping['first_name'] ?? '' }}" required>
                             <input type="text" name="last_name" placeholder="Last name" value="{{ $savedShipping['last_name'] ?? '' }}" required>
                         </div>
-                        <div class="input-group">
+                        <div class="input-row">
                             <input type="text" name="address" placeholder="Address" value="{{ $savedShipping['address'] ?? '' }}" required>
-                        </div>
-                        <div class="input-group">
                             <input type="text" name="apartment" placeholder="Apartment, suite, etc. (optional)" value="{{ $savedShipping['apartment'] ?? '' }}">
                         </div>
                         <div class="input-row">
-                            <input type="text" name="city" placeholder="City" value="{{ $savedShipping['city'] ?? '' }}" required>
+                            <input type="text" name="city" placeholder="City" value="{{ $savedShipping['city'] ?? '' }}" required style="flex: 1;">
                             <input type="text" name="state" placeholder="State/Province" value="{{ $savedShipping['state'] ?? '' }}" required style="flex: 1;">
-                            <input type="text" name="zip" placeholder="ZIP code" value="{{ $savedShipping['zip'] ?? '' }}" required>
+                            <input type="text" name="zip" placeholder="ZIP code" value="{{ $savedShipping['zip'] ?? '' }}" required style="flex: 1;">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h2>Payment</h2>
-                    <p class="text-xs opacity-50 mb-4">All transactions are secure and encrypted.</p>
-                    <div class="payment-box mb-8">
-                        <div class="input-group">
-                            <input type="text" placeholder="Card number">
-                        </div>
-                        <div class="input-row">
-                            <input type="text" placeholder="Expiration date (MM / YY)">
-                            <input type="text" placeholder="Security code">
-                        </div>
-                    </div>
-
                     <h2>Billing Address</h2>
                     <div class="billing-toggle mb-6">
                         <label class="radio-container {{ old('billing_selection', 'same') == 'same' ? 'active' : '' }}">
@@ -364,27 +386,55 @@
                     </div>
 
                     <div id="billing-address-fields" style="display: none; padding-top: 10px;">
-                        <div class="input-group">
+                        <div class="input-row">
                             <select name="billing_country">
                                 <option value="US">United States</option>
                                 <option value="UK">United Kingdom</option>
                                 <option value="CA">Canada</option>
                             </select>
+                            <input type="tel" name="billing_phone" placeholder="Phone">
                         </div>
                         <div class="input-row">
                             <input type="text" name="billing_first_name" placeholder="First name">
                             <input type="text" name="billing_last_name" placeholder="Last name">
                         </div>
-                        <div class="input-group">
+                        <div class="input-row">
                             <input type="text" name="billing_address" placeholder="Address">
-                        </div>
-                        <div class="input-group">
                             <input type="text" name="billing_apartment" placeholder="Apartment, suite, etc. (optional)">
                         </div>
                         <div class="input-row">
-                            <input type="text" name="billing_city" placeholder="City">
+                            <input type="text" name="billing_city" placeholder="City" style="flex: 1;">
                             <input type="text" name="billing_state" placeholder="State/Province" style="flex: 1;">
-                            <input type="text" name="billing_zip" placeholder="ZIP code">
+                            <input type="text" name="billing_zip" placeholder="ZIP code" style="flex: 1;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Payment</h2>
+                    <p class="text-xs opacity-50 mb-4">All transactions are secure and encrypted.</p>
+                    
+                    <div class="payment-method-selection mb-4">
+                        <label class="radio-container active">
+                            <input type="radio" name="payment_method" value="credit_card" checked>
+                            <span class="radio-check"></span>
+                            <div class="radio-label-text">
+                                <strong>Credit Card</strong>
+                            </div>
+                            <div class="flex gap-2 opacity-50">
+                                <i class="ri-visa-fill text-xl"></i>
+                                <i class="ri-mastercard-fill text-xl"></i>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="payment-box mb-8">
+                        <div class="input-group">
+                            <input type="text" placeholder="Card number">
+                        </div>
+                        <div class="input-row">
+                            <input type="text" placeholder="Expiration date (MM / YY)">
+                            <input type="text" placeholder="Security code">
                         </div>
                     </div>
                 </div>
@@ -465,6 +515,7 @@
                 </div>
             </div>
         </aside>
+
     </div>
 </div>
 

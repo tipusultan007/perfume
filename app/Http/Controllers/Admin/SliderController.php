@@ -51,12 +51,20 @@ class SliderController extends Controller
             'ui_theme' => 'nullable|string|in:light,dark',
             'price' => 'nullable|string|max:255',
             'top_notes' => 'nullable|string',
+            'social_hover_color' => 'nullable|string|max:20',
+            'social_icon_color' => 'nullable|string|max:20',
+            'social_icon_hover_color' => 'nullable|string|max:20',
+            'nav_hover_color' => 'nullable|string|max:20',
+            'nav_icon_color' => 'nullable|string|max:20',
+            'nav_icon_hover_color' => 'nullable|string|max:20',
         ]);
 
         $slider = Slider::create($request->only([
             'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active',
             'bg_color', 'accent_color', 'title_color', 'description_color', 'price_color', 'social_color',
-            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes'
+            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes',
+            'social_hover_color', 'social_icon_color', 'social_icon_hover_color',
+            'nav_hover_color', 'nav_icon_color', 'nav_icon_hover_color',
         ]) + ['image_path' => 'placeholder']); // image_path is temporary since we use MediaLibrary
 
         if ($request->hasFile('image')) {
@@ -109,12 +117,20 @@ class SliderController extends Controller
             'ui_theme' => 'nullable|string|in:light,dark',
             'price' => 'nullable|string|max:255',
             'top_notes' => 'nullable|string',
+            'social_hover_color' => 'nullable|string|max:20',
+            'social_icon_color' => 'nullable|string|max:20',
+            'social_icon_hover_color' => 'nullable|string|max:20',
+            'nav_hover_color' => 'nullable|string|max:20',
+            'nav_icon_color' => 'nullable|string|max:20',
+            'nav_icon_hover_color' => 'nullable|string|max:20',
         ]);
 
         $slider->update($request->only([
             'title', 'subtitle', 'description', 'button_text', 'button_link', 'display_order', 'is_active',
             'bg_color', 'accent_color', 'title_color', 'description_color', 'price_color', 'social_color',
-            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes'
+            'nav_color', 'line_color', 'ui_theme', 'price', 'top_notes',
+            'social_hover_color', 'social_icon_color', 'social_icon_hover_color',
+            'nav_hover_color', 'nav_icon_color', 'nav_icon_hover_color',
         ]));
 
         if ($request->hasFile('image')) {

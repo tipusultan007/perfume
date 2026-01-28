@@ -198,44 +198,15 @@
     </header>
 
     @if(count($cartItems) > 0)
-    <section class="cart-items">
-        @foreach($cartItems as $key => $item)
-        <div class="cart-item" data-key="{{ $key }}">
-            <div class="item-img">
-                @if(isset($item['image']))
-                    <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}">
-                @else
-                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
-                        <i class="ri-image-line text-2xl opacity-20"></i>
-                    </div>
-                @endif
-            </div>
-            <div class="item-details">
-                <div class="item-top">
-                    <div class="item-title">
-                        <h3>{{ $item['name'] }}</h3>
-                        <p class="item-meta">{{ $item['options'] }}</p>
-                    </div>
-                    <span class="item-price">${{ number_format($item['price'], 2) }}</span>
-                </div>
-                <div class="item-actions">
-                    <div class="qty-box">
-                        <button onclick="updateCartQty('{{ $key }}', {{ $item['quantity'] - 1 }})">&minus;</button>
-                        <p>{{ $item['quantity'] }}</p>
-                        <button onclick="updateCartQty('{{ $key }}', {{ $item['quantity'] + 1 }})">&plus;</button>
-                    </div>
-                    <span class="remove-link" onclick="removeFromCart('{{ $key }}')">Remove</span>
-                </div>
-            </div>
-        </div>
-        @endforeach
+    <section class="cart-items" id="page-cart-items">
+        @include('shop.partials.cart-items')
     </section>
 
     <aside class="cart-summary">
         <h2 class="summary-title">Summary</h2>
         <div class="summary-row">
             <span>Subtotal</span>
-            <span id="page-cart-subtotal">${{ number_format($subtotal, 2) }}</span>
+            <span id="page-cart-subtotal" class="mono">${{ number_format($subtotal, 2) }}</span>
         </div>
         <div class="summary-row">
             <span>Estimated Shipping</span>
@@ -247,7 +218,7 @@
         </div>
         <div class="summary-row summary-total">
             <span>Total</span>
-            <span id="page-cart-total">${{ number_format($subtotal, 2) }}</span>
+            <span id="page-cart-total" class="mono">${{ number_format($subtotal, 2) }}</span>
         </div>
 
         <div class="gift-note-toggle">
@@ -255,14 +226,14 @@
             <label for="gift">Include a complimentary handwritten gift note and premium Manhattan packaging.</label>
         </div>
 
-        <button class="checkout-btn" onclick="location.href='#'">Begin Checkout</button>
+        <button class="checkout-btn" onclick="location.href='{{ route('checkout') }}'">Begin Checkout</button>
 
         <p style="text-align: center; font-size: 10px; margin-top: 20px; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px;">
             Secure Checkout &middot; SSL Encrypted
         </p>
     </aside>
     @else
-        <div class="text-center py-20">
+        <div class="text-center py-20 w-full" style="grid-column: span 2;">
             <h2 class="serif text-2xl mb-4">Your bag is empty</h2>
             <a href="{{ route('shop') }}" class="btn-luxe text-black border-black hover:bg-black hover:text-white">Continue Shopping</a>
         </div>
@@ -272,17 +243,6 @@
 
 @section('scripts')
 <script>
-    // Override global functions to reload page on change if needed, or update DOM dynamically
-    // Actually our global functions update the drawer. 
-    // We should probably redirect the global functions to reload the page or update this specific view as well
-    // For simplicity, let's reuse the global functions but add a listener or override them for this page?
-    // No, the global functions in layout.store use AJAX and update #cart-drawer-body. 
-    // On this page, we want to update the page content.
-    
-    // Let's create specific functions for this page or modify global ones.
-    // Since global ones are in layout, we can overwrite them here for this specific page context.
-    
-    // Overwriting global removeFromCart to reload page
     window.removeFromCart = function(key) {
         fetch('{{ route("cart.remove") }}', {
             method: 'POST',
@@ -295,7 +255,7 @@
         .then(res => res.json())
         .then(data => {
             toastr.success('Item removed');
-            window.location.reload(); 
+            updatePageCart(data);
         });
     }
 
@@ -311,8 +271,28 @@
         })
         .then(res => res.json())
         .then(data => {
-            window.location.reload();
+            updatePageCart(data);
         });
+    }
+
+    function updatePageCart(data) {
+        // Update Drawer
+        document.getElementById('cart-drawer-body').innerHTML = data.html;
+        document.getElementById('cart-subtotal').innerText = '$' + data.subtotal;
+        updateCartCount(data.count);
+
+        // Update Main Page
+        const itemsContainer = document.getElementById('page-cart-items');
+        if (itemsContainer) {
+            if (data.count > 0) {
+                itemsContainer.innerHTML = data.page_html;
+                document.getElementById('page-cart-subtotal').innerText = '$' + data.subtotal;
+                document.getElementById('page-cart-total').innerText = '$' + data.subtotal;
+            } else {
+                // If cart is empty, redirect or refresh to show empty state
+                window.location.reload();
+            }
+        }
     }
 </script>
 @endsection

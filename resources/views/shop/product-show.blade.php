@@ -322,6 +322,12 @@
         margin-bottom: 60px;
     }
 
+    @media (max-width: 768px) {
+        .pdp-tabs-section .tab-panel{
+            padding: 30px 0;
+        }
+    }
+
     @media (max-width: 1024px) {
         .pdp-gallery { flex-direction: column-reverse; }
         .thumbs-container { width: 100%; }
@@ -494,12 +500,17 @@
                         <span class="text-green-600">In Stock</span>
                     </div>
 
+                    @php
+                        $shareUrl = urlencode(url()->current());
+                        $shareTitle = urlencode($product->name);
+                        $shareImage = urlencode($product->getFirstMediaUrl('featured'));
+                    @endphp
                     <div class="share-links">
                         <span class="meta-item font-bold mr-2">Share:</span>
-                        <a href="#"><i class="ri-facebook-fill"></i></a>
-                        <a href="#"><i class="ri-twitter-x-fill"></i></a>
-                        <a href="#"><i class="ri-pinterest-fill"></i></a>
-                        <a href="#"><i class="ri-mail-line"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank" rel="noopener"><i class="ri-facebook-fill"></i></a>
+                        <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}" target="_blank" rel="noopener"><i class="ri-twitter-x-fill"></i></a>
+                        <a href="https://pinterest.com/pin/create/button/?url={{ $shareUrl }}&media={{ $shareImage }}&description={{ $shareTitle }}" target="_blank" rel="noopener"><i class="ri-pinterest-fill"></i></a>
+                        <a href="mailto:?subject={{ $shareTitle }}&body=Check out this product: {{ url()->current() }}"><i class="ri-mail-line"></i></a>
                     </div>
                 </div>
             </div>

@@ -43,6 +43,12 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\CustomerWelcomeMail($user));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Welcome email failed for {$user->email}: " . $e->getMessage());
+        }
+
         Auth::login($user);
 
         return redirect(route('account.index', absolute: false));

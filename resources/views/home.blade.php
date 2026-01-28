@@ -133,6 +133,119 @@
             .banner-desc-lux { justify-content: center; flex-direction: column; gap: 8px; }
             .banner-title-lux-v2 { font-size: 1.2rem; }
         }
+
+        /* Luxury Newsletter Redesign - Pearl & Gold Variant */
+        .newsletter-section {
+            background: #fbfaf5; /* Champagne Pearl */
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .newsletter-wrapper.lux-variant {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 80px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+        }
+
+        .newsletter-text .sub-heading.gold-text {
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-size: 0.8rem;
+            margin-bottom: 25px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .newsletter-text .heading.serif-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.8rem;
+            color: #1a1a1a;
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 45px;
+        }
+
+        .newsletter-form-container.wide-form {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .newsletter-form .input-group.lux-group {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+            background: transparent;
+            padding: 5px 0;
+        }
+
+        .newsletter-form .input-group.lux-group:focus-within {
+            border-bottom-color: #d4af37;
+        }
+
+        .newsletter-form input[type="email"].ghost-input {
+            background: transparent;
+            border: none;
+            color: #1a1a1a;
+            font-size: 1.15rem;
+            padding: 15px 0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            flex: 1;
+        }
+
+        .newsletter-form input[type="email"].ghost-input::placeholder {
+            color: rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+        }
+
+        .newsletter-form .btn-submit.gold-btn {
+            background: transparent;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .newsletter-form .btn-submit.gold-btn:hover {
+            color: #d4af37;
+            transform: translateX(8px);
+        }
+
+        @media (max-width: 768px) {
+            .newsletter-section { padding: 80px 0; }
+            .newsletter-wrapper.lux-variant { padding: 60px 25px; border-left: none; border-right: none; }
+            .newsletter-text .heading.serif-title { font-size: 2.8rem; }
+            .newsletter-form .input-group.lux-group { flex-direction: row; align-items: center; }
+        }
     </style>
 @endsection
 
@@ -147,7 +260,7 @@
             <div class="swiper hero-swiper">
                 <div class="swiper-wrapper">
                     @foreach($sliders as $slider)
-                        <div class="swiper-slide hero-slide" style="background-image: url('{{ asset('storage/' . $slider->image_path) }}');">
+                        <div class="swiper-slide hero-slide" style="background-image: url('{{ $slider->getFirstMediaUrl('slider') }}');">
                             <div class="container hero-content">
                                 <span class="hero-subtitle">{{ $slider->subtitle }}</span>
                                 <h1 class="hero-title">{{ $slider->title }}</h1>
@@ -171,7 +284,7 @@
 
     <!-- Category Section -->
     @if(\App\Models\Setting::get('home_show_categories', 1))
-    <section class="category-section section-padding bg-accent-soft">
+    <section class="category-section section-padding bg-accent-soft" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">New Collection</h2>
             <div class="swiper category-slider">
@@ -247,7 +360,7 @@
 
     <!-- Promo Banners Section -->
     @if(\App\Models\Setting::get('home_show_promo_banners', 1))
-    <section class="promo-banners">
+    <section class="promo-banners" data-aos="fade-up">
         <div class="container banner-grid">
             <!-- Banner 1 -->
             <div class="promo-banner">
@@ -303,7 +416,7 @@
     @endif
 
     @if(\App\Models\Setting::get('home_show_recent_arrivals', 1))
-    <section class="new-collection section-padding">
+    <section class="new-collection section-padding" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">Recent Arrivals</h2>
 
@@ -331,7 +444,7 @@
 
     <!-- CTA Section -->
     @if(\App\Models\Setting::get('home_show_cta', 1))
-    <section class="cta-section"
+    <section class="cta-section" data-aos="fade-up"
         style="background-image: url('https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/CMS-banner-2.1.jpg');">
         <div class="container">
             <div class="cta-content">
@@ -370,7 +483,7 @@
 
     <!-- Featured Highlights -->
     @if(\App\Models\Setting::get('home_show_featured', 1))
-    <section class="featured-highlights section-padding">
+    <section class="featured-highlights section-padding" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">Featured Highlights</h2>
             <div class="swiper product-slider">
@@ -388,6 +501,32 @@
                 <!-- Navigation -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- Newsletter Section (Relocated for Contrast) -->
+    @if(\App\Models\Setting::get('home_show_newsletter', 1))
+    <section class="newsletter-section" data-aos="fade-up">
+        <div class="container">
+            <div class="newsletter-wrapper lux-variant">
+                <div class="newsletter-text">
+                    <span class="sub-heading gold-text">Essence Journal</span>
+                    <h2 class="heading serif-title">Subscribe to the <br>Art of Olfaction</h2>
+                </div>
+                <div class="newsletter-form-container wide-form">
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="newsletter-form" id="newsletterForm">
+                        @csrf
+                        <div class="input-group lux-group">
+                            <input type="email" name="email" id="newsletterEmail" class="ghost-input" placeholder="Enter your email atelier..." required>
+                            <button type="submit" class="btn-submit gold-btn" id="newsletterSubmitBtn">
+                                JOIN <i class="ri-arrow-right-line"></i>
+                            </button>
+                        </div>
+                        <div id="newsletterMessage" style="margin-top: 25px; font-size: 14px; color: #d4af37; display: none; font-family: 'Space Mono', monospace;"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -414,7 +553,7 @@
 
     <!-- Special Offers -->
     @if(\App\Models\Setting::get('home_show_special_offers', 1))
-    <section class="special-offers section-padding">
+    <section class="special-offers section-padding" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">Special Offers</h2>
             <div class="swiper product-slider">
@@ -458,7 +597,7 @@
 
     <!-- Limited Remaining -->
     @if(\App\Models\Setting::get('home_show_clearance', 1))
-    <section class="limited-remaining section-padding">
+    <section class="limited-remaining section-padding" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">Limited Remaining</h2>
             <div class="swiper product-slider">
@@ -503,13 +642,13 @@
 
     <!-- Testimonials Section -->
     @if(\App\Models\Setting::get('home_show_testimonials', 1))
-    <section class="testimonials-section section-padding">
+    <section class="testimonials-section section-padding" data-aos="fade-up">
         <div class="container">
             <h2 class="section-title">What Customer says About Us!</h2>
             <div class="swiper testimonials-slider">
                 <div class="swiper-wrapper">
                     <!-- Testimonial 1 -->
-                    <div class="swiper-slide testimonial-card bg-accent-soft">
+                    <div class="swiper-slide testimonial-card glass-panel">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -525,7 +664,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 2 -->
-                    <div class="swiper-slide testimonial-card bg-accent-soft">
+                    <div class="swiper-slide testimonial-card glass-panel">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -541,7 +680,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 3 -->
-                    <div class="swiper-slide testimonial-card bg-accent-soft">
+                    <div class="swiper-slide testimonial-card glass-panel">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -557,7 +696,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 4 -->
-                    <div class="swiper-slide testimonial-card bg-accent-soft">
+                    <div class="swiper-slide testimonial-card glass-panel">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -573,7 +712,7 @@
                         </div>
                     </div>
                     <!-- Testimonial 5 -->
-                    <div class="swiper-slide testimonial-card bg-accent-soft">
+                    <div class="swiper-slide testimonial-card glass-panel">
                         <div class="testimonial-content">
                             <h3 class="testimonial-heading">Great Product!</h3>
                             <div class="quote-icon">
@@ -621,7 +760,7 @@
         <div class="container">
             <div class="services-grid">
                 <!-- Service 1 -->
-                <div class="service-item">
+                <div class="service-item" data-aos="fade-up" data-aos-delay="100">
                     <div class="service-icon">
                         <i class="fa-solid fa-truck-fast"></i>
                     </div>
@@ -631,7 +770,7 @@
                     </div>
                 </div>
                 <!-- Service 2 -->
-                <div class="service-item">
+                <div class="service-item" data-aos="fade-up" data-aos-delay="200">
                     <div class="service-icon">
                         <i class="fa-solid fa-rotate-left"></i>
                     </div>
@@ -641,7 +780,7 @@
                     </div>
                 </div>
                 <!-- Service 3 -->
-                <div class="service-item">
+                <div class="service-item" data-aos="fade-up" data-aos-delay="300">
                     <div class="service-icon">
                         <i class="fa-solid fa-headset"></i>
                     </div>
@@ -651,7 +790,7 @@
                     </div>
                 </div>
                 <!-- Service 4 -->
-                <div class="service-item">
+                <div class="service-item" data-aos="fade-up" data-aos-delay="400">
                     <div class="service-icon">
                         <i class="fa-regular fa-credit-card"></i>
                     </div>
@@ -665,29 +804,7 @@
     </section>
     @endif
 
-    <!-- Newsletter Section -->
-    @if(\App\Models\Setting::get('home_show_newsletter', 1))
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="newsletter-wrapper">
-                <div class="newsletter-text">
-                    <p class="sub-heading">Our Newsletter</p>
-                    <h2 class="heading">Join Our Newsletter</h2>
-                </div>
-                <div class="newsletter-form-container">
-                    <form action="{{ route('newsletter.subscribe') }}" method="POST" class="newsletter-form" id="newsletterForm">
-                        @csrf
-                        <div class="input-group">
-                            <input type="email" name="email" id="newsletterEmail" placeholder="Your Email Here" required>
-                            <button type="submit" class="btn-submit" id="newsletterSubmitBtn">Submit</button>
-                        </div>
-                        <div id="newsletterMessage" style="margin-top: 10px; font-size: 14px; display: none;"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    @endif
+    
 
     <script>
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
@@ -700,7 +817,7 @@
 
             // Basic UI State
             btn.disabled = true;
-            btn.innerText = 'Sending...';
+            btn.innerHTML = 'JOIN <i class="ri-loader-4-line animate-spin"></i>';
             msg.style.display = 'none';
             msg.className = ''; // Reset classes
 
@@ -717,13 +834,13 @@
             .then(response => response.json())
             .then(data => {
                 btn.disabled = false;
-                btn.innerText = 'Submit';
+                btn.innerHTML = 'JOIN <i class="ri-arrow-right-line"></i>';
                 
                 msg.style.display = 'block';
                 msg.innerText = data.message;
 
                 if (data.status === 'success') {
-                    msg.style.color = 'green';
+                    msg.style.color = '#d4af37';
                     form.reset();
                 } else {
                     msg.style.color = 'red';
@@ -732,7 +849,7 @@
             .catch(error => {
                 console.error('Error:', error);
                 btn.disabled = false;
-                btn.innerText = 'Submit';
+                btn.innerHTML = 'JOIN <i class="ri-arrow-right-line"></i>';
                 msg.style.display = 'block';
                 msg.innerText = 'Something went wrong. Please try again.';
                 msg.style.color = 'red';

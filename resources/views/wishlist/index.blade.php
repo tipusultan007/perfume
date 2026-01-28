@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Spacer for Fixed Header -->
-<div class="h-[140px] md:h-[180px]"></div>
+<div class="h-[140px] md:h-[110px]"></div>
 
 <!-- Page Header -->
 <div class="relative w-full h-[250px] flex items-center justify-center bg-gray-100 overflow-hidden mb-12">
@@ -70,11 +70,10 @@
                             <!-- Actions -->
                             <td class="py-6 text-right">
                                 <div class="flex items-center justify-end gap-4">
-                                    <button class="relative overflow-hidden group bg-black text-white text-xs uppercase tracking-widest px-6 py-3 transition-all duration-300 hover:shadow-lg" onclick="quickAdd({{ $item->product->id }})">
-                                        <span class="relative z-10 group-hover:text-black transition-colors duration-300">Add to Bag</span>
-                                        <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
+                                    <button class="bg-[#d4af37] text-white text-xs uppercase tracking-widest px-8 py-3.5 transition-all duration-300 hover:bg-[#b8962e] hover:shadow-lg" onclick="quickAdd({{ $item->product->id }})">
+                                        Add to Bag
                                     </button>
-                                    <button onclick="addToWishlist({{ $item->product->id }}); this.closest('tr').remove();" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-400 hover:text-red-500 transition-all font-mono" title="Remove">
+                                    <button onclick="addToWishlist({{ $item->product->id }}); this.closest('tr').remove();" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 text-gray-400 hover:text-red-500 transition-all" title="Remove">
                                         <i class="ri-close-line text-lg"></i>
                                     </button>
                                 </div>
@@ -101,7 +100,7 @@
                         <h3 class="font-serif text-lg mb-1 leading-tight">{{ $item->product->name }}</h3>
                         <p class="text-brand-brown font-medium mb-3">${{ number_format($item->product->price, 2) }}</p>
                         
-                        <button onclick="quickAdd({{ $item->product->id }})" class="self-start text-[10px] uppercase tracking-widest bg-black text-white px-4 py-2 hover:bg-brand-brown transition-colors">
+                        <button onclick="quickAdd({{ $item->product->id }})" class="self-start text-[10px] uppercase tracking-widest bg-[#d4af37] text-white px-5 py-2.5 hover:bg-[#b8962e] transition-colors">
                             Add to Bag
                         </button>
                     </div>
@@ -116,7 +115,7 @@
             </div>
             <h2 class="text-2xl font-serif mb-2">Your wishlist is empty</h2>
             <p class="text-gray-500 text-sm max-w-sm mx-auto mb-8 font-light">Explore our collection and save your favorite essences for later.</p>
-            <a href="{{ route('shop') }}" class="text-xs uppercase tracking-[2px] border-b border-black pb-1 hover:text-brand-brown hover:border-brand-brown transition-all">
+            <a href="{{ route('shop') }}" class="text-xs uppercase tracking-[2px] border-b border-black pb-1 hover:text-[#d4af37] hover:border-[#d4af37] transition-all">
                 Discover Collection
             </a>
         </div>

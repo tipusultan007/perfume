@@ -27,6 +27,13 @@
                 <td>${{ number_format($order->grand_total, 2) }}</td>
                 <td>
                     <a href="{{ route('account.orders.show', $order->id) }}" class="mono" style="font-size: 10px; text-decoration: underline;">View</a>
+                    <span style="margin: 0 5px; opacity: 0.3;">|</span>
+                    <a href="{{ route('account.orders.invoice', $order->id) }}" class="mono" style="font-size: 10px; text-decoration: underline;">Download</a>
+                    <span style="margin: 0 5px; opacity: 0.3;">|</span>
+                    <form action="{{ route('account.orders.reorder', $order->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="mono" style="font-size: 10px; text-decoration: underline; background: none; border: none; padding: 0; cursor: pointer; color: inherit;">Order Again</button>
+                    </form>
                 </td>
             </tr>
             @endforeach

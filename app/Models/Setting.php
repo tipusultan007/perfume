@@ -16,6 +16,8 @@ class Setting extends Model
         'type',
     ];
 
+    private static $requestCache = null;
+
     /**
      * Get a setting value by key.
      *
@@ -25,7 +27,13 @@ class Setting extends Model
      */
     public static function get($key, $default = null)
     {
-        $setting = self::where('key', $key)->first();
+        if (self::$requestCache === null) {
+            self::$requestCache = \Illuminate\Support\Facades\Cache::rememberForever('settings_all', function () {
+                return self::all();
+            });
+        }
+
+        $setting = self::$requestCache->where('key', $key)->first();
         
         if (!$setting) {
             return $default;
@@ -54,7 +62,7 @@ class Setting extends Model
      */
     public static function set($key, $value, $group = 'general', $type = 'string')
     {
-        return self::updateOrCreate(
+        $setting = self::updateOrCreate(
             ['key' => $key],
             [
                 'value' => $value,
@@ -62,5 +70,10 @@ class Setting extends Model
                 'type' => $type
             ]
         );
+
+        \Illuminate\Support\Facades\Cache::forget('settings_all');
+        self::$requestCache = null;
+
+        return $setting;
     }
 }

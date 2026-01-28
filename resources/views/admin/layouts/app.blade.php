@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard') | L'ESSENCE Admin</title>
+    <title>@yield('title', 'Dashboard') | {{ \App\Models\Setting::get('site_name', "L'ESSENCE") }} Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -15,7 +15,11 @@
     <aside class="fixed inset-y-0 left-0 w-64 bg-[#0F172A] z-50 flex flex-col shadow-xl border-r border-slate-800">
 
         <div class="p-8 border-b border-slate-800 bg-slate-900/50">
-            <a href="{{ route('admin.dashboard') }}" class="font-serif text-xl tracking-[0.2em] font-medium text-white">L'ESSENCE</a>
+            <a href="{{ route('admin.dashboard') }}" class="block">
+                <span class="font-serif text-xl tracking-[0.25em] font-bold bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-transparent bg-clip-text uppercase">
+                    {{ \App\Models\Setting::get('site_name', "L'ESSENCE") }}
+                </span>
+            </a>
         </div>
 
         
@@ -96,28 +100,54 @@
             
             <div class="flex items-center gap-6">
                 <!-- Notifications -->
-                <div class="relative dropdown" id="notifDropdown">
-                    <button onclick="toggleDropdown('notifDropdown')" class="relative p-2 text-xl hover:text-luxury-accent transition-colors">
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" class="relative p-2 text-xl hover:text-luxury-accent transition-colors">
                         <i class="ri-notification-3-line"></i>
-                        <span class="absolute top-2 right-2 w-2 h-2 bg-luxury-accent rounded-full border-2 border-white"></span>
+                        @if(auth('admin')->user()->unreadNotifications->count() > 0)
+                            <span class="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white flex items-center justify-center text-[8px] font-bold rounded-full border-2 border-white">
+                                {{ auth('admin')->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
                     </button>
                     <!-- Dropdown Panel -->
-                    <div class="hidden absolute right-0 mt-4 w-80 bg-white border border-black/5 shadow-xl animate-in slide-in-from-top-2 duration-300 dropdown-panel">
-                        <div class="p-4 border-b border-black/5 flex justify-between items-center bg-gray-50/50">
-                            <h4 class="text-[10px] uppercase tracking-widest font-semibold">Notifications</h4>
-                            <a href="#" class="text-[10px] text-luxury-accent hover:underline">Mark read</a>
+                    <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-4 w-80 bg-white border border-slate-200 shadow-xl rounded-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <h4 class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Alerts</h4>
+                            @if(auth('admin')->user()->unreadNotifications->count() > 0)
+                                <form action="{{ route('admin.notifications.read-all') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-[10px] text-luxury-accent hover:underline font-bold uppercase tracking-widest">Mark All Read</button>
+                                </form>
+                            @endif
                         </div>
                         <div class="max-h-80 overflow-y-auto">
-                            <div class="p-4 border-b border-black/5 hover:bg-luxury-cream transition-colors cursor-pointer flex gap-4 items-start">
-                                <div class="w-8 h-8 rounded-full bg-luxury-cream flex items-center justify-center text-luxury-accent flex-shrink-0">
-                                    <i class="ri-shopping-cart-2-line"></i>
+                            @forelse(auth('admin')->user()->unreadNotifications->take(5) as $notif)
+                                <div class="p-4 border-b border-slate-50 hover:bg-slate-50 transition-all cursor-pointer flex gap-4 items-start group">
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 flex-shrink-0 group-hover:bg-luxury-accent group-hover:text-black transition-colors">
+                                        <i class="ri-{{ $notif->data['type'] == 'order_success' ? 'shopping-cart-2-line' : 'notification-3-line' }}"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-[11px] font-bold text-slate-900 leading-snug">{{ $notif->data['message'] }}</p>
+                                        <span class="text-[9px] text-slate-400 mt-1 block uppercase font-mono">{{ $notif->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    
+                                    <form action="{{ route('admin.notifications.read', $notif->id) }}" method="POST" class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                        @csrf
+                                        <button type="submit" title="Mark as Read" class="p-1 hover:text-luxury-accent">
+                                            <i class="ri-check-line"></i>
+                                        </button>
+                                    </form>
                                 </div>
-                                <div class="text-xs">
-                                    <p class="font-medium">New order #1029 received</p>
-                                    <span class="opacity-40 mt-1 block">2 mins ago</span>
+                            @empty
+                                <div class="p-8 text-center bg-white">
+                                    <i class="ri-notification-off-line text-2xl text-slate-200 mb-2 block"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Zen Garden: All Clear</p>
                                 </div>
-                            </div>
+                            @endforelse
                         </div>
+                        <a href="{{ route('admin.notifications.index') }}" class="block p-3 text-center text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-50 border-t border-slate-100">
+                            View All Notifications
+                        </a>
                     </div>
                 </div>
 

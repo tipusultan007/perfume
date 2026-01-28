@@ -4,58 +4,81 @@
 @section('page_title', 'Configuration')
 
 @section('content')
-<div class="w-full" x-data="{ tab: 'general' }">
-    <!-- Tabs Nav -->
-    <div class="flex flex-wrap items-center gap-3 mb-10">
+<div class="flex flex-col lg:flex-row gap-10 items-start" x-data="{ tab: 'general' }">
+    <!-- Sidebar Tabs Nav -->
+    <div class="w-full lg:w-72 flex-shrink-0 flex flex-col gap-2 bg-white p-6 border border-slate-200 rounded-2xl shadow-sm sticky top-24">
         <button @click="tab = 'general'" 
-            :class="tab === 'general' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-settings-4-line text-sm"></i> General
+            :class="tab === 'general' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-settings-4-line text-lg"></i> General
         </button>
         <button @click="tab = 'contact'" 
-            :class="tab === 'contact' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-mail-line text-sm"></i> Contact
+            :class="tab === 'contact' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-mail-line text-lg"></i> Contact
         </button>
         <button @click="tab = 'social'" 
-            :class="tab === 'social' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-links-line text-sm"></i> Social
+            :class="tab === 'social' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-links-line text-lg"></i> Social
         </button>
         <button @click="tab = 'navigation'" 
-            :class="tab === 'navigation' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-menu-line text-sm"></i> Navigation
+            :class="tab === 'navigation' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-menu-line text-lg"></i> Navigation
         </button>
         <button @click="tab = 'footer'" 
-            :class="tab === 'footer' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-layout-bottom-line text-sm"></i> Footer
+            :class="tab === 'footer' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-layout-bottom-line text-lg"></i> Footer
         </button>
         <button @click="tab = 'tax'" 
-            :class="tab === 'tax' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-percent-line text-sm"></i> Tax
+            :class="tab === 'tax' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-percent-line text-lg"></i> Tax
         </button>
         <button @click="tab = 'announcement'" 
-            :class="tab === 'announcement' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-notification-badge-line text-sm"></i> Announcement
+            :class="tab === 'announcement' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-notification-badge-line text-lg"></i> Announcement
         </button>
         <button @click="tab = 'integrations'" 
-            :class="tab === 'integrations' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20' : 'bg-white text-slate-500 hover:bg-slate-50 border-slate-200'" 
-            class="px-6 py-3.5 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-2">
-            <i class="ri-puzzle-line text-sm"></i> Integrations
+            :class="tab === 'integrations' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-puzzle-line text-lg"></i> Integrations
+        </button>
+        <button @click="tab = 'status'" 
+            :class="tab === 'status' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-shield-flash-line text-lg"></i> Site Status
+        </button>
+        <button @click="tab = 'mail'" 
+            :class="tab === 'mail' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-mail-send-line text-lg"></i> Email Settings
+        </button>
+        <button @click="tab = 'tools'" 
+            :class="tab === 'tools' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-tools-line text-lg"></i> System Tools
         </button>
     </div>
 
-    @if(session('success'))
-    <div class="mb-8 p-5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest flex items-center rounded-xl shadow-sm">
-        <i class="ri-checkbox-circle-line mr-3 text-xl"></i> {{ session('success') }}
-    </div>
-    @endif
+    <!-- Tab Content -->
+    <div class="flex-1 w-full space-y-8">
+        @if(session('success'))
+        <div class="p-5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest flex items-center rounded-xl shadow-sm">
+            <i class="ri-checkbox-circle-line mr-3 text-xl"></i> {{ session('success') }}
+        </div>
+        @endif
 
-    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-8 md:p-12">
+        @if(session('error'))
+        <div class="p-5 bg-rose-50 border border-rose-100 text-rose-700 text-xs font-bold uppercase tracking-widest flex items-center rounded-xl shadow-sm">
+            <i class="ri-error-warning-line mr-3 text-xl"></i> {{ session('error') }}
+        </div>
+        @endif
+
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-8 md:p-12">
 
         <!-- General Tab -->
         <div x-show="tab === 'general'" x-cloak class="space-y-8 animate-in fade-in duration-500">
@@ -479,6 +502,190 @@
                 </button>
             </form>
         </div>
+
+        <!-- Mail Tab -->
+        <div x-show="tab === 'mail'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+             <div class="border-b border-slate-100 pb-6 mb-8">
+                <h3 class="text-lg font-bold text-slate-900">Mail Configuration</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">SMTP & Sending Settings</p>
+            </div>
+
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-10">
+                @csrf
+                <input type="hidden" name="update_mail" value="1">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Mailer</label>
+                        <input type="text" name="mail_mailer" value="{{ $settings['mail_mailer'] ?? 'smtp' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Host</label>
+                        <input type="text" name="mail_host" value="{{ $settings['mail_host'] ?? '' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Port</label>
+                        <input type="text" name="mail_port" value="{{ $settings['mail_port'] ?? '587' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Encryption</label>
+                        <input type="text" name="mail_encryption" value="{{ $settings['mail_encryption'] ?? 'tls' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Username</label>
+                        <input type="text" name="mail_username" value="{{ $settings['mail_username'] ?? '' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail Password</label>
+                        <input type="password" name="mail_password" value="{{ $settings['mail_password'] ?? '' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail From Address</label>
+                        <input type="email" name="mail_from_address" value="{{ $settings['mail_from_address'] ?? '' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Mail From Name</label>
+                        <input type="text" name="mail_from_name" value="{{ $settings['mail_from_name'] ?? '' }}" 
+                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    </div>
+                </div>
+
+                <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
+                    Save Mail Settings
+                </button>
+            </form>
+
+            <div class="pt-10 border-t border-slate-100">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-4">Validate Configuration</h4>
+                    <p class="text-xs text-slate-500 mb-6 font-medium">Enter an email address below to send a test message using your current SMTP settings. Make sure to save changes before testing.</p>
+                    
+                    <form action="{{ route('admin.settings.test-smtp') }}" method="POST" class="flex flex-wrap md:flex-nowrap gap-4">
+                        @csrf
+                        <input type="email" name="test_email" placeholder="recipient@example.com" required
+                            class="flex-1 px-5 py-4 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                        <button type="submit" class="px-8 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all whitespace-nowrap">
+                            Send Connection Test
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Site Status Tab -->
+        <div x-show="tab === 'status'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+             <div class="border-b border-slate-100 pb-6 mb-8">
+                <h3 class="text-lg font-bold text-slate-900">Site Visibility & Status</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Control public access to your atelier</p>
+            </div>
+
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-10">
+                @csrf
+                <input type="hidden" name="update_site_status" value="1">
+                
+                @php $currentStatus = \App\Models\Setting::get('site_status', 'live'); @endphp
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Live Mode -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="site_status" value="live" class="peer sr-only" {{ $currentStatus === 'live' ? 'checked' : '' }}>
+                        <div class="p-8 bg-slate-50 border-2 border-transparent rounded-2xl transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 flex flex-col items-center text-center">
+                            <i class="ri-global-line text-4xl mb-4 text-slate-400 group-hover:scale-110 transition-transform peer-checked:text-emerald-500"></i>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-2">Live Mode</h4>
+                            <p class="text-[10px] text-slate-500 leading-relaxed uppercase font-bold tracking-tight">The boutique is open for business and accessible to everyone.</p>
+                        </div>
+                    </label>
+
+                    <!-- Maintenance Mode -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="site_status" value="maintenance" class="peer sr-only" {{ $currentStatus === 'maintenance' ? 'checked' : '' }}>
+                        <div class="p-8 bg-slate-50 border-2 border-transparent rounded-2xl transition-all peer-checked:bg-amber-50 peer-checked:border-amber-500 flex flex-col items-center text-center">
+                            <i class="ri-hammer-line text-4xl mb-4 text-slate-400 group-hover:scale-110 transition-transform peer-checked:text-amber-500"></i>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-2">Maintenance</h4>
+                            <p class="text-[10px] text-slate-500 leading-relaxed uppercase font-bold tracking-tight">Show a "Evolving" message. Only admins can access the shop.</p>
+                        </div>
+                    </label>
+
+                    <!-- Coming Soon Mode -->
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="site_status" value="coming_soon" class="peer sr-only" {{ $currentStatus === 'coming_soon' ? 'checked' : '' }}>
+                        <div class="p-8 bg-slate-50 border-2 border-transparent rounded-2xl transition-all peer-checked:bg-indigo-50 peer-checked:border-indigo-500 flex flex-col items-center text-center">
+                            <i class="ri-timer-flash-line text-4xl mb-4 text-slate-400 group-hover:scale-110 transition-transform peer-checked:text-indigo-500"></i>
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-2">Coming Soon</h4>
+                            <p class="text-[10px] text-slate-500 leading-relaxed uppercase font-bold tracking-tight">Perfect for pre-launch. Show a branded splash page to guests.</p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="p-8 bg-amber-50 border border-amber-100 rounded-2xl flex items-start gap-4">
+                    <i class="ri-information-fill text-2xl text-amber-500"></i>
+                    <div>
+                        <h5 class="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Administrator Access</h5>
+                        <p class="text-[11px] text-amber-700 leading-relaxed">As an administrator, you will always have full access to view and test all pages, regardless of the active mode. Public users will be redirected to designated splash pages.</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
+                    Update Site Visibility
+                </button>
+            </form>
+        </div>
+        <!-- System Tools Tab -->
+        <div x-show="tab === 'tools'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+             <div class="border-b border-slate-100 pb-6 mb-8">
+                <h3 class="text-lg font-bold text-slate-900">System Maintenance Tools</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Manage application performance and assets</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Clear Cache -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                            <i class="ri-refresh-line text-2xl text-slate-900"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Clear Application Cache</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed mb-8">This will flush the application, configuration, route, and view caches. Useful after making manual changes to configuration files or templates.</p>
+                    </div>
+                    <form action="{{ route('admin.settings.clear-cache') }}" method="POST">
+                        @csrf
+                        <button type="submit" onclick="return confirm('Note: This might perform a slight reload of assets. Proceed?')" class="w-full py-4 px-6 bg-slate-900 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
+                            Execute Clear Cache
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Storage Link -->
+                <div class="p-8 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                            <i class="ri-link-m text-2xl text-slate-900"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Fix Storage Link</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed mb-8">Re-generates the symbolic link from public/storage to storage/app/public. Required for uploaded media and product images to display correctly.</p>
+                    </div>
+                    <form action="{{ route('admin.settings.storage-link') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full py-4 px-6 border-2 border-slate-900 text-slate-900 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all">
+                            Create Symbolic Link
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="p-6 bg-blue-50 border border-blue-100 rounded-xl flex items-center gap-4 mt-10">
+                <i class="ri-information-line text-2xl text-blue-500"></i>
+                <p class="text-[10px] text-blue-700 font-bold uppercase tracking-widest">Only use these tools when necessary during deployment or configuration debugging.</p>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 @endsection

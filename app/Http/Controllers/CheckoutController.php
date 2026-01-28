@@ -190,6 +190,13 @@ class CheckoutController extends Controller
             'notes' => $request->notes
         ]);
 
+        // Notify Admins
+        try {
+            \Illuminate\Support\Facades\Notification::send(\App\Models\Admin::all(), new \App\Notifications\NewOrderNotification($order));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Admin notification failed: " . $e->getMessage());
+        }
+
         // SAVE ORDER ITEMS
         // Fetch raw cart to get IDs which getCartItems() might simplify away
         $rawCart = auth()->check() ? \App\Models\CartItem::where('user_id', auth()->id())->get() : Session::get('cart', []);

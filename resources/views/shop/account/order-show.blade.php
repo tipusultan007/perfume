@@ -3,8 +3,15 @@
 @section('account_content')
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
         <h3>Order #{{ $order->order_number }}</h3>
-        <span class="status-badge status-{{ strtolower($order->status) }}">{{ $order->status }}</span>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="{{ route('account.orders.invoice', $order->id) }}" class="mono" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 15px; border: 1px solid #111; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+                <i class="ri-download-line" style="font-size: 14px;"></i> Download Invoice
+            </a>
+            <span class="status-badge status-{{ strtolower($order->status) }}">{{ $order->status }}</span>
+        </div>
     </div>
+
+    @include('partials.order-timeline', ['order' => $order])
 
     <p style="opacity: 0.6; margin-bottom: 30px;">Order was placed on <strong>{{ $order->created_at->format('M d, Y') }}</strong> and is currently <strong>{{ $order->status }}</strong>.</p>
 

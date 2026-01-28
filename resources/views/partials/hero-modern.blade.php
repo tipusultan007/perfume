@@ -20,10 +20,12 @@
         .ui-btn:hover { transform: scale(1.1); }
 
         @media (max-width: 768px) {
-            .modern-slider-wrap { height: auto; min-height: 100vh; overflow: visible; }
-            .slide { position: relative; padding: 100px 0 140px; height: auto; min-height: 100vh; display: none; }
+            .modern-slider-wrap { height: auto; min-height: 100vh; overflow: visible; padding-top: 20px; }
+            .slide { position: relative; padding: 150px 0 140px; height: auto; min-height: 100vh; display: none; }
             .slide.active { display: flex; }
             .c-text-outline, .c-text-outline-dark { display: none; }
+            .nav-btn { width: 2.5rem !important; height: 2.5rem !important; }
+            .nav-btn i { font-size: 1.125rem !important; }
         }
 
         @media (max-width: 430px) {
@@ -33,7 +35,7 @@
             #dots-container { right: 4px; transform: scale(0.8) translateY(-50%); }
             
             /* Reduce typography slightly for ultra-mobile */
-            .slide h2 { font-size: 3.5rem !important; }
+            .slide h2 { font-size: 1.5rem !important; }
             .slide p { font-size: 0.85rem !important; }
         }
     </style>
@@ -97,7 +99,13 @@
              data-ui-theme="{{ $slider->ui_theme }}"
              data-accent-color="{{ $slider->accent_color }}"
              data-social-color="{{ $slider->social_color }}"
+             data-social-hover-color="{{ $slider->social_hover_color }}"
+             data-social-icon-color="{{ $slider->social_icon_color }}"
+             data-social-icon-hover-color="{{ $slider->social_icon_hover_color }}"
              data-nav-color="{{ $slider->nav_color }}"
+             data-nav-hover-color="{{ $slider->nav_hover_color }}"
+             data-nav-icon-color="{{ $slider->nav_icon_color }}"
+             data-nav-icon-hover-color="{{ $slider->nav_icon_hover_color }}"
              data-line-color="{{ $slider->line_color }}"
              data-title-color="{{ $slider->title_color }}"
              data-desc-color="{{ $slider->description_color }}"
@@ -112,8 +120,8 @@
 
             <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 w-full max-w-7xl mx-auto items-center px-6 gap-8 md:gap-0">
                 <div class="col-span-1 md:col-span-4 space-y-6 slide-content order-2 md:order-1 text-center md:text-left">
-                    <p class="tracking-[0.4em] text-sm font-bold uppercase" style="color: {{ $slider->accent_color }}">No. 0{{ $index + 1 }}</p>
-                    <h2 class="text-4xl md:text-8xl font-serif leading-[1.1]">{!! str_replace(' ', '<br class="hidden md:block">', $slider->title) !!}</h2>
+                    <p class="tracking-[0.4em] text-sm font-bold uppercase" style="color: {{ $slider->accent_color }}">{{ $slider->subtitle }}</p>
+                    <h2 class="text-4xl md:text-6xl font-serif leading-[1.1]">{!!  $slider->title !!}</h2>
                     <p class="font-light leading-relaxed max-w-xs mx-auto md:mx-0 opacity-80" style="color: {{ $slider->description_color }}">{{ $slider->description }}</p>
                     
                     @if($slider->button_text)
@@ -168,14 +176,27 @@
             if (!slide) return;
             const data = slide.dataset;
 
+            // Inject dynamic hover styles
+            let styleEl = document.getElementById('dynamic-slider-styles');
+            if(!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'dynamic-slider-styles';
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                .social-link { background-color: ${data.socialColor}; color: ${data.socialIconColor}; }
+                .social-link:hover { background-color: ${data.socialHoverColor} !important; color: ${data.socialIconHoverColor} !important; }
+                .nav-btn { background-color: ${data.navColor}; color: ${data.navIconColor}; }
+                .nav-btn:hover { background-color: ${data.navHoverColor} !important; color: ${data.navIconHoverColor} !important; }
+            `;
+
             // 1. Update Navigation Buttons
             const sideNext = document.getElementById('side-next');
             const sidePrev = document.getElementById('side-prev');
             
             [sideNext, sidePrev].forEach(btn => {
                 if (btn) {
-                    btn.style.backgroundColor = data.navColor;
-                    btn.style.color = data.uiTheme === 'dark' ? '#ffffff' : '#000000';
+                    btn.className = `ui-btn nav-btn w-14 h-14 rounded-full flex items-center justify-center shadow-lg cursor-pointer`;
                 }
             });
 
@@ -191,8 +212,7 @@
             // 2. Update Social Icons
             const socialLinks = document.querySelectorAll('#social-container a');
             socialLinks.forEach(link => {
-                link.style.backgroundColor = data.socialColor;
-                link.style.color = data.uiTheme === 'dark' ? '#ffffff' : '#000000';
+                link.className = `ui-btn social-link w-10 h-10 rounded-full flex items-center justify-center`;
             });
 
             // 3. Update Dots & Counter
@@ -269,6 +289,28 @@
         updateUI(0);
         gsap.from("#slide-0 .bottle", { y: 50, opacity: 0, duration: 1.5, ease: "power2.out" });
         gsap.from("#slide-0 .slide-content", { y: 20, opacity: 0, stagger: 0.2, duration: 1, delay: 0.5 });
+
+        // Parallax Effect for Background Text
+        const sliderWrap = document.querySelector('.modern-slider-wrap');
+        sliderWrap.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const xPos = (clientX / window.innerWidth - 0.5) * 40;
+            const yPos = (clientY / window.innerHeight - 0.5) * 40;
+
+            gsap.to('.c-text-outline, .c-text-outline-dark', {
+                x: xPos,
+                y: yPos,
+                duration: 1,
+                ease: "power2.out"
+            });
+            
+            gsap.to('.bottle', {
+                x: xPos * 0.2,
+                y: yPos * 0.2,
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
     });
 </script>
 @endpush

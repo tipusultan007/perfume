@@ -42,6 +42,14 @@ Route::post('/checkout/coupon', [\App\Http\Controllers\CheckoutController::class
 Route::delete('/checkout/coupon', [\App\Http\Controllers\CheckoutController::class, 'removeCoupon'])->name('checkout.remove-coupon');
 Route::get('/thank-you', [\App\Http\Controllers\CheckoutController::class, 'thankYou'])->name('checkout.thank-you');
 
+// Public Order Tracking
+Route::get('/track-order', [\App\Http\Controllers\OrderTrackingController::class, 'index'])->name('order.track');
+Route::post('/track-order', [\App\Http\Controllers\OrderTrackingController::class, 'track'])->name('order.track.process');
+
+// Site Status Splash Pages
+Route::get('/maintenance', function() { return view('shop.maintenance'); })->name('maintenance');
+Route::get('/coming-soon', function() { return view('shop.coming-soon'); })->name('coming-soon');
+
 // Customer Account Routes
 Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{email}/{hash}', [\App\Http\Controllers\NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
@@ -55,6 +63,8 @@ Route::middleware('auth')->prefix('account')->name('account.')->group(function (
     Route::post('/addresses/edit/{type}', [\App\Http\Controllers\AccountController::class, 'updateAddress']);
     Route::get('/details', [\App\Http\Controllers\AccountController::class, 'editDetails'])->name('details');
     Route::post('/details', [\App\Http\Controllers\AccountController::class, 'updateDetails']);
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\AccountController::class, 'downloadInvoice'])->name('orders.invoice');
+    Route::post('/orders/{order}/reorder', [\App\Http\Controllers\AccountController::class, 'reorder'])->name('orders.reorder');
 });
 
 // Profile Routes (Breeze)
@@ -92,7 +102,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('products', ProductController::class);
         Route::resource('sliders', SliderController::class);
         Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
-        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
+    // Orders
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\Admin\OrderController::class, 'downloadInvoice'])->name('orders.invoice');
+    Route::post('/orders/{order}/resend-details', [\App\Http\Controllers\Admin\OrderController::class, 'resendDetails'])->name('orders.resend-details');
+    Route::post('/orders/{order}/notes', [\App\Http\Controllers\Admin\OrderController::class, 'addNote'])->name('orders.notes.store');
 
         // Home Page Settings
         Route::get('/home-settings', [\App\Http\Controllers\Admin\HomeSettingsController::class, 'index'])->name('home-settings.index');
@@ -103,8 +117,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Tax & Settings
         Route::resource('taxes', \App\Http\Controllers\Admin\TaxController::class);
-        Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
-        Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+    // Global Settings
+    Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/clear-cache', [\App\Http\Controllers\Admin\SettingController::class, 'clearCache'])->name('settings.clear-cache');
+    Route::post('/settings/storage-link', [\App\Http\Controllers\Admin\SettingController::class, 'createStorageLink'])->name('settings.storage-link');
+    Route::post('/settings/test-smtp', [\App\Http\Controllers\Admin\SettingController::class, 'testSmtp'])->name('settings.test-smtp');
 
         // Customers
         Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'show', 'destroy']);
@@ -115,6 +133,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Newsletter
         Route::post('/newsletter/{id}/send', [\App\Http\Controllers\Admin\NewsletterController::class, 'send'])->name('newsletter.send');
         Route::resource('newsletter', \App\Http\Controllers\Admin\NewsletterController::class);
+
+        // Notifications
+    Route::get('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'readAll'])->name('notifications.read-all');
 
         // Popups
         Route::resource('popups', \App\Http\Controllers\Admin\PopupController::class);
