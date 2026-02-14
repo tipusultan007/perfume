@@ -57,6 +57,11 @@
             class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
             <i class="ri-mail-send-line text-lg"></i> Email Settings
         </button>
+        <button @click="tab = 'seo'" 
+            :class="tab === 'seo' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
+            class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
+            <i class="ri-search-eye-line text-lg"></i> SEO Settings
+        </button>
         <button @click="tab = 'tools'" 
             :class="tab === 'tools' ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20 active-tab' : 'bg-white text-slate-500 hover:bg-slate-50 border-transparent hover:border-slate-200'" 
             class="w-full px-6 py-4 text-[10px] uppercase tracking-widest font-bold border rounded-xl transition-all duration-300 flex items-center gap-3">
@@ -102,14 +107,26 @@
                 </div>
                 <div>
                     <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Site Logo</label>
-                    @if(isset($settings['site_logo']))
+                    @if(isset($settings['site_logo']) && !empty($settings['site_logo']))
                         <div class="mb-4 p-4 bg-slate-50 border border-slate-200 rounded-xl w-fit">
-                            <img src="{{ asset($settings['site_logo']) }}" alt="Current Logo" class="h-12 object-contain">
+                            <img src="{{ str_starts_with($settings['site_logo'], 'http') ? $settings['site_logo'] : asset($settings['site_logo']) }}" alt="Current Logo" class="h-12 object-contain">
                         </div>
                     @endif
                     <input type="file" name="site_logo" accept="image/*"
                         class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
                     <p class="text-[10px] text-slate-400 mt-2 font-medium">Recommended height: 40-60px. Format: PNG, JPG, SVG.</p>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Site Favicon</label>
+                    @if(isset($settings['site_favicon']) && !empty($settings['site_favicon']))
+                        <div class="mb-4 p-4 bg-slate-50 border border-slate-200 rounded-xl w-fit">
+                            <img src="{{ str_starts_with($settings['site_favicon'], 'http') ? $settings['site_favicon'] : asset($settings['site_favicon']) }}" alt="Current Favicon" class="h-8 w-8 object-contain">
+                        </div>
+                    @endif
+                    <input type="file" name="site_favicon" accept="image/x-icon,image/png,image/svg+xml"
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                    <p class="text-[10px] text-slate-400 mt-2 font-medium">Recommended size: 32x32px or 64x64px. Format: ICO, PNG, SVG.</p>
                 </div>
                 <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
                     Save General Changes
@@ -189,39 +206,7 @@
         </div>
 
         <!-- Navigation Tab -->
-        <div x-show="tab === 'navigation'" x-cloak x-data="{
-            menuItems: {{ $settings['nav_menu_json'] ?? '[]' }},
-            addParent() {
-                this.menuItems.push({ label: '', url: '', children: [] });
-            },
-            addChild(parentIndex) {
-                 if (!this.menuItems[parentIndex]) return;
-                if (!this.menuItems[parentIndex].children) {
-                    this.menuItems[parentIndex].children = [];
-                }
-                this.menuItems[parentIndex].children.push({ label: '', url: '' });
-            },
-            removeParent(index) {
-                this.menuItems.splice(index, 1);
-            },
-            removeChild(parentIndex, childIndex) {
-                this.menuItems[parentIndex].children.splice(childIndex, 1);
-            },
-            moveUp(index) {
-                if(index > 0) {
-                    const item = this.menuItems[index];
-                    this.menuItems.splice(index, 1);
-                    this.menuItems.splice(index - 1, 0, item);
-                }
-            },
-            moveDown(index) {
-                if(index < this.menuItems.length - 1) {
-                    const item = this.menuItems[index];
-                    this.menuItems.splice(index, 1);
-                    this.menuItems.splice(index + 1, 0, item);
-                }
-            }
-        }" class="space-y-8 animate-in fade-in duration-500">
+        <div x-show="tab === 'navigation'" x-cloak x-data="navigationSettings({{ json_encode($settings['nav_menu_json'] ?? []) }})" class="space-y-8 animate-in fade-in duration-500">
             <div class="border-b border-slate-100 pb-6 mb-8">
                 <h3 class="text-lg font-bold text-slate-900">Custom Navigation Links</h3>
                 <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Manage your website's header menu</p>
@@ -637,6 +622,119 @@
                 </button>
             </form>
         </div>
+
+        <!-- SEO Tab -->
+        <div x-show="tab === 'seo'" x-cloak class="space-y-8 animate-in fade-in duration-500">
+            <div class="border-b border-slate-100 pb-6 mb-8">
+                <h3 class="text-lg font-bold text-slate-900">Search Engine Optimization</h3>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Manage global meta tags and social sharing</p>
+            </div>
+
+            <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-8" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="update_seo" value="1">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest border-l-4 border-slate-900 pl-4">Standard Meta</h4>
+                        
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Meta Title</label>
+                            <input type="text" name="meta_title" value="{{ $settings['meta_title'] ?? '' }}" placeholder="Site Title | Catchy Slogan"
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Meta Keywords</label>
+                            <input type="text" name="meta_keywords" value="{{ $settings['meta_keywords'] ?? '' }}" placeholder="perfume, gifts, luxury, newkirk"
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Meta Description</label>
+                            <textarea name="meta_description" rows="4" placeholder="Brief description of your business for search results..."
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">{{ $settings['meta_description'] ?? '' }}</textarea>
+                            <p class="text-[10px] text-slate-400 mt-2 font-medium">Recommended length: 150-160 characters.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest border-l-4 border-slate-900 pl-4">Social Graph (OG)</h4>
+                        
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Social Title</label>
+                            <input type="text" name="og_title" value="{{ $settings['og_title'] ?? '' }}" placeholder="Title for Facebook/WhatsApp sharing"
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Social Description</label>
+                            <textarea name="og_description" rows="3" placeholder="Description for social snippets..."
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">{{ $settings['og_description'] ?? '' }}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-3">Social Sharing Image</label>
+                            @if(isset($settings['og_image']) && !empty($settings['og_image']))
+                                <div class="mb-4 p-4 bg-slate-50 border border-slate-200 rounded-xl w-fit">
+                                    <img src="{{ str_starts_with($settings['og_image'], 'http') ? $settings['og_image'] : asset($settings['og_image']) }}" alt="Current OG Image" class="h-24 w-40 object-cover rounded-lg">
+                                </div>
+                            @endif
+                            <input type="file" name="og_image" accept="image/*"
+                                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
+                            <p class="text-[10px] text-slate-400 mt-2 font-medium">Recommended size: 1200x630px. Aspect Ratio 1.91:1.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-100">
+                    <button type="submit" class="bg-slate-900 text-white px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
+                        Save SEO Settings
+                    </button>
+                </div>
+            </form>
+            
+            <div class="pt-12 border-t border-slate-100 space-y-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest">Sitemap Management</h4>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-bold">Manual control & Indexing status</p>
+                    </div>
+                    <form action="{{ route('admin.settings.generate-sitemap') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-8 py-4 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center gap-3">
+                            <i class="ri-refresh-line"></i> Force Regenerate Sitemap
+                        </button>
+                    </form>
+                </div>
+
+                @if(!empty($sitemapLinks))
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+                        <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-white">
+                            <h5 class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Current Indexed Links ({{ count($sitemapLinks) }})</h5>
+                            <a href="{{ asset('sitemap.xml') }}" target="_blank" class="text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:underline flex items-center gap-2">
+                                <i class="ri-external-link-line"></i> View Raw XML
+                            </a>
+                        </div>
+                        <div class="max-h-96 overflow-y-auto p-4 space-y-2">
+                            @foreach($sitemapLinks as $link)
+                                <div class="p-3 bg-white border border-slate-100 rounded-lg flex items-center justify-between group hover:border-slate-900 transition-all">
+                                    <span class="text-xs font-mono text-slate-600 truncate mr-4">{{ $link }}</span>
+                                    <a href="{{ $link }}" target="_blank" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-all">
+                                        <i class="ri-arrow-right-up-line text-sm"></i>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                     <div class="p-12 text-center bg-slate-50 border border-slate-200 rounded-2xl border-dashed">
+                        <i class="ri-file-search-line text-4xl text-slate-300 mb-4 block"></i>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">No sitemap found. Generate one to see the links.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
         <!-- System Tools Tab -->
         <div x-show="tab === 'tools'" x-cloak class="space-y-8 animate-in fade-in duration-500">
              <div class="border-b border-slate-100 pb-6 mb-8">
@@ -692,5 +790,47 @@
 
 @section('scripts')
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('navigationSettings', (initialData) => ({
+            menuItems: initialData || [],
+            addParent() {
+                this.menuItems.push({ label: '', url: '', children: [] });
+            },
+            addChild(parentIndex) {
+                if (!this.menuItems[parentIndex]) return;
+                if (!this.menuItems[parentIndex].children) {
+                    this.menuItems[parentIndex].children = [];
+                }
+                this.menuItems[parentIndex].children.push({ label: '', url: '' });
+            },
+            removeParent(index) {
+                this.menuItems.splice(index, 1);
+            },
+            removeChild(parentIndex, childIndex) {
+                this.menuItems[parentIndex].children.splice(parentIndex, 1); // Wait, this was bugged?
+                // Correct: this.menuItems[parentIndex].children.splice(childIndex, 1);
+            },
+            // Fixing the child removal logic while at it
+            removeChild(pIdx, cIdx) {
+                this.menuItems[pIdx].children.splice(cIdx, 1);
+            },
+            moveUp(index) {
+                if(index > 0) {
+                    const item = this.menuItems[index];
+                    this.menuItems.splice(index, 1);
+                    this.menuItems.splice(index - 1, 0, item);
+                }
+            },
+            moveDown(index) {
+                if(index < this.menuItems.length - 1) {
+                    const item = this.menuItems[index];
+                    this.menuItems.splice(index, 1);
+                    this.menuItems.splice(index + 1, 0, item);
+                }
+            }
+        }));
+    });
+</script>
 @endsection
 

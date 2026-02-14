@@ -123,6 +123,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/settings/clear-cache', [\App\Http\Controllers\Admin\SettingController::class, 'clearCache'])->name('settings.clear-cache');
     Route::post('/settings/storage-link', [\App\Http\Controllers\Admin\SettingController::class, 'createStorageLink'])->name('settings.storage-link');
     Route::post('/settings/test-smtp', [\App\Http\Controllers\Admin\SettingController::class, 'testSmtp'])->name('settings.test-smtp');
+    Route::post('/settings/generate-sitemap', [\App\Http\Controllers\Admin\SettingController::class, 'generateSitemap'])->name('settings.generate-sitemap');
 
         // Customers
         Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->only(['index', 'show', 'destroy']);

@@ -10,8 +10,21 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = \App\Models\Setting::all()->pluck('value', 'key');
-        return view('admin.settings.index', compact('settings'));
+        $all = \App\Models\Setting::all();
+        $settings = [];
+        foreach ($all as $setting) {
+            $settings[$setting->key] = \App\Models\Setting::get($setting->key);
+        }
+
+        $sitemapLinks = [];
+        if (file_exists(public_path('sitemap.xml'))) {
+            $xml = simplexml_load_file(public_path('sitemap.xml'));
+            foreach ($xml->url as $url) {
+                $sitemapLinks[] = (string) $url->loc;
+            }
+        }
+
+        return view('admin.settings.index', compact('settings', 'sitemapLinks'));
     }
 
     public function update(Request $request)
@@ -22,8 +35,15 @@ class SettingController extends Controller
             Setting::set('site_description', $request->input('site_description'), 'general');
 
             if ($request->hasFile('site_logo')) {
-                $path = $request->file('site_logo')->store('settings', 'public');
-                Setting::set('site_logo', 'storage/' . $path, 'general');
+                $setting = Setting::where('key', 'site_logo')->first() ?? Setting::set('site_logo', 'media', 'general', 'media');
+                $setting->addMediaFromRequest('site_logo')->toMediaCollection('site_logo');
+                Setting::set('site_logo', 'media', 'general', 'media');
+            }
+
+            if ($request->hasFile('site_favicon')) {
+                $setting = Setting::where('key', 'site_favicon')->first() ?? Setting::set('site_favicon', 'media', 'general', 'media');
+                $setting->addMediaFromRequest('site_favicon')->toMediaCollection('site_favicon');
+                Setting::set('site_favicon', 'media', 'general', 'media');
             }
             
             return back()->with('success', 'General settings updated.');
@@ -120,6 +140,23 @@ class SettingController extends Controller
             return back()->with('success', 'Mail settings updated.');
         }
 
+        // SEO Settings
+        if ($request->has('update_seo')) {
+            Setting::set('meta_title', $request->input('meta_title'), 'seo');
+            Setting::set('meta_description', $request->input('meta_description'), 'seo');
+            Setting::set('meta_keywords', $request->input('meta_keywords'), 'seo');
+            Setting::set('og_title', $request->input('og_title'), 'seo');
+            Setting::set('og_description', $request->input('og_description'), 'seo');
+            
+            if ($request->hasFile('og_image')) {
+                $setting = Setting::where('key', 'og_image')->first() ?? Setting::set('og_image', 'media', 'seo', 'media');
+                $setting->addMediaFromRequest('og_image')->toMediaCollection('og_image');
+                Setting::set('og_image', 'media', 'seo', 'media');
+            }
+            
+            return back()->with('success', 'SEO settings updated.');
+        }
+
         return back();
     }
 
@@ -156,5 +193,12 @@ class SettingController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'SMTP Error: ' . $e->getMessage());
         }
+    }
+
+    public function generateSitemap()
+    {
+        \Illuminate\Support\Facades\Artisan::call('sitemap:generate');
+        
+        return back()->with('success', 'Sitemap generated successfully.');
     }
 }

@@ -23,12 +23,20 @@ class PopupController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'subtitle' => 'nullable|string',
+            'description' => 'nullable|string',
+            'cta_text' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'template_id' => 'required|string',
+            'font_family' => 'required|string',
         ]);
 
-        $popup = Popup::create($request->only('title', 'link', 'start_date', 'end_date', 'is_active'));
+        $data = $request->only('title', 'subtitle', 'description', 'link', 'cta_text', 'template_id', 'font_family', 'start_date', 'end_date', 'is_active');
+        $data['show_newsletter'] = $request->has('show_newsletter');
+        
+        $popup = Popup::create($data);
 
         if ($request->hasFile('image')) {
             $popup->addMediaFromRequest('image')->toMediaCollection('popup');
@@ -46,18 +54,21 @@ class PopupController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'subtitle' => 'nullable|string',
+            'description' => 'nullable|string',
+            'cta_text' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'template_id' => 'required|string',
+            'font_family' => 'required|string',
         ]);
 
-        $popup->update($request->only('title', 'link', 'start_date', 'end_date', 'is_active'));
-        
-        // Handle checkbox logic for is_active matching typical Laravel behavior if it's not in the request
-        if (!$request->has('is_active')) {
-            $popup->is_active = false;
-            $popup->save();
-        }
+        $data = $request->only('title', 'subtitle', 'description', 'link', 'cta_text', 'template_id', 'font_family', 'start_date', 'end_date', 'is_active');
+        $data['show_newsletter'] = $request->has('show_newsletter');
+        $data['is_active'] = $request->has('is_active');
+
+        $popup->update($data);
 
         if ($request->hasFile('image')) {
             $popup->clearMediaCollection('popup');

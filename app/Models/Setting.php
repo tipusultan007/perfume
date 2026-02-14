@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Setting extends Model
+class Setting extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'key',
@@ -17,6 +19,13 @@ class Setting extends Model
     ];
 
     private static $requestCache = null;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('site_logo')->singleFile();
+        $this->addMediaCollection('site_favicon')->singleFile();
+        $this->addMediaCollection('og_image')->singleFile();
+    }
 
     /**
      * Get a setting value by key.
@@ -46,6 +55,10 @@ class Setting extends Model
                 return (int) $setting->value;
             case 'json':
                 return json_decode($setting->value, true);
+            case 'media':
+                // Re-fetch to use InteractsWithMedia (static context workaround)
+                $model = self::find($setting->id);
+                return $model ? $model->getFirstMediaUrl($key) : $default;
             default:
                 return $setting->value;
         }

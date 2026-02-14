@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', "L'ESSENCE NYC | Fragrance & Objects Atelier")</title>
+    
+    <!-- Favicon -->
+    @php $favicon = \App\Models\Setting::get('site_favicon'); @endphp
+    @if($favicon)
+        <link rel="icon" type="{{ str_ends_with($favicon, '.ico') ? 'image/x-icon' : (str_ends_with($favicon, '.svg') ? 'image/svg+xml' : 'image/png') }}" href="{{ str_starts_with($favicon, 'http') ? $favicon : asset($favicon) }}">
+    @endif
+
+    <title>@yield('title', \App\Models\Setting::get('meta_title', "Newkirk | Perfumes & Gifts"))</title>
+    <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', ''))">
+    <meta name="keywords" content="@yield('meta_keywords', \App\Models\Setting::get('meta_keywords', ''))">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="@yield('og_title', \App\Models\Setting::get('og_title', \App\Models\Setting::get('meta_title', 'Newkirk')))">
+    <meta property="og:description" content="@yield('og_description', \App\Models\Setting::get('og_description', \App\Models\Setting::get('meta_description', '')))">
+    <meta property="og:image" content="@yield('og_image', asset(\App\Models\Setting::get('og_image', 'images/og-default.jpg')))">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
 
     <!-- Google Analytics -->
     @php $gaId = \App\Models\Setting::get('google_analytics_id'); @endphp

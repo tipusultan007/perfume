@@ -1,0 +1,21 @@
+Researching Gallery Media Orphans...
+
+Processing: C:\wamp64\www\perfumes\storage\app/public/products/featured
+Path: C:\wamp64\www\perfumes\storage\app/public/products/featured
+Total Folders: 146
+Folders in WRONG collection folder: 106
+  Sample: ID 100: In folder 'featured' but collection is 'gallery'
+  ID 102: In folder 'featured' but collection is 'gallery'
+  ID 103: In folder 'featured' but collection is 'gallery'
+  ID 104: In folder 'featured' but collection is 'gallery'
+  ID 105: In folder 'featured' but collection is 'gallery'
+
+Processing: C:\wamp64\www\perfumes\storage\app/public/products/gallery
+Path: C:\wamp64\www\perfumes\storage\app/public/products/gallery
+Total Folders: 179
+Folders in WRONG collection folder: 42
+  Sample: ID 183: In folder 'gallery' but collection is 'sliders'
+  ID 184: In folder 'gallery' but collection is 'sliders'
+  ID 185: In folder 'gallery' but collection is 'sliders'
+  ID 187: In folder 'gallery' but collection is 'sliders'
+  ID 193: In folder 'gallery' but collection is 'slider'

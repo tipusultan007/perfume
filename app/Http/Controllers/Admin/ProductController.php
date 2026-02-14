@@ -41,7 +41,7 @@ class ProductController extends Controller
             $query->where('product_type', $request->product_type);
         }
 
-        $products = $query->latest()->paginate(10)->withQueryString();
+        $products = $query->orderBy('name','asc')->paginate(10)->withQueryString();
         
         $categories = Category::all();
         $brands = Brand::all();

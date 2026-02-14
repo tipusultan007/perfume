@@ -39,10 +39,7 @@ class HomeSettingsController extends Controller
         );
 
         if ($request->has('hero_style')) {
-            Setting::updateOrCreate(
-                ['key' => 'home_hero_style'],
-                ['value' => $request->hero_style, 'group' => 'home', 'type' => 'string']
-            );
+            Setting::set('home_hero_style', $request->hero_style, 'home', 'string');
         }
 
         return back()->with('success', 'Hero section updated successfully.');
@@ -102,10 +99,7 @@ class HomeSettingsController extends Controller
             
             $value = $request->has('show_' . $section) ? '1' : '0';
             
-            Setting::updateOrCreate(
-                ['key' => $key],
-                ['value' => $value, 'group' => 'home_visibility', 'type' => 'boolean']
-            );
+            Setting::set($key, $value, 'home_visibility', 'boolean');
         }
 
         return back()->with('success', 'Section visibility updated successfully.');

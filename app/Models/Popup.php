@@ -13,7 +13,13 @@ class Popup extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'subtitle',
+        'description',
         'link',
+        'cta_text',
+        'template_id',
+        'show_newsletter',
+        'font_family',
         'start_date',
         'end_date',
         'is_active',
@@ -23,5 +29,6 @@ class Popup extends Model implements HasMedia
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'is_active' => 'boolean',
+        'show_newsletter' => 'boolean',
     ];
 }

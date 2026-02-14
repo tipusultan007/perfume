@@ -508,8 +508,8 @@ img {
 
 .product-thumb {
     position: relative;
-    background: #ebebeb;
-    aspect-ratio: 1 / 1.3;
+    background: #FBF9F4;
+    aspect-ratio: 1 / 1.2;
     overflow: hidden;
     width: 100%;
 }
@@ -522,7 +522,7 @@ img {
 .product-thumb img {
     width: 100%;
     height: 100%;
-    /* object-fit: cover; */
+    object-fit: contain;
     transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -1343,7 +1343,7 @@ img {
 }
 
 .footer-logo {
-    max-width: 150px;
+    max-width: 175px;
     margin-bottom: 20px;
 }
 

@@ -33,7 +33,7 @@
                                 'banner_signature' => 'Banner: Signature Scents',
                                 'recent_arrivals' => 'Recent Arrivals',
                                 'cta' => 'CTA Section (Confidence)',
-                                'featured' => 'Featured Highlights',
+                                'featured' => 'Featured Products',
                                 'banner_seasonal' => 'Banner: Seasonal Picks',
                                 'special_offers' => 'Special Offers',
                                 'banner_engraving' => 'Banner: Exclusive Engraving',

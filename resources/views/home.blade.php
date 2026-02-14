@@ -358,6 +358,31 @@
     </section>
     @endif
 
+    <!-- Featured Products Slider -->
+    @if(\App\Models\Setting::get('home_show_featured', 1))
+    <section class="featured-products section-padding" data-aos="fade-up">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="swiper product-slider">
+                <div class="swiper-wrapper">
+                    @forelse($featuredProducts as $product)
+                    <div class="swiper-slide">
+                        <x-product-card :product="$product" :badge="'FEATURED'" />
+                    </div>
+                    @empty
+                    <div class="swiper-slide text-center py-20">
+                        <p class="opacity-50">No featured products found.</p>
+                    </div>
+                    @endforelse
+                </div>
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+    @endif
+
     <!-- Promo Banners Section -->
     @if(\App\Models\Setting::get('home_show_promo_banners', 1))
     <section class="promo-banners" data-aos="fade-up">
@@ -481,30 +506,6 @@
         </div>
     </section> --}}
 
-    <!-- Featured Highlights -->
-    @if(\App\Models\Setting::get('home_show_featured', 1))
-    <section class="featured-highlights section-padding" data-aos="fade-up">
-        <div class="container">
-            <h2 class="section-title">Featured Highlights</h2>
-            <div class="swiper product-slider">
-                <div class="swiper-wrapper">
-                    @forelse($featuredProducts as $product)
-                    <div class="swiper-slide">
-                        <x-product-card :product="$product" :badge="'FEATURED'" />
-                    </div>
-                    @empty
-                    <div class="swiper-slide text-center py-20">
-                        <p class="opacity-50">No featured highlights found.</p>
-                    </div>
-                    @endforelse
-                </div>
-                <!-- Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </section>
-    @endif
 
     <!-- Newsletter Section (Relocated for Contrast) -->
     @if(\App\Models\Setting::get('home_show_newsletter', 1))
