@@ -14,13 +14,24 @@
     <title>@yield('title', \App\Models\Setting::get('meta_title', "Newkirk | Perfumes & Gifts"))</title>
     <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('meta_description', ''))">
     <meta name="keywords" content="@yield('meta_keywords', \App\Models\Setting::get('meta_keywords', ''))">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
     
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="@yield('og_title', \App\Models\Setting::get('og_title', \App\Models\Setting::get('meta_title', 'Newkirk')))">
     <meta property="og:description" content="@yield('og_description', \App\Models\Setting::get('og_description', \App\Models\Setting::get('meta_description', '')))">
-    <meta property="og:image" content="@yield('og_image', asset(\App\Models\Setting::get('og_image', 'images/og-default.jpg')))">
+    @php
+        $defaultOgImage = \App\Models\Setting::get('og_image') ? asset(\App\Models\Setting::get('og_image')) : asset('images/og-default.jpg');
+    @endphp
+    <meta property="og:image" content="@yield('og_image', $defaultOgImage)">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="{{ config('app.name') }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('og_title', \App\Models\Setting::get('og_title', \App\Models\Setting::get('meta_title', 'Newkirk')))">
+    <meta name="twitter:description" content="@yield('og_description', \App\Models\Setting::get('og_description', \App\Models\Setting::get('meta_description', '')))">
+    <meta name="twitter:image" content="@yield('og_image', $defaultOgImage)">
 
     <!-- Google Analytics -->
     @php $gaId = \App\Models\Setting::get('google_analytics_id'); @endphp
@@ -89,6 +100,193 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @media (max-width: 1024px) {
+            .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 300px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .split-section { flex-direction: column; text-align: center; gap: 40px; }
+            footer { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-desktop { display: none; }
+            .menu-toggle { display: flex; }
+            .bento { grid-template-columns: 1fr; grid-auto-rows: 400px; padding: 10px; }
+            .bento-1, .bento-2 { grid-column: span 1; grid-row: span 1; }
+            footer { grid-template-columns: 1fr; text-align: center; }
+            .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; }
+            .section-padding { padding: 60px 5%; }
+            
+            /* --- Mobile Bottom Nav Styles --- */
+            .mobile-bottom-nav {
+                display: none;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 70px;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                border-top: 1px solid var(--border);
+                z-index: 1000;
+                justify-content: space-around;
+                align-items: center;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: var(--black);
+                flex: 1;
+                gap: 5px;
+                transition: opacity 0.3s ease;
+            }
+
+            .nav-item svg {
+                width: 22px;
+                height: 22px;
+                opacity: 0.7;
+            }
+
+            .nav-item span {
+                font-family: 'Space Mono', monospace;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                opacity: 0.6;
+            }
+
+            .nav-item.active svg,
+            .nav-item.active span {
+                opacity: 1;
+            }
+
+            /* Cart Badge in Bottom Nav */
+            .cart-icon-wrapper {
+                position: relative;
+            }
+
+            .cart-badge {
+                position: absolute;
+                top: -5px;
+                right: -8px;
+                background: var(--accent);
+                color: white;
+                font-family: 'Inter';
+                font-size: 8px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+            }
+
+            .mobile-bottom-nav { display: flex; padding-top: 10px;}
+            body { padding-bottom: 70px; }
+        }
+
+        .footer-brand .social-links { margin-top: 20px; }
+
+        /* Search Overlay Styles */
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            padding: 100px 10%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+        }
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .search-close {
+            position: absolute;
+            top: 40px;
+            right: 6%;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .search-close:hover { transform: rotate(90deg); }
+        .search-input-wrapper {
+            position: relative;
+            margin-bottom: 50px;
+        }
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            font-size: 40px;
+            font-family: 'Cormorant Garamond';
+            padding: 20px 0;
+            outline: none;
+            transition: border-color 0.3s ease;
+            color: white;
+        }
+        .search-input:focus { border-color: var(--accent); }
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+            overflow-y: auto;
+            padding-bottom: 50px;
+        }
+        .search-result-item {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 15px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        .search-result-item:hover {
+            background: rgba(0,0,0,0.03);
+            transform: translateY(-2px);
+        }
+        .search-result-img {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .search-result-info h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--black);
+        }
+        .search-result-info p {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .no-results {
+            text-align: center;
+            font-family: 'Cormorant Garamond';
+            font-size: 24px;
+            opacity: 0.5;
+            grid-column: 1 / -1;
+            padding: 50px 0;
+        }
+    </style>    
     <style>
         :root {
             --black: #0A0A0A;
@@ -633,7 +831,7 @@
         }
         .social-link:hover { 
             border-color: var(--accent); 
-            color: var(--black); 
+            color: var(--accent) !important; 
             opacity: 1; 
             transform: translateY(-5px);
             background: rgba(212, 175, 55, 0.05);
@@ -647,7 +845,7 @@
 
         /* Hide Mobile Nav on Desktop */
         .mobile-bottom-nav { display: none; }
-        
+       
         @media (max-width: 1024px) {
             .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 300px; }
             .product-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1449,8 +1647,6 @@
             if(input && parseInt(input.value) > 1) input.value = parseInt(input.value) - 1;
         }
     </script>
-
-    @include('components.popup')
     
     @yield('scripts')
     @stack('scripts')
@@ -1516,5 +1712,6 @@
             }, 800);
         });
     </script>
+    <x-popup />
 </body>
 </html>

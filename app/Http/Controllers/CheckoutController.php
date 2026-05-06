@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -128,6 +130,25 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
+        if ($request->address_selection === 'saved' && auth()->check() && auth()->user()->shipping_address) {
+            $savedShipping = auth()->user()->shipping_address;
+            if (is_string($savedShipping)) {
+                $savedShipping = json_decode($savedShipping, true) ?: [];
+            }
+
+            $request->merge([
+                'first_name' => $savedShipping['first_name'] ?? $request->first_name,
+                'last_name' => $savedShipping['last_name'] ?? $request->last_name,
+                'email' => $request->email ?: ($savedShipping['email'] ?? null),
+                'address' => $savedShipping['address'] ?? $request->address,
+                'city' => $savedShipping['city'] ?? $request->city,
+                'zip' => $savedShipping['zip'] ?? $request->zip,
+                'state' => $savedShipping['state'] ?? $request->state,
+                'country' => $savedShipping['country'] ?? $request->country,
+                'phone' => $savedShipping['phone'] ?? $request->phone,
+            ]);
+        }
+
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -234,7 +255,36 @@ class CheckoutController extends Controller
                  'total' => $price * $qty
              ]);
         }
-        
+
+        // CLEAR CART & COUPON (Only if payment is successful or if it's COD, but here we process payment first)
+
+        // Handle Payment Gateway
+        if ($request->payment_method === 'credit_card') {
+            if (!$request->clover_token) {
+                return back()->withInput()->with('error', 'Payment token is missing. Please try again.');
+            }
+
+            $amountInCents = round($grandTotal * 100);
+            $paymentResponse = $this->chargeClover(
+                $request->clover_token,
+                $amountInCents,
+                $order->order_number,
+                $request->ip(),
+                $request->email
+            );
+
+            if (!$paymentResponse['success']) {
+                $order->update(['status' => 'failed', 'payment_status' => 'failed']);
+                return back()->withInput()->with('error', 'Payment Failed: ' . $paymentResponse['message']);
+            }
+
+            $order->update([
+                'payment_status' => 'paid',
+                'status' => 'processing',
+                'clover_charge_id' => $paymentResponse['charge_id']
+            ]);
+        }
+
         // Clear Cart & Coupon
         if (auth()->check()) {
             \App\Models\CartItem::where('user_id', auth()->id())->delete();
@@ -242,6 +292,7 @@ class CheckoutController extends Controller
             Session::forget('cart');
         }
         Session::forget('coupon');
+        Session::put('last_order_id', $order->id);
 
         // SEND EMAILS
         try {
@@ -259,9 +310,102 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.thank-you')->with('success', 'Order placed successfully!');
     }
 
+    private function chargeClover($token, $amount, $orderNumber, $clientIp = null, $receiptEmail = null)
+    {
+        $config = config('services.clover');
+        $baseUrl = $config['env'] === 'sandbox' ? 'https://scl-sandbox.dev.clover.com' : 'https://scl.clover.com';
+
+        if (empty($config['private_key'])) {
+            return [
+                'success' => false,
+                'message' => 'Clover private key is not configured.'
+            ];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $config['private_key'],
+                'Idempotency-Key' => Str::uuid()->toString(),
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'x-forwarded-for' => $clientIp ?: request()->ip(),
+            ])->post($baseUrl . '/v1/charges', [
+                'amount' => $amount,
+                'currency' => 'usd',
+                'source' => $token,
+                'description' => 'Order ' . $orderNumber,
+                'capture' => true,
+                'ecomind' => 'ecom',
+                'receipt_email' => $receiptEmail,
+            ]);
+
+            if ($response->successful()) {
+                return [
+                    'success' => true,
+                    'charge_id' => $response->json('id')
+                ];
+            }
+
+            \Illuminate\Support\Facades\Log::warning('Clover charge failed', [
+                'status' => $response->status(),
+                'body' => $response->json() ?? $response->body(),
+                'order_number' => $orderNumber,
+            ]);
+
+            return [
+                'success' => false,
+                'message' => $this->cloverErrorMessage($response)
+            ];
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Clover Payment Error: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Internal server error during payment processing.'
+            ];
+        }
+    }
+
+    private function cloverErrorMessage($response)
+    {
+        $json = $response->json();
+
+        if (is_array($json)) {
+            foreach (['message', 'error_description', 'error'] as $key) {
+                if (!empty($json[$key]) && is_string($json[$key])) {
+                    return $json[$key];
+                }
+            }
+
+            if (!empty($json['error']['message'])) {
+                return $json['error']['message'];
+            }
+
+            if (!empty($json['details']) && is_array($json['details'])) {
+                return collect($json['details'])->pluck('message')->filter()->first()
+                    ?: 'Clover rejected the payment request.';
+            }
+        }
+
+        return 'Clover rejected the payment request. Check storage/logs/laravel.log for details.';
+    }
+
     public function thankYou()
     {
-        return view('shop.thank-you');
+        $order = null;
+
+        if (Session::has('last_order_id')) {
+            $order = \App\Models\Order::with('items')->find(Session::get('last_order_id'));
+        }
+
+        if (!$order && auth()->check()) {
+            $order = \App\Models\Order::with('items')
+                ->where('user_id', auth()->id())
+                ->latest()
+                ->first();
+        }
+
+        return view('shop.thank-you', compact('order'));
     }
 
     private function getCartItems()

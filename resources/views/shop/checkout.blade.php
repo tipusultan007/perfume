@@ -267,7 +267,44 @@
         }
         .checkout-main { padding: 40px 5%; }
     }
+    .clover-element {
+        padding: 12px;
+        border: 1px solid rgba(0,0,0,0.1);
+        background: white;
+        height: 48px;
+        width: 100%;
+    }
+    .clover-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .clover-row > div {
+        flex: 1;
+    }
+    #clover-card-errors {
+        color: #e53e3e;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+    #clover-card-errors:not(:empty) {
+        margin-top: 12px;
+    }
+    .clover-trust {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        font-size: 11px;
+        color: rgba(0,0,0,0.55);
+        min-height: 28px;
+    }
 </style>
+@php
+    $cloverSdkUrl = config('services.clover.env') === 'sandbox'
+        ? 'https://checkout.sandbox.dev.clover.com/sdk.js'
+        : 'https://checkout.clover.com/sdk.js';
+@endphp
+<script src="{{ $cloverSdkUrl }}"></script>
 @endsection
 
 @section('content')
@@ -303,8 +340,9 @@
                 </div>
             @endif
 
-            <form action="{{ route('checkout.process') }}" method="POST">
+            <form id="checkout-form" action="{{ route('checkout.process') }}" method="POST">
                 @csrf
+                <input type="hidden" name="clover_token" id="clover-token">
                 
                 <div class="form-section">
                     <div class="flex justify-between items-center">
@@ -428,18 +466,31 @@
                         </label>
                     </div>
 
-                    <div class="payment-box mb-8">
-                        <div class="input-group">
-                            <input type="text" placeholder="Card number">
+                    <div class="payment-box mb-8" id="credit-card-fields">
+                        <div class="input-group mb-3">
+                            <label class="text-[10px] uppercase tracking-widest font-bold mb-1 block">Card Number</label>
+                            <div id="clover-card-number" class="clover-element"></div>
                         </div>
-                        <div class="input-row">
-                            <input type="text" placeholder="Expiration date (MM / YY)">
-                            <input type="text" placeholder="Security code">
+                        <div class="clover-row">
+                            <div class="input-group">
+                                <label class="text-[10px] uppercase tracking-widest font-bold mb-1 block">Expiry Date</label>
+                                <div id="clover-card-date" class="clover-element"></div>
+                            </div>
+                            <div class="input-group">
+                                <label class="text-[10px] uppercase tracking-widest font-bold mb-1 block">CVV</label>
+                                <div id="clover-card-cvv" class="clover-element"></div>
+                            </div>
                         </div>
+                        <div class="input-group mt-3">
+                            <label class="text-[10px] uppercase tracking-widest font-bold mb-1 block">Card ZIP Code</label>
+                            <div id="clover-card-postal-code" class="clover-element"></div>
+                        </div>
+                        <div id="clover-card-errors" role="alert"></div>
+                        <div class="clover-trust clover-footer"></div>
                     </div>
                 </div>
 
-                <button type="submit" class="complete-purchase-btn">Pay Now</button>
+                <button type="submit" id="submit-button" class="complete-purchase-btn">Pay Now</button>
             </form>
         </section>
 
@@ -598,5 +649,117 @@
             btn.innerText = 'Apply';
         });
     }
+    // Clover Integration
+    document.addEventListener('DOMContentLoaded', function() {
+        const publicKey = '{{ config('services.clover.public_key') }}';
+        const merchantId = '{{ config('services.clover.merchant_id') }}';
+
+        const errorBox = document.getElementById('clover-card-errors');
+        const form = document.getElementById('checkout-form');
+        const submitBtn = document.getElementById('submit-button');
+
+        if (!publicKey || typeof Clover === 'undefined') {
+            errorBox.textContent = 'Payment form could not load. Please refresh and try again.';
+            return;
+        }
+
+        const clover = new Clover(publicKey, {
+            merchantId: merchantId
+        });
+
+        const elements = clover.elements();
+        const styles = {
+            input: {
+                fontFamily: 'Montserrat, sans-serif',
+                fontSize: '14px',
+                color: '#333'
+            }
+        };
+
+        const cardNumber = elements.create('CARD_NUMBER', styles);
+        const cardDate = elements.create('CARD_DATE', styles);
+        const cardCvv = elements.create('CARD_CVV', styles);
+        const cardPostalCode = elements.create('CARD_POSTAL_CODE', styles);
+
+        cardNumber.mount('#clover-card-number');
+        cardDate.mount('#clover-card-date');
+        cardCvv.mount('#clover-card-cvv');
+        cardPostalCode.mount('#clover-card-postal-code');
+
+        const handleChange = (e) => {
+            if (e.error) {
+                errorBox.textContent = getCloverErrorMessage(e.error);
+            } else {
+                errorBox.textContent = '';
+            }
+        };
+
+        cardNumber.addEventListener('change', handleChange);
+        cardDate.addEventListener('change', handleChange);
+        cardCvv.addEventListener('change', handleChange);
+        cardPostalCode.addEventListener('change', handleChange);
+
+        form.addEventListener('submit', function(event) {
+            const paymentMethodInput = document.querySelector('input[name="payment_method"]:checked');
+            const paymentMethod = paymentMethodInput ? paymentMethodInput.value : null;
+
+            if (paymentMethod !== 'credit_card') return;
+            if (form.dataset.cloverTokenized === 'true') return;
+
+            event.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Processing...';
+            errorBox.textContent = '';
+
+            tokenWithTimeout(clover, 30000)
+                .then(function(result) {
+                    if (result.errors) {
+                        const errorMsg = getCloverErrorMessage(result.errors);
+                        errorBox.textContent = errorMsg;
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Pay Now';
+                    } else if (result.token) {
+                        document.getElementById('clover-token').value = result.token;
+                        form.dataset.cloverTokenized = 'true';
+                        form.submit();
+                    } else {
+                        throw new Error('No token or error returned from Clover');
+                    }
+                })
+                .catch(function(err) {
+                    errorBox.textContent = err && err.message ? err.message : 'Payment could not be tokenized. Please check the card details and try again.';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Pay Now';
+                });
+        });
+
+        function tokenWithTimeout(cloverInstance, timeoutMs) {
+            return Promise.race([
+                cloverInstance.createToken(),
+                new Promise(function(_, reject) {
+                    setTimeout(function() {
+                        reject(new Error('Clover did not respond while tokenizing the card. Please refresh the page and try again.'));
+                    }, timeoutMs);
+                })
+            ]);
+        }
+
+        function getCloverErrorMessage(error) {
+            if (!error) return 'Payment details are invalid.';
+            if (typeof error === 'string') return error;
+            if (error.message) return error.message;
+
+            const values = Array.isArray(error) ? error : Object.values(error);
+            for (const value of values) {
+                if (!value) continue;
+                if (typeof value === 'string') return value;
+                if (value.message) return value.message;
+                if (value.error) return getCloverErrorMessage(value.error);
+            }
+
+            return 'Payment details are invalid. Please check the card fields and try again.';
+        }
+    });
 </script>
 @endsection

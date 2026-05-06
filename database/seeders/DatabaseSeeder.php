@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             EcommerceSeeder::class,
             SliderSeeder::class,
+            PopupSeeder::class,
         ]);
     }
 }

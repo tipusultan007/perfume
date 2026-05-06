@@ -1,6 +1,15 @@
 @extends('layouts.store')
 
-@section('title', $product->name . " | L'ESSENCE NYC")
+@section('title', $product->meta_title ?: $product->name . " | " . \App\Models\Setting::get('meta_title', "L'ESSENCE NYC"))
+@section('meta_description', $product->meta_description ?: Str::limit(strip_tags($product->description), 160))
+@section('og_title', $product->name)
+@section('og_description', $product->meta_description ?: Str::limit(strip_tags($product->description), 160))
+@php
+    $pOgImage = $product->getFirstMediaUrl('featured') ?: (\App\Models\Setting::get('og_image') ? asset(\App\Models\Setting::get('og_image')) : asset('images/og-default.jpg'));
+@endphp
+@section('og_image', $pOgImage)
+@section('og_type', 'product')
+@section('canonical', route('shop.product.show', $product->slug))
 
 @section('styles')
 <style>
@@ -184,7 +193,7 @@
         font-family: 'Space Mono';
     }
 
-    .btn-add-cart, .btn-buy-now {
+    .pdp-details .btn-add-cart,.pdp-details .btn-buy-now {
         flex: 1;
         height: 55px;
         text-transform: uppercase;
@@ -198,22 +207,22 @@
         visibility: visible !important;
     }
 
-    .btn-add-cart {
+  /*  .btn-add-cart {
         background: var(--white);
         color: var(--accent);
         border: 1px solid var(--accent);
-    }
+    }*/
 
     .btn-buy-now {
-        background: var(--accent);
+        background: var(--clr-black);
         color: white;
     }
 
-    .btn-add-cart:hover { 
+  /*  .btn-add-cart:hover { 
         background: var(--accent); 
         color: white; 
         transform: translateY(-2px);
-    }
+    }*/
     .btn-buy-now:hover { 
         background: var(--black);
         transform: translateY(-2px);

@@ -10,7 +10,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'order_number', 'status', 'grand_total', 'tax_amount', 'shipping_cost',
-        'payment_method', 'payment_status', 'shipping_address', 'billing_address', 'notes'
+        'payment_method', 'payment_status', 'clover_charge_id', 'shipping_address', 'billing_address', 'notes'
     ];
 
     protected $casts = [

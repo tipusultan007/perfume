@@ -42,6 +42,14 @@ class PopupController extends Controller
             $popup->addMediaFromRequest('image')->toMediaCollection('popup');
         }
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Popup created successfully.',
+                'redirect' => route('admin.popups.index')
+            ]);
+        }
+
         return redirect()->route('admin.popups.index')->with('success', 'Popup created successfully.');
     }
 
@@ -75,6 +83,14 @@ class PopupController extends Controller
             $popup->addMediaFromRequest('image')->toMediaCollection('popup');
         }
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Popup updated successfully.',
+                'redirect' => route('admin.popups.index')
+            ]);
+        }
+
         return redirect()->route('admin.popups.index')->with('success', 'Popup updated successfully.');
     }
 
@@ -82,5 +98,16 @@ class PopupController extends Controller
     {
         $popup->delete();
         return redirect()->route('admin.popups.index')->with('success', 'Popup deleted successfully.');
+    }
+
+    public function toggleStatus(Popup $popup)
+    {
+        $popup->update(['is_active' => !$popup->is_active]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Popup status updated successfully.',
+            'is_active' => $popup->is_active
+        ]);
     }
 }

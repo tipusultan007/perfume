@@ -1,7 +1,7 @@
 @extends('layouts.store')
 
 @section('styles')
-    @vite(['resources/css/frontend.css'])
+    {{-- @vite(['resources/css/frontend.css']) --}}
     <style>
         /* Scoped adjustments to prevent homepage-v4 styles from breaking layouts.store navbar/footer */
         .site-header, .site-footer {

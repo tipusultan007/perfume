@@ -141,6 +141,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'readAll'])->name('notifications.read-all');
 
         // Popups
+        Route::post('/popups/{popup}/toggle-status', [\App\Http\Controllers\Admin\PopupController::class, 'toggleStatus'])->name('popups.toggle-status');
         Route::resource('popups', \App\Http\Controllers\Admin\PopupController::class);
 
         // Reports

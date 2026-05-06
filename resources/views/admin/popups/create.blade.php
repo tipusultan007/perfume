@@ -48,6 +48,7 @@
                             hover:file:bg-slate-800 file:transition-all cursor-pointer"
                         />
                          <p class="mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest">Supports JPG, PNG, GIF. Max 2MB.</p>
+                         <p id="image-error" class="hidden mt-2 text-[10px] text-rose-500 font-bold uppercase tracking-widest"></p>
                     </div>
                 </div>
             </div>
@@ -194,5 +195,80 @@
              window.dispatchEvent(new CustomEvent('open-popup-preview', { detail: data }));
         }
     }
+
+    // Image size validation
+    document.querySelector('input[name="image"]').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const errorContainer = document.getElementById('image-error');
+        if (file && file.size > 2 * 1024 * 1024) { // 2MB
+            errorContainer.innerText = 'Image size too large. Max 2MB allowed.';
+            errorContainer.classList.remove('hidden');
+            this.value = ''; // Reset input
+        } else {
+            errorContainer.classList.add('hidden');
+        }
+    });
+
+    // AJAX Submission
+    document.getElementById('popup-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = this;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerText;
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i> Saving...';
+
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: result.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = result.redirect;
+                });
+            } else {
+                // Handle validation errors
+                let errorMessage = result.message || 'Something went wrong.';
+                if (result.errors) {
+                    errorMessage = Object.values(result.errors).flat().join('<br>');
+                }
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    html: errorMessage,
+                    confirmButtonColor: '#0f172a'
+                });
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "An error occurred during submission. Please check your connection or file size.",
+                confirmButtonColor: '#0f172a'
+            });
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalBtnText;
+        }
+    });
 </script>
 @endsection

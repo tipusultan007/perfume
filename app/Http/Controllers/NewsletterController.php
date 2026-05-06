@@ -17,7 +17,7 @@ class NewsletterController extends Controller
         $subscriber = Subscriber::where('email', $request->email)->first();
 
         if ($subscriber && $subscriber->is_subscribed) {
-            if ($request->ajax()) {
+            if ($request->expectsJson()) {
                 return response()->json(['status' => 'error', 'message' => 'You are already subscribed!']);
             }
             return back()->with('error', 'You are already subscribed!');
@@ -39,7 +39,7 @@ class NewsletterController extends Controller
             $message = 'Thank you for subscribing to our newsletter!';
         }
 
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
             return response()->json(['status' => 'success', 'message' => $message]);
         }
         return back()->with('success', $message);

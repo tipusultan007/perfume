@@ -55,11 +55,14 @@
                         </div>
                     </td>
                     <td class="py-6">
-                        @if($popup->is_active)
-                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-bold uppercase tracking-wider border border-emerald-100">Active</span>
-                        @else
-                            <span class="px-3 py-1 bg-slate-100 text-slate-400 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-200">Inactive</span>
-                        @endif
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" 
+                                class="sr-only peer status-toggle" 
+                                data-id="{{ $popup->id }}"
+                                data-url="{{ route('admin.popups.toggle-status', $popup) }}"
+                                {{ $popup->is_active ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+                        </label>
                     </td>
                     <td class="px-8 py-6 text-right">
                         <div class="flex justify-end items-center gap-3">
@@ -95,4 +98,50 @@
         </table>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.querySelectorAll('.status-toggle').forEach(toggle => {
+        toggle.addEventListener('change', async function() {
+            const url = this.getAttribute('data-url');
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: result.message,
+                        timer: 1500,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-end'
+                    });
+                } else {
+                    this.checked = !this.checked; // Revert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to update status.',
+                        toast: true,
+                        position: 'top-end'
+                    });
+                }
+            } catch (error) {
+                this.checked = !this.checked; // Revert
+                console.error('Toggle error:', error);
+            }
+        });
+    });
+</script>
 @endsection

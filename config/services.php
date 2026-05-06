@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'clover' => [
+        'public_key' => env('CLOVER_PUBLIC_KEY'),
+        'private_key' => env('CLOVER_PRIVATE_KEY'),
+        'merchant_id' => env('CLOVER_MERCHANT_ID'),
+        'env' => env('CLOVER_ENVIRONMENT', 'production'),
+    ],
+
 ];

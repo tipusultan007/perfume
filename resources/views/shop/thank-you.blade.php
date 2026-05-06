@@ -50,6 +50,78 @@
     }
     .detail-box h3 { font-size: 1.8rem; margin-bottom: 20px; }
     .detail-box p { font-size: 14px; opacity: 0.7; line-height: 2; }
+    .order-review {
+        max-width: 1000px;
+        margin: 0 auto 100px;
+        padding: 0 5%;
+    }
+    .order-review h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+    }
+    .order-table th,
+    .order-table td {
+        padding: 18px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        text-align: left;
+        vertical-align: top;
+    }
+    .order-table th {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.55;
+    }
+    .order-table th:last-child,
+    .order-table td:last-child {
+        text-align: right;
+    }
+    .order-item-meta {
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+        opacity: 0.55;
+    }
+    .order-totals {
+        max-width: 360px;
+        margin-left: auto;
+        padding-top: 24px;
+    }
+    .order-total-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    .order-total-row.final {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .empty-confirmation {
+        max-width: 700px;
+        margin: 0 auto 100px;
+        padding: 50px 5%;
+        text-align: center;
+        background: var(--cream);
+    }
+    .empty-confirmation p {
+        opacity: 0.7;
+        line-height: 1.8;
+        margin-bottom: 28px;
+    }
 
     /* --- 5. Post-Purchase Engagement --- */
     .engagement {
@@ -82,6 +154,13 @@
         .t-step { display: flex; align-items: center; gap: 20px; text-align: left; background: transparent; }
         .t-dot { margin: 0; }
         .cta-group { flex-direction: column; padding: 0 20px; }
+        .order-table th:nth-child(2),
+        .order-table td:nth-child(2) {
+            display: none;
+        }
+        .order-totals {
+            max-width: none;
+        }
     }
 </style>
 @endsection
@@ -91,10 +170,15 @@
     <section class="success-hero">
         <p class="mono" style="margin-bottom: 15px; opacity: 0.5;">Purchase Confirmed</p>
         <h1>Thank You.</h1>
-        <p>Your order is being prepared with care in our Manhattan studio. We have sent a confirmation email to <strong>{{ auth()->user()->email ?? 'j.carter@nyc.com' }}</strong>.</p>
-        <div class="order-id">Order #LS-{{ date('Ymd') }}{{ rand(1000, 9999) }}</div>
+        @if($order)
+            <p>Your order is being prepared with care. We have sent a confirmation email to <strong>{{ $order->shipping_address['email'] ?? auth()->user()->email ?? 'your email' }}</strong>.</p>
+            <div class="order-id">Order {{ $order->order_number }}</div>
+        @else
+            <p>Your order confirmation will appear here after checkout is complete.</p>
+        @endif
     </section>
 
+    @if($order)
     <section class="status-tracker">
         <div class="timeline">
             <div class="t-step active">
@@ -119,18 +203,73 @@
     <section class="details-container">
         <div class="detail-box">
             <h3>Delivery Details</h3>
-            <p>{{ auth()->user()->name ?? 'Jameson Carter' }}<br>
-            242 West 27th St, Apt 4B<br>
-            New York, NY 10001<br>
-            United States</p>
+            <p>
+                {{ trim(($order->shipping_address['first_name'] ?? '') . ' ' . ($order->shipping_address['last_name'] ?? '')) }}<br>
+                {{ $order->shipping_address['address'] ?? '' }}<br>
+                {{ $order->shipping_address['city'] ?? '' }}{{ !empty($order->shipping_address['state']) ? ', ' . $order->shipping_address['state'] : '' }} {{ $order->shipping_address['zip'] ?? '' }}<br>
+                {{ $order->shipping_address['country'] ?? '' }}<br>
+                {{ $order->shipping_address['phone'] ?? '' }}
+            </p>
         </div>
         <div class="detail-box">
-            <h3>Atelier Delivery</h3>
+            <h3>Order Status</h3>
             <p>Estimated Arrival: {{ now()->addDays(5)->format('M d') }} – {{ now()->addDays(7)->format('M d') }}<br>
-            Standard Shipping (Free)<br>
+            Payment: {{ ucfirst($order->payment_status) }} via {{ str_replace('_', ' ', ucfirst($order->payment_method)) }}<br>
             A tracking link will be sent once your items leave our studio.</p>
         </div>
     </section>
+
+    <section class="order-review">
+        <h2>Order Details</h2>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($order->items as $item)
+                <tr>
+                    <td>
+                        {{ $item->product_name }}
+                        @if($item->variant_name)
+                            <span class="order-item-meta">{{ $item->variant_name }}</span>
+                        @endif
+                    </td>
+                    <td>{{ $item->quantity }}</td>
+                    <td>${{ number_format($item->total, 2) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="order-totals">
+            <div class="order-total-row">
+                <span>Subtotal</span>
+                <span>${{ number_format($order->items->sum('total'), 2) }}</span>
+            </div>
+            <div class="order-total-row">
+                <span>Shipping</span>
+                <span>{{ $order->shipping_cost > 0 ? '$' . number_format($order->shipping_cost, 2) : 'Free' }}</span>
+            </div>
+            <div class="order-total-row">
+                <span>Tax</span>
+                <span>${{ number_format($order->tax_amount, 2) }}</span>
+            </div>
+            <div class="order-total-row final">
+                <span>Total</span>
+                <span>${{ number_format($order->grand_total, 2) }}</span>
+            </div>
+        </div>
+    </section>
+    @else
+    <section class="empty-confirmation">
+        <p>No recent order was found for this browser session. You can continue shopping or check your email for an existing order confirmation.</p>
+        <a href="{{ route('shop') }}" class="btn-outline-dark">Back to Shop</a>
+    </section>
+    @endif
 
     <section class="engagement">
         <h2>While You Wait</h2>
