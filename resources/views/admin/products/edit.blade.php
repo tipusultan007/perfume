@@ -1,4 +1,4 @@
-@extends('admin.layouts.jidox.master')
+@extends('admin.layouts.app')
 
 @section('title', 'Edit Product')
 
