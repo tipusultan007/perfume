@@ -192,7 +192,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="text-muted fs-12 mb-0">Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} of {{ $products->total() }} results</p>
                             <div class="pagination-newkirk">
-                                {{ $products->links() }}
+                                {{ $products->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
                     </div>

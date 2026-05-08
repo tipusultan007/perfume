@@ -321,7 +321,7 @@
         border-bottom-color: var(--accent);
     }
 
-    /* --- 6. Professional Pagination --- */
+    /* --- 6. Professional Pagination (Tailwind Override) --- */
     .pagination-container {
         margin-top: 80px;
         display: flex;
@@ -331,12 +331,103 @@
 
     .pagination-container nav {
         width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Target Tailwind Pagination Elements */
+    .pagination-container nav div:first-child {
+        display: none !important; 
+    }
+
+    @media (min-width: 640px) {
+        .pagination-container nav div:first-child {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .pagination-container nav span, 
+    .pagination-container nav a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 12px 20px !important;
+        font-family: 'Space Mono', monospace !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        border: 1px solid var(--border) !important;
+        background: transparent !important;
+        color: var(--black) !important;
+        transition: var(--transition) !important;
+        margin: 0 2px !important;
+        border-radius: 0 !important;
+        min-width: 45px !important;
+        height: 45px !important;
+        padding: 0!important;
+    }
+
+    .pagination-container nav a:hover {
+        background: var(--black) !important;
+        color: white !important;
+        border-color: var(--black) !important;
+    }
+
+    .pagination-container nav a:hover svg {
+        color: white !important;
+        fill: white !important;
+    }
+
+    .pagination-container nav span[aria-current="page"] span {
+        background: var(--black) !important;
+        color: white !important;
+        border-color: var(--black) !important;
+        padding: 0 !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .pagination-container nav span[aria-disabled="true"] span {
+        opacity: 0.2 !important;
+        cursor: not-allowed !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Fix SVG Icons Visibility */
+    .pagination-container nav svg {
+        display: inline-block !important;
+        vertical-align: middle !important;
+        width: 14px !important;
+        height: 14px !important;
+        color: var(--black) !important;
+        fill: none !important;
+        stroke: currentColor !important;
+        stroke-width: 2.5 !important;
+    }
+
+    .pagination-container nav a:hover svg {
+        color: white !important;
     }
 
     /* Mobile Responsive Pagination */
     @media (max-width: 640px) {
         .pagination-container {
             margin-top: 40px;
+        }
+        .pagination-container nav div:nth-child(2) {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
         }
     }
 </style>
@@ -586,7 +677,7 @@
         </div>
 
         <div class="pagination-container">
-            {{ $products->onEachSide(2)->links() }}
+            {{ $products->onEachSide(1)->links('pagination::tailwind') }}
         </div>
     </main>
 </div>

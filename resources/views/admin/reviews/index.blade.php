@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="mt-3 pagination-newkirk">
-                        {{ $reviews->appends(request()->query())->links() }}
+                        {{ $reviews->appends(request()->query())->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

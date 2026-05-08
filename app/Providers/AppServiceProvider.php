@@ -25,8 +25,9 @@ class AppServiceProvider extends ServiceProvider
             \App\Listeners\MergeCartOnLogin::class
         );
 
-        Paginator::useTailwind();
-        Paginator::useBootstrapFive();
+        // Paginator styling is now handled per-view to avoid conflicts between Tailwind (Frontend) and Bootstrap (Admin)
+        // Paginator::useTailwind();
+        // Paginator::useBootstrapFive();
 
         // Dynamic Mail Configuration
         try {
