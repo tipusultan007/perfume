@@ -1,260 +1,334 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Dashboard Overview')
-@section('page_title', 'Overview')
 
 @section('content')
-<div class="space-y-8">
-    <!-- Stats Widgets -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Revenue -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Total Revenue</p>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-2">${{ number_format($totalRevenue, 2) }}</h3>
-                </div>
-                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
-                    <i class="ri-money-dollar-circle-line text-xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs">
-                <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">
-                    +12.5%
-                </span>
-                <span class="text-slate-400 ml-2 font-medium">from last month</span>
-            </div>
-        </div>
+<!-- Start Content-->
+<div class="container-fluid">
 
-        <!-- Orders -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">New Orders</p>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ $newOrdersCount }}</h3>
-                </div>
-                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
-                    <i class="ri-shopping-bag-3-line text-xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs">
-                <span class="text-slate-400 font-medium">Today's active orders</span>
-            </div>
-        </div>
-
-        <!-- Customers -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Total Customers</p>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ number_format($totalCustomers) }}</h3>
-                </div>
-                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
-                    <i class="ri-user-heart-line text-xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs">
-                <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">
-                    +5.2%
-                </span>
-                <span class="text-slate-400 ml-2 font-medium">new growth</span>
-            </div>
-        </div>
-        
-        <!-- Products -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Top Products</p>
-                    <h3 class="text-2xl font-bold text-slate-900 mt-2">{{ $topProducts->count() }}</h3>
-                </div>
-                <div class="p-3 bg-slate-50 text-slate-900 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all">
-                    <i class="ri-star-smile-line text-xl"></i>
-                </div>
-            </div>
-            <div class="mt-4 flex items-center text-xs">
-                <span class="text-slate-400 font-medium">Best sellers available</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Chart -->
-        <div class="lg:col-span-2 bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="font-bold text-slate-900">Revenue Overview</h3>
-                <select class="text-xs border border-slate-200 bg-slate-50 rounded-lg px-4 py-2 text-slate-600 focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none cursor-pointer hover:bg-slate-100 transition-colors">
-                    <option>Last 12 Months</option>
-                    <option>Last 30 Days</option>
-                    <option>This Year</option>
-                </select>
-            </div>
-            <div class="relative h-80 w-full">
-                <canvas id="dashboardRevenueChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Top Products List -->
-        <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-slate-900 mb-8">Top Selling Products</h3>
-            <div class="space-y-4">
-                @foreach($topProducts as $index => $product)
-                <div class="flex items-center gap-4 p-4 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-100">
-                    <div class="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-                        {{ $index + 1 }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-bold text-slate-900 truncate">{{ $product->product_name }}</h4>
-                        <p class="text-[11px] text-slate-500 font-medium">{{ $product->total_qty }} units sold</p>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-sm font-bold text-slate-900 block">${{ number_format($product->revenue, 0) }}</span>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            <a href="{{ route('admin.reports.products') }}" class="block mt-8 text-center text-[11px] text-slate-500 hover:text-slate-900 uppercase tracking-[0.2em] font-bold border border-slate-200 py-3 rounded-lg hover:bg-slate-50 transition-all">View All Products</a>
-        </div>
-    </div>
-
-    <!-- Recent Orders -->
-    <div class="bg-white p-0 rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-            <h3 class="font-bold text-slate-900">Recent Orders</h3>
-            <a href="{{ route('admin.orders.index') }}" class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-[11px] text-slate-600 font-bold uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">View All Orders</a>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/50 border-b border-slate-100">
-                        <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Order ID</th>
-                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Customer</th>
-                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Date</th>
-                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Amount</th>
-                        <th class="py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold">Status</th>
-                        <th class="px-8 py-5 text-[11px] uppercase tracking-widest text-slate-500 font-bold text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="text-sm divide-y divide-slate-100">
-                    @forelse($recentOrders as $order)
-                    <tr class="hover:bg-slate-50/50 transition-all group">
-                        <td class="px-8 py-5 font-bold text-slate-900">{{ $order->order_number }}</td>
-                        <td class="py-5">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 border border-slate-200">
-                                    {{ substr($order->shipping_address['first_name'] ?? 'G', 0, 1) }}
-                                </div>
-                                <span class="font-medium text-slate-700">{{ $order->shipping_address['first_name'] ?? 'Guest' }}</span>
-                            </div>
-                        </td>
-                        <td class="py-5 text-slate-500 font-medium">{{ $order->created_at->format('M d, Y') }}</td>
-                        <td class="py-5 font-bold text-slate-900">${{ number_format($order->grand_total, 2) }}</td>
-                        <td class="py-5">
-                            @php
-                                $statusClasses = [
-                                    'pending' => 'bg-amber-50 text-amber-600 border-amber-100',
-                                    'processing' => 'bg-blue-50 text-blue-600 border-blue-100',
-                                    'completed' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
-                                    'cancelled' => 'bg-rose-50 text-rose-600 border-rose-100',
-                                ];
-                                $class = $statusClasses[$order->status] ?? 'bg-slate-50 text-slate-600 border-slate-100';
-                            @endphp
-                            <span class="inline-flex px-2.5 py-1 text-[10px] uppercase tracking-widest font-bold rounded-md border {{ $class }}">
-                                {{ $order->status }}
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <form class="d-flex">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-light" id="dash-daterange">
+                            <span class="input-group-text bg-primary border-primary text-white">
+                                <i class="ri-calendar-todo-fill fs-13"></i>
                             </span>
-                        </td>
-                        <td class="px-8 py-5 text-right">
-                            <a href="{{ route('admin.orders.show', $order->id) }}" class="inline-flex items-center px-3 py-1.5 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-900 hover:text-white transition-all shadow-sm border border-slate-200">View</a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="py-8 text-center text-gray-500">No orders found.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        </div>
+                        <a href="javascript: void(0);" class="btn btn-primary ms-2">
+                            <i class="ri-refresh-line"></i>
+                        </a>
+                    </form>
+                </div>
+                <h4 class="page-title">Dashboard</h4>
+            </div>
         </div>
     </div>
-</div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-xxl-3 col-sm-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-end">
+                        <i class="ri-money-dollar-circle-line widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Total Revenue">Total Revenue</h5>
+                    <h3 class="mt-3 mb-3">${{ number_format($totalRevenue, 2) }}</h3>
+                    <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><i class="ri-arrow-up-line"></i> 12.5%</span>
+                        <span class="text-nowrap">Since last month</span>
+                    </p>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-xxl-3 col-sm-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-end">
+                        <i class="ri-shopping-bag-3-line widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="New Orders">New Orders</h5>
+                    <h3 class="mt-3 mb-3">{{ $newOrdersCount }}</h3>
+                    <p class="mb-0 text-muted">
+                        <span class="text-danger me-2"><i class="ri-arrow-down-line"></i> 1.08%</span>
+                        <span class="text-nowrap">Since yesterday</span>
+                    </p>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-xxl-3 col-sm-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-end">
+                        <i class="ri-user-heart-line widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Total Customers">Total Customers</h5>
+                    <h3 class="mt-3 mb-3">{{ number_format($totalCustomers) }}</h3>
+                    <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><i class="ri-arrow-up-line"></i> 5.2%</span>
+                        <span class="text-nowrap">Since last month</span>
+                    </p>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-xxl-3 col-sm-6">
+            <div class="card widget-flat">
+                <div class="card-body">
+                    <div class="float-end">
+                        <i class="ri-star-smile-line widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Top Products">Top Products</h5>
+                    <h3 class="mt-3 mb-3">{{ $topProducts->count() }}</h3>
+                    <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><i class="ri-arrow-up-line"></i> 4.87%</span>
+                        <span class="text-nowrap">Since last month</span>
+                    </p>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+    </div> <!-- end row -->
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="header-title">Revenue Overview</h4>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ri-more-2-fill"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    @php
+                        $currentRevenue = $revenues->last() ?? 0;
+                        $prevRevenue = $revenues->count() > 1 ? $revenues->slice(-2, 1)->first() : 0;
+                    @endphp
+                    <div class="chart-content-bg">
+                        <div class="row text-center">
+                            <div class="col-sm-6">
+                                <p class="text-muted mb-0 mt-2">Current Month</p>
+                                <h3 class="fw-normal mb-3">
+                                    <span>${{ number_format($currentRevenue, 2) }}</span>
+                                </h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="text-muted mb-0 mt-2">Previous Month</p>
+                                <h3 class="fw-normal mb-3">
+                                    <span>${{ number_format($prevRevenue, 2) }}</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height: 335px;">
+                         <canvas id="dashboardRevenueChart"></canvas>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="header-title">Top Selling Products</h4>
+                    <a href="{{ route('admin.reports.products') }}" class="btn btn-sm btn-light">View All</a>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap table-hover mb-0">
+                            <tbody>
+                                @foreach($topProducts as $index => $product)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <div class="avatar-xs">
+                                                    <span class="avatar-title bg-primary-600 rounded-circle">
+                                                        {{ $index + 1 }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mt-0 mb-1 fs-14">{{ $product->product_name }}</h5>
+                                                <span class="text-muted fs-12">{{ $product->total_qty }} units sold</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <h5 class="mt-0 mb-1 fs-14">${{ number_format($product->revenue, 0) }}</h5>
+                                        <span class="text-muted fs-12">Revenue</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div> <!-- end table-responsive-->
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+    </div>
+    <!-- end row -->
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="header-title">Recent Orders</h4>
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-light">Export</a>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($recentOrders as $order)
+                                <tr>
+                                    <td><span class="fw-bold">{{ $order->order_number }}</span></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-xs me-2">
+                                                <span class="avatar-title bg-primary-600 rounded-circle">
+                                                    {{ substr($order->shipping_address['first_name'] ?? 'G', 0, 1) }}
+                                                </span>
+                                            </div>
+                                            {{ $order->shipping_address['first_name'] ?? 'Guest' }}
+                                        </div>
+                                    </td>
+                                    <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                    <td><span class="fw-bold">${{ number_format($order->grand_total, 2) }}</span></td>
+                                    <td>
+                                        @php
+                                            $statusClasses = [
+                                                'pending' => 'bg-warning-lighten text-warning',
+                                                'processing' => 'bg-info-lighten text-info',
+                                                'completed' => 'bg-success-lighten text-success',
+                                                'cancelled' => 'bg-danger-lighten text-danger',
+                                            ];
+                                            $class = $statusClasses[$order->status] ?? 'bg-secondary-lighten text-secondary';
+                                        @endphp
+                                        <span class="badge {{ $class }} px-2 py-1">{{ ucfirst($order->status) }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-light">View</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No orders found.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+    </div>
+    <!-- end row -->
+
+</div> <!-- container -->
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('dashboardRevenueChart').getContext('2d');
-    
-    // Gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0.1)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('dashboardRevenueChart').getContext('2d');
+        
+        // Gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(66, 84, 186, 0.1)');
+        gradient.addColorStop(1, 'rgba(66, 84, 186, 0)');
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($months),
-            datasets: [{
-                label: 'Revenue',
-                data: @json($revenues),
-                borderColor: '#1a1a1a', // luxury black
-                backgroundColor: gradient,
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 0,
-                pointHoverRadius: 6,
-                pointHoverBackgroundColor: '#1a1a1a',
-                pointHoverBorderColor: '#fff',
-                pointHoverBorderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1a1a1a',
-                    padding: 12,
-                    titleFont: { family: 'Inter', size: 13 },
-                    bodyFont: { family: 'Inter', size: 13 },
-                    callbacks: {
-                        label: function(context) {
-                            return 'Revenue: $' + context.parsed.y.toLocaleString();
-                        }
-                    }
-                }
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($months),
+                datasets: [{
+                    label: 'Revenue',
+                    data: @json($revenues),
+                    borderColor: '#4254ba', // Jidox primary
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#4254ba',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.03)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        font: { family: 'Inter', size: 11 },
-                        color: '#9ca3af',
-                        callback: function(value) {
-                            if(value >= 1000) return '$' + (value/1000) + 'k';
-                            return '$' + value;
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a1a',
+                        padding: 12,
+                        titleFont: { family: 'Inter', size: 13 },
+                        bodyFont: { family: 'Inter', size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: $' + context.parsed.y.toLocaleString();
+                            }
                         }
                     }
                 },
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        font: { family: 'Inter', size: 11 },
-                        color: '#9ca3af'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.03)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            font: { family: 'Inter', size: 11 },
+                            color: '#9ca3af',
+                            callback: function(value) {
+                                if(value >= 1000) return '$' + (value/1000) + 'k';
+                                return '$' + value;
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Inter', size: 11 },
+                            color: '#9ca3af'
+                        }
                     }
-                }
-            },
-            interaction: {
-                intersect: false,
-                mode: 'index',
-            },
-        }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+            }
+        });
     });
 </script>
 @endsection

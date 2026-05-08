@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', 'My Wishlist | L\'ESSENCE')
+@section('title', 'My Wishlist | NewKirk')
 
 @section('content')
 <!-- Spacer for Fixed Header -->

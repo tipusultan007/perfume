@@ -11,7 +11,7 @@ class EcommerceSeeder extends Seeder
     {
         // 1. Brands
         $brands = [
-            ['name' => "L'Essence", 'slug' => 'lessence', 'description' => 'Our signature luxury collection.'],
+            ['name' => "NewKirk", 'slug' => 'newkirk', 'description' => 'Our signature luxury collection.'],
             ['name' => 'Al Haramain', 'slug' => 'al-haramain', 'description' => 'Traditional Arabian oils and perfumes.'],
             ['name' => 'Swiss Arabian', 'slug' => 'swiss-arabian', 'description' => 'Fusion of East and West.'],
         ];

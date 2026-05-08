@@ -4,141 +4,156 @@
 @section('page_title', 'Tax Configurations')
 
 @section('content')
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- List of Tax Rates -->
-    <div class="lg:col-span-2 space-y-8">
-        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-8 border-b border-slate-100 bg-slate-50/30">
-                <h3 class="text-sm font-bold uppercase tracking-[0.15em] text-slate-500">Active Tax Rates</h3>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
-                            <th class="px-8 py-6">Name / Scope</th>
-                            <th class="px-8 py-6">Rate (%)</th>
-                            <th class="px-8 py-6">Priority</th>
-                            <th class="px-8 py-6 text-center">Status</th>
-                            <th class="px-8 py-6 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        @forelse($taxRates as $rate)
-                        <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                            <td class="px-8 py-6">
-                                <div class="font-bold text-slate-900">{{ $rate->name }}</div>
-                                <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
-                                    Region: {{ $rate->state_code ?? 'Global' }}
-                                </div>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="bg-slate-900 text-white px-3 py-1 rounded-lg font-mono text-xs">{{ number_format($rate->rate, 3) }}%</span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="text-slate-500 font-medium">L{{ $rate->priority }}</span>
-                            </td>
-                            <td class="px-8 py-6 text-center">
-                                @if($rate->is_active)
-                                    <span class="inline-flex items-center justify-center bg-emerald-50 text-emerald-600 px-4 py-1.5 border border-emerald-100 rounded-full text-[10px] uppercase tracking-widest font-bold">Active</span>
-                                @else
-                                    <span class="inline-flex items-center justify-center bg-slate-100 text-slate-500 px-4 py-1.5 border border-slate-200 rounded-full text-[10px] uppercase tracking-widest font-bold">Inactive</span>
-                                @endif
-                            </td>
-                            <td class="px-8 py-6 text-right">
-                                <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <form action="{{ route('admin.taxes.destroy', $rate) }}" method="POST" 
-                                        onsubmit="return confirm('Delete this tax rate?');" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                            class="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all shadow-sm" 
-                                            title="Delete">
-                                            <i class="ri-delete-bin-line text-lg"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="px-8 py-20 text-center text-slate-400">
-                                <div class="flex flex-col items-center gap-4">
-                                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
-                                        <i class="ri-percent-line text-4xl text-slate-200"></i>
-                                    </div>
-                                    <p class="text-sm font-bold uppercase tracking-widest">No tax rates defined</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Settings</a></li>
+                        <li class="breadcrumb-item active">Tax Rates</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Tax Configurations</h4>
             </div>
         </div>
     </div>
+    <!-- end page title -->
 
-    <!-- Create New Tax Rate -->
-    <div>
-        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden sticky top-24">
-            <div class="p-8 border-b border-slate-100 bg-slate-50/30">
-                <h3 class="text-sm font-bold uppercase tracking-[0.15em] text-slate-500">Add Tax Rate</h3>
+    <div class="row">
+        <!-- List of Tax Rates -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">Active Tax Rates</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 table-hover">
+                            <thead class="table-light">
+                                <tr class="text-uppercase fs-11 fw-bold tracking-wider">
+                                    <th>Name / Scope</th>
+                                    <th>Rate (%)</th>
+                                    <th>Priority</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-end" style="width: 100px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($taxRates as $rate)
+                                <tr>
+                                    <td>
+                                        <h5 class="my-0 fs-14 fw-bold text-dark">{{ $rate->name }}</h5>
+                                        <span class="text-muted fs-11 fw-semibold text-uppercase opacity-75">
+                                            Region: {{ $rate->state_code ?? 'Global' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-soft-dark text-dark fw-bold px-2 py-1 fs-12 font-monospace border">
+                                            {{ number_format($rate->rate, 3) }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted fw-bold">L{{ $rate->priority }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        @if($rate->is_active)
+                                            <span class="badge bg-soft-success text-success rounded-pill px-2 py-1 text-uppercase fs-10 tracking-wider fw-bold">Active</span>
+                                        @else
+                                            <span class="badge bg-soft-secondary text-secondary rounded-pill px-2 py-1 text-uppercase fs-10 tracking-wider fw-bold">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        <form action="{{ route('admin.taxes.destroy', $rate) }}" method="POST" 
+                                            onsubmit="return confirm('Delete this tax rate?');" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-soft-danger btn-sm" title="Delete">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-5">
+                                        <div class="text-muted opacity-50">
+                                            <i class="ri-percent-line fs-48"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No tax rates defined</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            
-            <form action="{{ route('admin.taxes.store') }}" method="POST" class="p-8 space-y-6">
-                @csrf
-                
-                <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Display Name</label>
-                    <input type="text" name="name" required placeholder="e.g. Standard Sales Tax" 
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
-                </div>
+        </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Rate (%)</label>
-                        <input type="number" step="0.0001" name="rate" required placeholder="8.875" 
-                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
-                    </div>
-                    <div>
-                         <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">State (2 Char)</label>
-                         <input type="text" name="state_code" maxlength="2" placeholder="AL" 
-                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all uppercase">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Priority</label>
-                    <input type="number" name="priority" value="1" 
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:border-slate-900 transition-all">
-                </div>
-
-                <div class="space-y-4 pt-4 border-t border-slate-100">
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <div class="relative flex items-center">
-                            <input type="checkbox" name="is_active" checked value="1" class="peer h-5 w-5 opacity-0 absolute cursor-pointer">
-                            <div class="h-5 w-5 border-2 border-slate-200 rounded peer-checked:bg-slate-900 peer-checked:border-slate-900 transition-all"></div>
-                            <i class="ri-check-line absolute text-white text-sm left-0.5 opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+        <!-- Add New Tax Rate -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">Add Tax Rate</h4>
+                    
+                    <form action="{{ route('admin.taxes.store') }}" method="POST">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Display Name</label>
+                            <input type="text" name="name" required placeholder="e.g. Standard Sales Tax" 
+                                class="form-control fw-semibold">
                         </div>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-slate-600 group-hover:text-slate-900 transition-colors">Active Status</span>
-                    </label>
 
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <div class="relative flex items-center">
-                            <input type="checkbox" name="is_shipping_taxable" checked value="1" class="peer h-5 w-5 opacity-0 absolute cursor-pointer">
-                            <div class="h-5 w-5 border-2 border-slate-200 rounded peer-checked:bg-slate-900 peer-checked:border-slate-900 transition-all"></div>
-                            <i class="ri-check-line absolute text-white text-sm left-0.5 opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Rate (%)</label>
+                                <input type="number" step="0.0001" name="rate" required placeholder="8.875" 
+                                    class="form-control fw-bold">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">State (2 Char)</label>
+                                <input type="text" name="state_code" maxlength="2" placeholder="AL" 
+                                    class="form-control fw-bold text-uppercase">
+                            </div>
                         </div>
-                        <span class="text-[11px] font-bold uppercase tracking-widest text-slate-600 group-hover:text-slate-900 transition-colors">Taxable Shipping</span>
-                    </label>
-                </div>
 
-                <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20">
-                    Save Tax Rate
-                </button>
-            </form>
+                        <div class="mb-4">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Priority</label>
+                            <input type="number" name="priority" value="1" 
+                                class="form-control fw-semibold">
+                        </div>
+
+                        <div class="bg-light p-3 rounded mb-4">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="isActive" checked value="1">
+                                <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="isActive">ACTIVE STATUS</label>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="is_shipping_taxable" id="isShippingTaxable" checked value="1">
+                                <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="isShippingTaxable">TAXABLE SHIPPING</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 fw-bold text-uppercase fs-11 py-2">
+                            <i class="ri-save-line me-1"></i> Save Tax Rate
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .fs-11 { font-size: 11px; }
+    .fs-10 { font-size: 10px; }
+    .fs-12 { font-size: 12px; }
+    .fs-14 { font-size: 14px; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+</style>
 @endsection
 

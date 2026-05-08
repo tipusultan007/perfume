@@ -4,130 +4,154 @@
 @section('page_title', 'Customer Profile')
 
 @section('content')
-<div class="max-w-6xl">
-    <div class="mb-8 flex items-center justify-between">
-        <a href="{{ route('admin.customers.index') }}" 
-            class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-            <i class="ri-arrow-left-line text-lg"></i>
-        </a>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Sidebar: Profile & Addresses -->
-        <div class="space-y-8">
-            <!-- Profile Card -->
-            <div class="bg-white border border-slate-200 p-10 rounded-xl shadow-sm text-center">
-                <div class="w-24 h-24 bg-slate-50 border border-slate-100 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-slate-400">
-                    {{ strtoupper(substr($customer->name, 0, 1)) }}
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Customers</a></li>
+                        <li class="breadcrumb-item active">Profile</li>
+                    </ol>
                 </div>
-                <h2 class="font-bold text-2xl text-slate-900 mb-1">{{ $customer->name }}</h2>
-                <p class="text-sm text-slate-500 font-medium mb-8">{{ $customer->email }}</p>
-                
-                <div class="border-t border-slate-50 pt-8 grid grid-cols-2 gap-4 text-center">
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Total Orders</span>
-                        <span class="text-xl font-bold text-slate-900">{{ $customer->orders->count() }}</span>
+                <h4 class="page-title">Customer Profile</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-xl-4 col-lg-5">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div class="avatar-lg mx-auto mb-3">
+                        <span class="avatar-title bg-soft-primary text-primary rounded-circle fw-bold fs-24 uppercase">
+                            {{ substr($customer->name, 0, 1) }}
+                        </span>
                     </div>
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Member Since</span>
-                        <span class="text-xs font-bold text-slate-900">{{ $customer->created_at->format('M Y') }}</span>
+                    <h4 class="mb-1 text-dark fw-bold">{{ $customer->name }}</h4>
+                    <p class="text-muted font-14 fw-medium">{{ $customer->email }}</p>
+
+                    <div class="row mt-4 pt-2 border-top">
+                        <div class="col-6 border-end">
+                            <h5 class="text-muted fs-11 text-uppercase tracking-wider fw-bold">Total Orders</h5>
+                            <h4 class="mb-0 text-dark fw-bold">{{ $customer->orders->count() }}</h4>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-muted fs-11 text-uppercase tracking-wider fw-bold">Member Since</h5>
+                            <h4 class="mb-0 text-dark fw-bold">{{ $customer->created_at->format('M Y') }}</h4>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Addresses -->
-            <div class="bg-white border border-slate-200 p-8 rounded-xl shadow-sm">
-                <h3 class="font-bold text-lg text-slate-900 mb-6 flex items-center gap-3">
-                    <i class="ri-map-pin-line text-slate-300"></i> Saved Addresses
-                </h3>
-                
-                <div class="space-y-8">
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-3">Shipping Address</span>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">
+                        <i class="ri-map-pin-line me-1 text-primary"></i> Contact Information
+                    </h4>
+                    
+                    <div class="mb-4 pb-3 border-bottom">
+                        <h5 class="text-muted fs-11 text-uppercase tracking-wider fw-bold mb-2">Shipping Address</h5>
                         @if($customer->shipping_address)
-                            <p class="text-sm leading-relaxed text-slate-600 font-medium">
+                            <p class="text-dark fs-13 fw-medium mb-0 lh-base">
                                 {{ $customer->shipping_address['address'] ?? '' }}<br>
                                 {{ $customer->shipping_address['city'] ?? '' }}, {{ $customer->shipping_address['state'] ?? '' }} {{ $customer->shipping_address['zip'] ?? '' }}<br>
                                 {{ $customer->shipping_address['country'] ?? '' }}
                             </p>
                         @else
-                            <p class="text-sm text-slate-300 italic font-medium">No shipping address saved.</p>
+                            <p class="text-muted fs-13 italic mb-0">No shipping address saved.</p>
                         @endif
                     </div>
-                    
-                    <div class="border-t border-slate-50 pt-6">
-                        <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-3">Billing Address</span>
+
+                    <div>
+                        <h5 class="text-muted fs-11 text-uppercase tracking-wider fw-bold mb-2">Billing Address</h5>
                         @if($customer->billing_address)
-                            <p class="text-sm leading-relaxed text-slate-600 font-medium">
+                            <p class="text-dark fs-13 fw-medium mb-0 lh-base">
                                 {{ $customer->billing_address['address'] ?? '' }}<br>
                                 {{ $customer->billing_address['city'] ?? '' }}, {{ $customer->billing_address['state'] ?? '' }} {{ $customer->billing_address['zip'] ?? '' }}<br>
                                 {{ $customer->billing_address['country'] ?? '' }}
                             </p>
                         @else
-                            <p class="text-sm text-slate-300 italic font-medium">No billing address saved.</p>
+                            <p class="text-muted fs-13 italic mb-0">No billing address saved.</p>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content: Order History -->
-        <div class="lg:col-span-2">
-            <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                <div class="p-8 border-b border-slate-100 bg-slate-50/30">
-                    <h3 class="font-bold text-lg text-slate-900">Order History</h3>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-50/50 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold border-b border-slate-100">
-                                <th class="px-8 py-5">Order ID</th>
-                                <th class="px-8 py-5">Date</th>
-                                <th class="px-8 py-5">Status</th>
-                                <th class="px-8 py-5 text-right">Total</th>
-                                <th class="px-8 py-5"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            @forelse($customer->orders as $order)
-                            <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                                <td class="px-8 py-6 font-mono text-xs text-slate-400 font-bold group-hover:text-slate-900 transition-colors">#{{ $order->id }}</td>
-                                <td class="px-8 py-6 text-slate-500 text-xs font-semibold">{{ $order->created_at->format('M d, Y') }}</td>
-                                <td class="px-8 py-6">
-                                    <span class="inline-flex items-center px-4 py-1.5 border text-[10px] font-bold rounded-full uppercase tracking-widest
-                                        {{ $order->status === 'completed' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 
-                                          ($order->status === 'pending' ? 'bg-amber-50 border-amber-100 text-amber-600' : 
-                                          ($order->status === 'cancelled' ? 'bg-rose-50 border-rose-100 text-rose-600' : 'bg-slate-100 border-slate-200 text-slate-500')) }}">
-                                        {{ $order->status }}
-                                    </span>
-                                </td>
-                                <td class="px-8 py-6 text-right font-bold text-slate-900">${{ number_format($order->total ?? 0, 2) }}</td>
-                                <td class="px-8 py-6 text-right">
-                                    <a href="{{ route('admin.orders.show', $order) }}" 
-                                        class="w-10 h-10 inline-flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all shadow-sm">
-                                        <i class="ri-arrow-right-line text-lg"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="px-8 py-20 text-center text-slate-400">
-                                    <div class="flex flex-col items-center gap-4">
-                                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center">
-                                            <i class="ri-shopping-bag-line text-3xl text-slate-200"></i>
+        <div class="col-xl-8 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-4">Order History</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 table-hover">
+                            <thead class="table-light">
+                                <tr class="text-uppercase fs-11 fw-bold tracking-wider">
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-end" style="width: 80px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($customer->orders as $order)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('admin.orders.show', $order) }}" class="text-dark fw-bold">#{{ $order->id }}</a>
+                                    </td>
+                                    <td class="text-muted fs-12 fw-semibold">{{ $order->created_at->format('M d, Y') }}</td>
+                                    <td>
+                                        @php
+                                            $badgeClass = match($order->status) {
+                                                'completed' => 'bg-soft-success text-success',
+                                                'pending' => 'bg-soft-warning text-warning',
+                                                'cancelled' => 'bg-soft-danger text-danger',
+                                                default => 'bg-soft-secondary text-secondary'
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $badgeClass }} rounded-pill px-2 py-1 text-uppercase fs-10 tracking-wider">
+                                            {{ $order->status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end text-dark fw-bold font-monospace">${{ number_format($order->total ?? 0, 2) }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-soft-primary btn-sm">
+                                            <i class="ri-arrow-right-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-5">
+                                        <div class="text-muted opacity-50">
+                                            <i class="ri-shopping-bag-line fs-48"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No orders found</p>
                                         </div>
-                                        <p class="text-sm font-bold uppercase tracking-widest">No orders found</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .avatar-lg { height: 80px; width: 80px; }
+    .avatar-title { font-size: 24px; }
+    .fs-11 { font-size: 11px; }
+    .fs-10 { font-size: 10px; }
+    .fs-13 { font-size: 13px; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+</style>
 @endsection
 

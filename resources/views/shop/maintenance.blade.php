@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolving... | L'ESSENCE NYC</title>
+    <title>Evolving... | NewKirk NYC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Montserrat:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -75,7 +75,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">L'ESSENCE</div>
+        <div class="logo">NewKirk</div>
         <div class="divider"></div>
         <h1>Our atelier is<br>currently evolving.</h1>
         <p>We are refining our collection and will return shortly with fresh inspirations.</p>

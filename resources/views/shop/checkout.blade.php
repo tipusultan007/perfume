@@ -298,6 +298,39 @@
         color: rgba(0,0,0,0.55);
         min-height: 28px;
     }
+
+    .security-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+    }
+
+    .security-badge i {
+        font-size: 24px;
+        color: #28a745;
+    }
+
+    .security-badge-text {
+        font-size: 12px;
+        line-height: 1.4;
+        color: #495057;
+    }
+
+    .clover-logo-sm {
+        height: 20px;
+        filter: grayscale(1) opacity(0.7);
+        transition: all 0.3s ease;
+    }
+
+    .clover-logo-sm:hover {
+        filter: none;
+        opacity: 1;
+    }
 </style>
 @php
     $cloverSdkUrl = config('services.clover.env') === 'sandbox'
@@ -486,11 +519,39 @@
                             <div id="clover-card-postal-code" class="clover-element"></div>
                         </div>
                         <div id="clover-card-errors" role="alert"></div>
-                        <div class="clover-trust clover-footer"></div>
+                        
+                        <div class="security-badge">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="ri-shield-check-line"></i>
+                                <div class="security-badge-text">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <strong>Secure Payment by</strong>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Clover_mobile_app_Logo.svg/2560px-Clover_mobile_app_Logo.svg.png" alt="Clover" class="clover-logo-sm">
+                                    </div>
+                                    Your security is our priority. Your card information never touches our servers and is fully encrypted through Clover's secure processing.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <button type="submit" id="submit-button" class="complete-purchase-btn">Pay Now</button>
+                
+                <div class="mt-5 pt-5 opacity-50 grayscale" style="border-top: 1px solid rgba(0,0,0,0.05); margin-top: 2rem; display: flex; justify-content: center; align-items: flex-start; gap: 40px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1;">
+                        <i class="ri-shield-check-line" style="font-size: 20px; color: #28a745;"></i>
+                        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 5px; margin-bottom: 0; white-space: nowrap;">Secure SSL</p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; border-left: 1px solid rgba(0,0,0,0.1); padding-left: 10px;">
+                        <i class="ri-lock-2-line" style="font-size: 20px; color: #28a745;"></i>
+                        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 5px; margin-bottom: 0; white-space: nowrap;">PCI Compliant</p>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; border-left: 1px solid rgba(0,0,0,0.1); padding-left: 10px;">
+                        <i class="ri-customer-service-2-line" style="font-size: 20px; color: #28a745;"></i>
+                        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 5px; margin-bottom: 0; white-space: nowrap;">24/7 Support</p>
+                    </div>
+                </div>
+
             </form>
         </section>
 

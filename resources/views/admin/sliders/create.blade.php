@@ -4,300 +4,308 @@
 @section('page_title', 'Sliders')
 
 @section('content')
-<div x-data="sliderPreview()" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-    <div class="lg:col-span-12 xl:col-span-7">
-        <div class="flex items-center gap-4 mb-10">
-            <a href="{{ route('admin.sliders.index') }}" class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h3 class="font-bold text-2xl text-slate-900">New Slider Slide</h3>
-        </div>
-
-        @if($errors->any())
-            <div class="bg-rose-50 text-rose-700 p-6 mb-10 rounded-xl border border-rose-100 shadow-sm">
-                <div class="flex items-center gap-3 mb-4">
-                    <i class="ri-error-warning-line text-xl"></i>
-                    <span class="text-[11px] uppercase tracking-widest font-bold">Validation Errors</span>
+<div x-data="sliderPreview()" class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Sliders</a></li>
+                        <li class="breadcrumb-item active">Add New</li>
+                    </ol>
                 </div>
-                <ul class="space-y-1">
-                    @foreach($errors->all() as $error)
-                        <li class="text-[10px] uppercase tracking-widest font-bold opacity-80">• {{ $error }}</li>
-                    @endforeach
-                </ul>
+                <h4 class="page-title">Add New Slider</h4>
             </div>
-        @endif
+        </div>
+    </div>
+    <!-- end page title -->
 
-        <div class="bg-white border border-slate-200 p-8 md:p-12 rounded-2xl shadow-sm overflow-hidden">
-            <form action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
+    <div class="row">
+        <div class="col-xl-7 col-lg-12">
+            <div class="mb-4 d-flex align-items-center gap-2">
+                <a href="{{ route('admin.sliders.index') }}" class="btn btn-sm btn-outline-dark">
+                    <i class="ri-arrow-left-line"></i> Back to List
+                </a>
+            </div>
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading fs-14 fw-bold text-uppercase tracking-wider">Validation Errors</h4>
+                    <ul class="mb-0 fs-12">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <form action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Slide Title</label>
-                        <input type="text" name="title" x-model="title" value="{{ old('title') }}" placeholder="e.g. Luxury Scent Collection"
-                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Subtitle / Small Text</label>
-                        <input type="text" name="subtitle" x-model="subtitle" value="{{ old('subtitle') }}" placeholder="e.g. New Arrivals 2026"
-                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium font-mono">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Main Description</label>
-                    <textarea name="description" x-model="description" rows="4" placeholder="Enter the descriptive text that appears on the slide..."
-                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium resize-none">{{ old('description') }}</textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Call to Action Text</label>
-                        <input type="text" name="button_text" x-model="button_text" value="{{ old('button_text', 'Shop Now') }}"
-                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold uppercase tracking-widest">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Destination URL</label>
-                        <input type="text" name="button_link" value="{{ old('button_link', '#') }}"
-                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-mono">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-                    <div>
-                        <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Display Priority (Order)</label>
-                        <input type="number" name="display_order" value="{{ old('display_order', 0) }}"
-                            class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold">
-                    </div>
-                    <div class="flex items-center justify-between p-6 bg-slate-50 border border-slate-200 rounded-xl">
-                        <div>
-                            <h4 class="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Visibility Status</h4>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter mt-1">Show this slide in the main carousel</p>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="hidden" name="is_active" value="0">
-                            <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="pt-8 border-t border-slate-100">
-                    <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                        <i class="ri-brush-3-line text-lg"></i> Dynamic Styling & Content
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Background Accent</label>
-                            <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                                <input type="color" name="bg_color" x-model="bg_color" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-white shadow-sm">
-                                <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex-1" x-text="bg_color"></span>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Basic Information</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Slide Title</label>
+                                <input type="text" name="title" x-model="title" value="{{ old('title') }}" placeholder="e.g. Luxury Scent Collection" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Subtitle / Small Text</label>
+                                <input type="text" name="subtitle" x-model="subtitle" value="{{ old('subtitle') }}" placeholder="e.g. New Arrivals 2026" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Main Description</label>
+                                <textarea name="description" x-model="description" rows="3" placeholder="Enter the descriptive text that appears on the slide..." class="form-control">{{ old('description') }}</textarea>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">UI Theme Mode</label>
-                            <div class="relative">
-                                <select name="ui_theme" x-model="ui_theme" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-[11px] text-slate-900 font-bold uppercase tracking-widest appearance-none cursor-pointer">
-                                    <option value="dark">Dark (For Light BGs)</option>
-                                    <option value="light">Light (For Dark BGs)</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
-                                    <i class="ri-arrow-down-s-line text-lg"></i>
+
+                        <div class="row g-3 mt-1">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Call to Action Text</label>
+                                <input type="text" name="button_text" x-model="button_text" value="{{ old('button_text', 'Shop Now') }}" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Destination URL</label>
+                                <input type="text" name="button_link" value="{{ old('button_link', '#') }}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-1 align-items-center">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Display Priority (Order)</label>
+                                <input type="number" name="display_order" value="{{ old('display_order', 0) }}" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-2 border rounded bg-light mt-4">
+                                    <div class="form-check form-switch d-flex justify-content-between align-items-center ps-0">
+                                        <label class="form-check-label fw-bold text-uppercase fs-11 tracking-wider mb-0" for="is_active">Visibility Status</label>
+                                        <input type="hidden" name="is_active" value="0">
+                                        <input class="form-check-input ms-0" type="checkbox" name="is_active" id="is_active" value="1" checked>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Interaction Color</label>
-                            <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                                <input type="color" name="accent_color" x-model="accent_color" class="w-12 h-12 rounded-lg cursor-pointer border-2 border-white shadow-sm">
-                                <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex-1" x-text="accent_color"></span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Dynamic Styling & Theme</h4>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Background Accent</label>
+                                <div class="input-group">
+                                    <input type="color" name="bg_color" x-model="bg_color" class="form-control form-control-color p-1" style="width: 50px;">
+                                    <input type="text" x-text="bg_color" class="form-control bg-light fs-12 font-monospace" x-model="bg_color" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">UI Theme Mode</label>
+                                <select name="ui_theme" x-model="ui_theme" class="form-select">
+                                    <option value="dark">Dark (For Light BGs)</option>
+                                    <option value="light">Light (For Dark BGs)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-muted">Interaction Color</label>
+                                <div class="input-group">
+                                    <input type="color" name="accent_color" x-model="accent_color" class="form-control form-control-color p-1" style="width: 50px;">
+                                    <input type="text" class="form-control bg-light fs-12 font-monospace" x-model="accent_color" readonly>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Icons Main</label>
-                            <input type="color" name="social_color" x-model="social_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Icons Main</label>
+                                <input type="color" name="social_color" x-model="social_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Icons Hover BG</label>
+                                <input type="color" name="social_hover_color" x-model="social_hover_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Icons Color</label>
+                                <input type="color" name="social_icon_color" x-model="social_icon_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Icons Hover</label>
+                                <input type="color" name="social_icon_hover_color" x-model="social_icon_hover_color" class="form-control form-control-color w-100 p-1">
+                            </div>
                         </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Icons Hover BG</label>
-                            <input type="color" name="social_hover_color" x-model="social_hover_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Icons Color</label>
-                            <input type="color" name="social_icon_color" x-model="social_icon_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Icons Hover Color</label>
-                            <input type="color" name="social_icon_hover_color" x-model="social_icon_hover_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Nav Main</label>
-                            <input type="color" name="nav_color" x-model="nav_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Nav Main</label>
+                                <input type="color" name="nav_color" x-model="nav_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Nav Hover BG</label>
+                                <input type="color" name="nav_hover_color" x-model="nav_hover_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Nav Icon Color</label>
+                                <input type="color" name="nav_icon_color" x-model="nav_icon_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Nav Hover Icon</label>
+                                <input type="color" name="nav_icon_hover_color" x-model="nav_icon_hover_color" class="form-control form-control-color w-100 p-1">
+                            </div>
                         </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Nav Hover BG</label>
-                            <input type="color" name="nav_hover_color" x-model="nav_hover_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Nav Icon Color</label>
-                            <input type="color" name="nav_icon_color" x-model="nav_icon_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Nav Hover Icon</label>
-                            <input type="color" name="nav_icon_hover_color" x-model="nav_icon_hover_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-2 gap-6 mt-6">
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Title Color</label>
-                            <input type="color" name="title_color" x-model="title_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Title Color</label>
+                                <input type="color" name="title_color" x-model="title_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Desc Color</label>
+                                <input type="color" name="description_color" x-model="description_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Price Color</label>
+                                <input type="color" name="price_color" x-model="price_color" class="form-control form-control-color w-100 p-1">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fs-10 text-muted text-uppercase fw-bold">Line Color</label>
+                                <input type="color" name="line_color" x-model="line_color" class="form-control form-control-color w-100 p-1">
+                            </div>
                         </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Description Color</label>
-                            <input type="color" name="description_color" x-model="description_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Price Color</label>
-                            <input type="color" name="price_color" x-model="price_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                        <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                            <label class="block text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-3">Line/Accent Color</label>
-                            <input type="color" name="line_color" x-model="line_color" class="w-full h-8 rounded border-none cursor-pointer shadow-sm">
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10 p-8 bg-slate-900 rounded-2xl shadow-xl shadow-slate-900/10">
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-400 font-bold">Display Price</label>
-                            <input type="text" name="price" x-model="price" value="{{ old('price') }}" placeholder="e.g. $145.00"
-                                class="w-full px-5 py-4 bg-white/10 border border-white/10 rounded-xl focus:border-white focus:ring-4 focus:ring-white/5 outline-none transition-all text-sm text-white font-bold font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-400 font-bold">Fragrance Notes</label>
-                            <input type="text" name="top_notes" x-model="top_notes" value="{{ old('top_notes') }}" placeholder="e.g. Mint, Bergamot & Ozone"
-                                class="w-full px-5 py-4 bg-white/10 border border-white/10 rounded-xl focus:border-white focus:ring-4 focus:ring-white/5 outline-none transition-all text-sm text-white font-medium">
+                        <div class="row g-3 mt-4 p-3 bg-dark rounded border border-secondary shadow-sm mx-0">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-light opacity-75">Display Price</label>
+                                <input type="text" name="price" x-model="price" value="{{ old('price') }}" placeholder="e.g. $145.00" class="form-control bg-transparent text-white border-secondary fw-bold font-monospace">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold text-light opacity-75">Fragrance Notes</label>
+                                <input type="text" name="top_notes" x-model="top_notes" value="{{ old('top_notes') }}" placeholder="e.g. Mint, Bergamot & Ozone" class="form-control bg-transparent text-white border-secondary">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-8 border-t border-slate-100">
-                    <label class="block text-[10px] uppercase tracking-widest mb-6 text-slate-500 font-bold">Slide Background / Main Image</label>
-                    <div class="relative group">
-                        <input type="file" name="image" @change="previewImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*">
-                        <div class="border-2 border-dashed border-slate-200 p-12 rounded-2xl flex flex-col items-center justify-center bg-slate-50 group-hover:bg-slate-100 group-hover:border-slate-900 transition-all duration-500">
-                            <div class="w-20 h-20 bg-white border border-slate-100 rounded-2xl flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform">
-                                <i class="ri-image-add-line text-4xl text-slate-300 group-hover:text-slate-900"></i>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Slide Media</h4>
+                        <div class="mb-4">
+                            <label class="form-label text-uppercase fs-11 fw-bold text-muted">Main Image</label>
+                            <div class="p-4 border-2 border-dashed rounded text-center bg-light position-relative hover-bg-light transition-all">
+                                <input type="file" name="image" @change="previewImage($event)" class="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer" style="z-index: 10;" accept="image/*">
+                                <div class="py-3">
+                                    <i class="ri-image-add-line fs-32 text-muted"></i>
+                                    <p class="mt-2 fw-bold text-uppercase fs-11 tracking-wider text-dark">Drop image here or click to browse</p>
+                                    <p class="mb-0 fs-10 text-muted fw-semibold">JPEG, PNG OR WEBP • MAX 2MB • RECOMMENDED 1920x800</p>
+                                </div>
                             </div>
-                            <p class="text-[11px] uppercase tracking-widest font-bold text-slate-500 group-hover:text-slate-900">Drop image here or click to browse</p>
-                            <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tighter">JPEG, PNG OR WEBP • MAX 2MB • RECOMMENDED 1920x800</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-10 border-t border-slate-100 mt-10">
-                    <button type="submit" class="w-full py-5 bg-slate-900 text-white text-[11px] uppercase tracking-widest font-bold rounded-xl hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-[0.98] duration-200">
-                        Commit & Create New Slide
+                <div class="mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold text-uppercase tracking-widest fs-14 shadow-lg">
+                        <i class="ri-save-line me-1"></i> Commit & Create New Slide
                     </button>
                 </div>
             </form>
         </div>
-    </div>
 
-    <!-- Live Preview -->
-    <div class="lg:col-span-12 xl:col-span-5 hidden xl:block">
-        <div class="sticky top-10">
-            <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6 flex items-center justify-between">
-                <span><i class="ri-eye-line text-lg mr-2"></i> Real-time Preview</span>
-                <span class="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-[9px]">Active</span>
-            </h4>
-            
-            <div class="preview-canvas rounded-3xl overflow-hidden shadow-2xl border border-slate-200" 
-                 :style="'background-color: ' + bg_color + '; color: ' + title_color">
-                
-                <div class="relative h-[600px] flex items-center justify-center p-12 overflow-hidden">
-                    <!-- Background Text -->
-                    <h1 class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[150px] font-serif font-bold leading-none select-none opacity-5 uppercase tracking-tighter whitespace-nowrap"
-                        :class="ui_theme === 'dark' ? 'c-text-outline-dark' : 'c-text-outline'"
-                        x-text="title.split(' ')[0]">
-                    </h1>
-
-                    <div class="relative z-10 w-full grid grid-cols-12 gap-6 items-center">
-                        <div class="col-span-7 space-y-4">
-                            <p class="tracking-[0.4em] text-[10px] font-bold uppercase" :style="'color: ' + accent_color">No. 01</p>
-                            <h2 class="text-4xl font-serif leading-[1.1]" x-html="title.replace(' ', '<br>')"></h2>
-                            <p class="text-xs font-light leading-relaxed max-w-xs opacity-80" :style="'color: ' + description_color" x-text="description"></p>
+        <!-- Live Preview -->
+        <div class="col-xl-5 d-none d-xl-block">
+            <div class="sticky-top" style="top: 100px;">
+                <div class="card border-0 shadow-lg overflow-hidden">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fs-12 text-uppercase fw-bold text-muted tracking-widest">
+                            <i class="ri-eye-line me-1 text-primary"></i> Real-time Preview
+                        </h5>
+                        <span class="badge bg-success-subtle text-success">Active Preview</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="preview-canvas overflow-hidden" 
+                             :style="'background-color: ' + bg_color + '; color: ' + title_color">
                             
-                            <div class="flex items-center gap-6 pt-4">
-                                <div class="w-10 h-10 rounded-full border flex items-center justify-center" :style="'border-color: ' + accent_color + '; color: ' + accent_color">
-                                    <i class="ri-arrow-right-line"></i>
+                            <div class="position-relative h-[600px] d-flex align-items-center justify-content-center p-4 overflow-hidden" style="height: 500px;">
+                                <!-- Background Text -->
+                                <h1 class="position-absolute start-50 top-50 translate-middle font-serif fw-bold select-none opacity-5 uppercase tracking-tighter text-nowrap"
+                                    :class="ui_theme === 'dark' ? 'c-text-outline-dark' : 'c-text-outline'"
+                                    style="font-size: 120px;"
+                                    x-text="title.split(' ')[0] || 'LUXURY'">
+                                </h1>
+
+                                <div class="position-relative z-index-1 w-100 row align-items-center gx-4">
+                                    <div class="col-7">
+                                        <p class="tracking-widest fs-10 fw-bold text-uppercase mb-2" :style="'color: ' + accent_color">No. 01</p>
+                                        <h2 class="font-serif fw-bold mb-3" style="font-size: 2.2rem; line-height: 1.1;" x-html="title.replace(' ', '<br>') || 'Luxury<br>Scent'"></h2>
+                                        <p class="fs-12 font-light text-muted mb-4 opacity-75" :style="'color: ' + description_color" x-text="description || 'Slide description will appear here...'"></p>
+                                        
+                                        <div class="d-flex align-items-center gap-3 pt-2">
+                                            <div class="rounded-circle border d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" :style="'border-color: ' + accent_color + '; color: ' + accent_color">
+                                                <i class="ri-arrow-right-line"></i>
+                                            </div>
+                                            <span class="fs-10 text-uppercase fw-bold tracking-widest" x-text="button_text"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-5">
+                                        <div class="mb-4" x-show="top_notes">
+                                            <h4 class="fs-10 text-uppercase tracking-widest opacity-40 mb-2">Top Notes</h4>
+                                            <p class="font-serif fs-13 border-start border-2 ps-3" :style="'border-color: ' + accent_color" x-html="top_notes.replace('&', '&<br>')"></p>
+                                        </div>
+                                        
+                                        <div x-show="price">
+                                            <span class="fs-24 font-serif" :style="'color: ' + price_color" x-text="price"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <span class="text-[10px] uppercase tracking-widest font-bold" x-text="button_text"></span>
+
+                                <!-- Bottle Image -->
+                                <div class="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex align-items-center justify-content-center pointer-events-none" style="z-index: 0;">
+                                    <img :src="imagePreview" x-show="imagePreview" class="h-75 object-fit-contain drop-shadow-2xl">
+                                </div>
+
+                                <!-- Overlay UI Elements -->
+                                <div class="position-absolute bottom-0 start-0 p-4 d-flex gap-2">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" :style="'background-color: ' + social_color + '; color: ' + social_icon_color">
+                                        <i class="ri-facebook-fill fs-12"></i>
+                                    </div>
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" :style="'background-color: ' + social_color + '; color: ' + social_icon_color">
+                                        <i class="ri-instagram-line fs-12"></i>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-span-1"></div>
-
-                        <div class="col-span-4 space-y-8">
-                            <div x-show="top_notes">
-                                <h4 class="text-[9px] uppercase tracking-widest opacity-40 mb-2">Top Notes</h4>
-                                <p class="font-serif text-sm border-l-2 pl-4" :style="'border-color: ' + accent_color" x-html="top_notes.replace('&', '&<br>')"></p>
-                            </div>
-                            
-                            <div x-show="price">
-                                <span class="text-2xl font-serif" :style="'color: ' + price_color" x-text="price"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottle Image -->
-                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <img :src="imagePreview" x-show="imagePreview" class="h-[60%] object-contain drop-shadow-2xl">
-                    </div>
-
-                    <!-- Social Icons Overlay -->
-                    <div class="absolute left-10 bottom-10 flex gap-3">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center" :style="'background-color: ' + social_color + '; color: ' + social_icon_color">
-                            <i class="ri-facebook-fill text-sm"></i>
-                        </div>
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center" :style="'background-color: ' + social_color + '; color: ' + social_icon_color">
-                            <i class="ri-instagram-line text-sm"></i>
-                        </div>
-                    </div>
-
-                    <!-- Nav Arrows Overlay -->
-                    <div class="absolute right-10 bottom-10 flex gap-3">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center" :style="'background-color: ' + nav_color + '; color: ' + nav_icon_color">
-                            <i class="ri-arrow-left-line"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center" :style="'background-color: ' + nav_color + '; color: ' + nav_icon_color">
-                            <i class="ri-arrow-right-line"></i>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mt-8 grid grid-cols-2 gap-4">
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl">
-                    <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Interactive States</h5>
-                    <div class="flex justify-center gap-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" :style="'background-color: ' + social_hover_color + '; color: ' + social_icon_hover_color" title="Social Hover">
-                            <i class="ri-share-line"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" :style="'background-color: ' + nav_hover_color + '; color: ' + nav_icon_hover_color" title="Nav Hover">
-                            <i class="ri-arrow-right-line"></i>
+                <div class="card mt-3">
+                    <div class="card-body p-3">
+                        <div class="row align-items-center g-3">
+                            <div class="col-6">
+                                <div class="p-2 border rounded bg-light text-center">
+                                    <h5 class="fs-10 fw-bold text-muted text-uppercase mb-2">Hover States</h5>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 32px; height: 32px;" :style="'background-color: ' + social_hover_color + '; color: ' + social_icon_hover_color">
+                                            <i class="ri-share-line"></i>
+                                        </div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 32px; height: 32px;" :style="'background-color: ' + nav_hover_color + '; color: ' + nav_icon_hover_color">
+                                            <i class="ri-arrow-right-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-2 border rounded bg-white text-center d-flex flex-column align-items-center justify-content-center">
+                                    <div class="rounded-pill mb-1" style="width: 4px; height: 24px;" :style="'background-color: ' + line_color"></div>
+                                    <span class="fs-9 fw-bold text-muted text-uppercase tracking-tighter">Accent</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="p-6 bg-white border border-slate-200 rounded-2xl flex flex-col items-center justify-center gap-2">
-                    <div class="w-2 h-10 rounded-full" :style="'background-color: ' + line_color"></div>
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Active Accent</span>
                 </div>
             </div>
         </div>
@@ -305,10 +313,17 @@
 </div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
     .font-serif { font-family: 'Playfair Display', serif; }
+    .fs-24 { font-size: 24px; }
+    .fs-32 { font-size: 32px; }
+    .fs-9 { font-size: 9px; }
+    .tracking-widest { letter-spacing: 0.15em; }
     .c-text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; }
     .c-text-outline-dark { -webkit-text-stroke: 1px rgba(0,0,0,0.1); color: transparent; }
-    .preview-canvas { transition: all 0.5s ease-in-out; }
+    .preview-canvas { transition: all 0.5s ease; border-radius: 20px; }
+    .drop-shadow-2xl { filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)); }
+    .hover-bg-light:hover { background-color: #f8f9fa !important; border-color: #adb5bd !important; }
 </style>
 
 <script>

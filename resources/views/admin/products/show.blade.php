@@ -1,192 +1,240 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.jidox.master')
 
 @section('title', 'Product Details')
-@section('page_title', 'Product: ' . $product->name)
 
 @section('content')
-<div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-10">
-        <div class="flex items-center gap-4">
-            <a href="{{ route('admin.products.index') }}" class="w-10 h-10 border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <div>
-                <h3 class="font-serif text-2xl">{{ $product->name }}</h3>
-                <p class="text-[10px] uppercase tracking-widest opacity-60 mt-1">
-                    {{ ucfirst($product->product_type) }} Product • {{ $product->sku ?? 'No SKU' }}
-                </p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.products.index') }}">Products</a></li>
+                        <li class="breadcrumb-item active">View Product</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ $product->name }}</h4>
             </div>
-        </div>
-        <div class="flex gap-4">
-            <a href="{{ route('admin.products.edit', $product) }}" class="px-6 py-3 border border-black text-[11px] uppercase tracking-widest hover:bg-black hover:text-white transition-all">
-                Edit Product
-            </a>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <!-- Header Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card mb-0 shadow-none bg-transparent">
+                <div class="card-body p-0 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="ri-arrow-left-line"></i>
+                        </a>
+                        <div>
+                            <h5 class="m-0 fw-semibold">{{ $product->name }}</h5>
+                            <p class="text-muted mb-0 fs-11 text-uppercase tracking-wider">
+                                {{ ucfirst($product->product_type) }} Product • {{ $product->sku ?? 'No SKU' }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-primary px-4">
+                            <i class="ri-edit-line me-1"></i> Edit Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <!-- Left Column: Media & Gallery -->
-        <div class="space-y-8">
-            <div class="bg-white border border-black/5 p-2">
-                @if($product->getFirstMediaUrl('featured'))
-                    <img src="{{ $product->getFirstMediaUrl('featured') }}" class="w-full h-auto object-cover aspect-square">
-                @else
-                    <div class="w-full aspect-square bg-gray-50 flex items-center justify-center text-xs uppercase tracking-widest opacity-40">No Image</div>
-                @endif
+        <div class="col-lg-4 col-xl-3">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-2">
+                    <div class="bg-light rounded overflow-hidden">
+                        @if($product->getFirstMediaUrl('featured'))
+                            <img src="{{ $product->getFirstMediaUrl('featured') }}" class="img-fluid w-100 object-fit-cover aspect-ratio-1x1 rounded">
+                        @else
+                            <div class="d-flex align-items-center justify-content-center bg-light-subtle text-muted fs-11 text-uppercase tracking-widest rounded" style="aspect-ratio: 1/1;">No Image</div>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             @if($product->getMedia('gallery')->count() > 0)
-            <div class="grid grid-cols-4 gap-2">
-                @foreach($product->getMedia('gallery') as $media)
-                <div class="aspect-square border border-black/5 p-1">
-                    <img src="{{ $media->getUrl() }}" class="w-full h-full object-cover">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom py-3">
+                    <h5 class="card-title mb-0 fs-13 text-uppercase tracking-wider">Gallery</h5>
                 </div>
-                @endforeach
-            </div>
-            @endif
-        </div>
-
-        <!-- Right Column: Details -->
-        <div class="lg:col-span-2 space-y-10">
-            <!-- Basic Info -->
-            <div class="bg-white border border-black/5 p-10">
-                <h4 class="font-serif text-lg mb-6 border-b border-black/5 pb-4">Product Overview</h4>
-                
-                <div class="grid grid-cols-2 gap-8 mb-8">
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Category</span>
-                        <span class="font-medium">{{ $product->category->name }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Brand</span>
-                        <span class="font-medium">{{ $product->brand->name ?? 'N/A' }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Base Price</span>
-                        <span class="font-mono">${{ number_format($product->base_price, 2) }}</span>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Total Stock</span>
-                        <span class="font-mono">{{ $product->product_type == 'variable' ? $product->variants->sum('stock_quantity') : $product->stock_quantity }}</span>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-2">Short Description</span>
-                    <p class="text-sm leading-relaxed opacity-80">{{ $product->short_description ?? 'No short description.' }}</p>
-                </div>
-
-                <div>
-                    <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-2">Description</span>
-                    <div class="prose prose-sm max-w-none text-opacity-80 font-light">
-                        {!! $product->description !!}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scent Profile -->
-            <div class="bg-white border border-black/5 p-10">
-                <h4 class="font-serif text-lg mb-6 border-b border-black/5 pb-4">Scent Profile</h4>
-                <div class="space-y-8">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Gender</span>
-                            <span class="font-medium">{{ $product->gender ?? 'N/A' }}</span>
+                <div class="card-body">
+                    <div class="row g-2">
+                        @foreach($product->getMedia('gallery') as $media)
+                        <div class="col-4">
+                            <div class="border rounded p-1">
+                                <img src="{{ $media->getUrl() }}" class="img-fluid rounded object-fit-cover aspect-ratio-1x1">
+                            </div>
                         </div>
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Concentration</span>
-                            <span class="font-medium">{{ $product->concentration ?? 'N/A' }}</span>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Size</span>
-                            <span class="font-medium">{{ $product->size ?? 'N/A' }}</span>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Season</span>
-                            <span class="font-medium">{{ $product->season ?? 'N/A' }}</span>
-                        </div>
+                        @endforeach
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Top Notes</span>
-                            <p class="text-sm opacity-80">{{ $product->top_notes ?? 'N/A' }}</p>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Heart Notes</span>
-                            <p class="text-sm opacity-80">{{ $product->heart_notes ?? 'N/A' }}</p>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Base Notes</span>
-                            <p class="text-sm opacity-80">{{ $product->base_notes ?? 'N/A' }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Variants / Options -->
-            @if($product->product_type === 'variable')
-            <div class="bg-white border border-black/5 p-10">
-                <h4 class="font-serif text-lg mb-6 border-b border-black/5 pb-4">Variants ({{ $product->variants->count() }})</h4>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="border-b border-black/5">
-                                <th class="py-3 text-[9px] uppercase tracking-widest opacity-40">Combination</th>
-                                <th class="py-3 text-[9px] uppercase tracking-widest opacity-40">SKU</th>
-                                <th class="py-3 text-[9px] uppercase tracking-widest opacity-40">Price</th>
-                                <th class="py-3 text-[9px] uppercase tracking-widest opacity-40">Stock</th>
-                                <th class="py-3 text-[9px] uppercase tracking-widest opacity-40">Image</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-xs">
-                            @foreach($product->variants as $variant)
-                            <tr class="border-b border-black/5 last:border-0 hover:bg-gray-50/50">
-                                <td class="py-4 font-medium">
-                                    {{ $variant->attributeValues->pluck('value')->join(' / ') }}
-                                </td>
-                                <td class="py-4 font-mono opacity-60">{{ $variant->sku }}</td>
-                                <td class="py-4 font-mono">
-                                    @if($variant->sale_price)
-                                        <span class="text-red-500 mr-1">${{ number_format($variant->sale_price, 2) }}</span>
-                                        <strike class="opacity-40 text-[10px]">${{ number_format($variant->price, 2) }}</strike>
-                                    @else
-                                        ${{ number_format($variant->price, 2) }}
-                                    @endif
-                                </td>
-                                <td class="py-4 {{ $variant->stock_quantity < 10 ? 'text-red-500' : 'text-emerald-600' }}">
-                                    {{ $variant->stock_quantity }}
-                                </td>
-                                <td class="py-4">
-                                    @if($variant->getFirstMediaUrl('variant_image'))
-                                        <img src="{{ $variant->getFirstMediaUrl('variant_image') }}" class="w-8 h-8 object-cover border border-black/5">
-                                    @else
-                                        <span class="opacity-20">-</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
             </div>
             @endif
 
             <!-- SEO Data -->
-            <div class="bg-gray-50 border border-black/5 p-8">
-                <span class="text-[10px] uppercase tracking-widest font-semibold block mb-4 border-b border-black/5 pb-2">SEO Preview</span>
-                <div class="space-y-4">
-                    <div>
-                        <span class="block text-[9px] uppercase tracking-widest opacity-40 mb-1">Meta Title</span>
-                        <p class="text-sm font-medium">{{ $product->meta_title ?? $product->name }}</p>
+            <div class="card border-0 shadow-sm mt-4 bg-light-subtle">
+                <div class="card-body">
+                    <h5 class="card-title mb-3 fs-12 text-uppercase tracking-wider border-bottom pb-2">SEO Preview</h5>
+                    <div class="mb-3">
+                        <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Meta Title</label>
+                        <p class="fw-semibold mb-0 fs-13 text-primary">{{ $product->meta_title ?? $product->name }}</p>
                     </div>
                     <div>
-                        <span class="block text-[9px] uppercase tracking-widest opacity-40 mb-1">Meta Description</span>
-                        <p class="text-xs opacity-70">{{ $product->meta_description ?? Str::limit(strip_tags($product->description), 150) }}</p>
+                        <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Meta Description</label>
+                        <p class="text-muted mb-0 fs-12 lh-base">{{ $product->meta_description ?? Str::limit(strip_tags($product->description), 150) }}</p>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Right Column: Details -->
+        <div class="col-lg-8 col-xl-9">
+            <!-- Basic Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom py-3">
+                    <h5 class="card-title mb-0 fs-14 text-uppercase tracking-wider">Product Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-3 col-6 mb-3 mb-md-0">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Category</label>
+                            <span class="fw-semibold fs-14">{{ $product->category->name }}</span>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3 mb-md-0">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Brand</label>
+                            <span class="fw-semibold fs-14">{{ $product->brand->name ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Base Price</label>
+                            <span class="fw-bold fs-15 text-primary">${{ number_format($product->base_price, 2) }}</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Total Stock</label>
+                            <span class="badge {{ ($product->product_type == 'variable' ? $product->variants->sum('stock_quantity') : $product->stock_quantity) < 10 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }} px-2 py-1 fs-12">
+                                {{ $product->product_type == 'variable' ? $product->variants->sum('stock_quantity') : $product->stock_quantity }} units
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Short Description</label>
+                        <p class="text-muted fs-13 leading-relaxed mb-0">{{ $product->short_description ?? 'No short description provided.' }}</p>
+                    </div>
+
+                    <div>
+                        <label class="text-muted fs-10 text-uppercase tracking-widest mb-2 d-block border-bottom pb-1">Full Description</label>
+                        <div class="fs-14 text-muted lh-lg">
+                            {!! $product->description !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scent Profile -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom py-3">
+                    <h5 class="card-title mb-0 fs-14 text-uppercase tracking-wider">Scent Profile & Attributes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Gender</label>
+                            <span class="fw-semibold fs-13">{{ $product->gender ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Concentration</label>
+                            <span class="fw-semibold fs-13">{{ $product->concentration ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Size</label>
+                            <span class="fw-semibold fs-13">{{ $product->size ?? 'N/A' }}</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Season</label>
+                            <span class="fw-semibold fs-13">{{ $product->season ?? 'N/A' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Top Notes</label>
+                            <p class="fs-13 text-muted mb-0">{{ $product->top_notes ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Heart Notes</label>
+                            <p class="fs-13 text-muted mb-0">{{ $product->heart_notes ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted fs-10 text-uppercase tracking-widest mb-1 d-block">Base Notes</label>
+                            <p class="fs-13 text-muted mb-0">{{ $product->base_notes ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variants -->
+            @if($product->product_type === 'variable')
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0 fs-14 text-uppercase tracking-wider">Product Variants</h5>
+                    <span class="badge bg-primary-subtle text-primary">{{ $product->variants->count() }} Variants</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light-subtle">
+                                <tr>
+                                    <th class="ps-3 fs-11 text-uppercase tracking-widest text-muted border-0">Combination</th>
+                                    <th class="fs-11 text-uppercase tracking-widest text-muted border-0">SKU</th>
+                                    <th class="fs-11 text-uppercase tracking-widest text-muted border-0">Price</th>
+                                    <th class="fs-11 text-uppercase tracking-widest text-muted border-0">Stock</th>
+                                    <th class="pe-3 text-center fs-11 text-uppercase tracking-widest text-muted border-0">Image</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fs-13">
+                                @foreach($product->variants as $variant)
+                                <tr>
+                                    <td class="ps-3 py-3">
+                                        <span class="fw-medium">{{ $variant->attributeValues->pluck('value')->join(' / ') }}</span>
+                                    </td>
+                                    <td class="text-muted font-monospace">{{ $variant->sku }}</td>
+                                    <td>
+                                        @if($variant->sale_price)
+                                            <span class="text-danger fw-semibold">${{ number_format($variant->sale_price, 2) }}</span>
+                                            <del class="text-muted fs-11 ms-1">${{ number_format($variant->price, 2) }}</del>
+                                        @else
+                                            <span class="fw-semibold">${{ number_format($variant->price, 2) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $variant->stock_quantity < 10 ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' }} px-2">
+                                            {{ $variant->stock_quantity }}
+                                        </span>
+                                    </td>
+                                    <td class="pe-3 text-center">
+                                        @if($variant->getFirstMediaUrl('variant_image'))
+                                            <img src="{{ $variant->getFirstMediaUrl('variant_image') }}" class="rounded shadow-sm border" style="width: 32px; height: 32px; object-fit: cover;">
+                                        @else
+                                            <div class="bg-light rounded border d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                                <i class="ri-image-line text-muted fs-14"></i>
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 </div>

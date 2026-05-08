@@ -10,5 +10,5 @@
     <p style="margin: 0;"><strong>Status:</strong> <span style="text-transform: uppercase; color: #999;">{{ ucfirst($order->status) }}</span></p>
 </div>
 
-<p>If you have any questions or would like to discuss this further, our concierge team is always available at <a href="mailto:info@lessence.nyc">info@lessence.nyc</a>.</p>
+<p>If you have any questions or would like to discuss this further, our concierge team is always available at <a href="mailto:info@newkirkperfumesusa.com">info@newkirkperfumesusa.com</a>.</p>
 @endsection

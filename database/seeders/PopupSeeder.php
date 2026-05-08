@@ -11,7 +11,7 @@ class PopupSeeder extends Seeder
     {
         $popups = [
             [
-                'title' => 'L\'ESSENCE Exclusive',
+                'title' => 'NewKirk Exclusive',
                 'subtitle' => 'Membership Reward',
                 'description' => 'Join our elite inner circle and receive 15% off your first niche fragrance bottle. Experience the art of scent.',
                 'link' => '/shop',

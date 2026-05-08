@@ -19,6 +19,43 @@
     .popup-luxury-font-Syncopate { font-family: 'Syncopate', sans-serif !important; }
 </style>
 
+@if($isPreview)
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+              600: '#475569',
+              500: '#64748b',
+              400: '#94a3b8',
+              300: '#cbd5e1',
+              200: '#e2e8f0',
+              100: '#f1f5f9',
+              50: '#f8fafc',
+            },
+            emerald: {
+              600: '#059669',
+              400: '#34d399',
+            },
+            rose: {
+              600: '#e11d48',
+              400: '#fb7185',
+            }
+          }
+        }
+      }
+    }
+</script>
+@endif
+
 <div x-data="{
     show: false,
     popups: {{ json_encode($popups->map(fn($p) => [
@@ -64,23 +101,31 @@
 
         @if($isPreview)
             window.addEventListener('open-popup-preview', (e) => {
+                console.log('Received popup preview data:', e.detail);
                 this.loadPopup(e.detail);
                 if(e.detail.image_preview) this.p_image = e.detail.image_preview;
                 this.show = true;
+                this.$nextTick(() => {
+                    console.log('Popup state after load:', {
+                        title: this.p_title,
+                        template: this.p_template,
+                        show: this.show
+                    });
+                });
             });
         @endif
     },
     loadPopup(p) {
-        this.id = p.id;
-        this.p_title = p.title;
-        this.p_subtitle = p.subtitle;
-        this.p_description = p.description;
-        this.p_template = p.template_id;
-        this.p_font = p.font_family;
-        this.p_link = p.link;
-        this.p_cta = p.cta_text;
-        this.p_show_newsletter = p.show_newsletter;
-        this.p_image = p.image || '';
+        this.id = p.id || 0;
+        this.p_title = p.title || '';
+        this.p_subtitle = p.subtitle || '';
+        this.p_description = p.description || '';
+        this.p_template = p.template_id || 'luxury-minimalist';
+        this.p_font = p.font_family || 'Cormorant Garamond';
+        this.p_link = p.link || '';
+        this.p_cta = p.cta_text || '';
+        this.p_show_newsletter = !!p.show_newsletter;
+        this.p_image = p.image || p.image_preview || '';
     },
     close() {
         this.show = false;
@@ -146,6 +191,7 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
         
         <!-- Close Button -->
         <button @click="close()" 
+            :class="{
                 'bg-slate-900/5 text-slate-400 border-slate-100 hover:text-slate-900 hover:bg-slate-900/10': p_template === 'floating-minimalist' || p_template === 'elegant-sidebar',
                 'bg-white/10 text-white border-white/20 hover:bg-white/20': p_template === 'modern-glass',
                 'bg-slate-900 text-white border-slate-800 hover:bg-black': p_template === 'luxury-minimalist',
@@ -172,8 +218,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                     
                     <div x-show="p_show_newsletter" class="space-y-4">
                         <div class="relative">
-                            <input type="email" x-model="email" placeholder="Your Email Address" class="w-full bg-slate-50 border-b-2 border-slate-200 py-3 md:py-4 px-0 focus:border-slate-900 outline-none transition-all text-sm font-medium">
-                            <button @click="subscribe()" :disabled="loading" style="color: #0f172a !important;" class="absolute right-0 bottom-4 text-slate-900 font-bold uppercase text-[10px] tracking-widest hover:translate-x-1 transition-transform">
+                            <input type="email" x-model="email" placeholder="Your Email Address" class="w-full bg-slate-50 border-0 border-b-2 border-slate-200 py-3 md:py-4 px-0 focus:border-slate-900 outline-none transition-all text-sm font-medium appearance-none">
+                            <button @click="subscribe()" :disabled="loading" style="color: #0f172a !important;" class="absolute right-0 bottom-4 text-slate-900 font-bold uppercase text-[10px] tracking-widest hover:translate-x-1 transition-transform border-0 bg-transparent cursor-pointer">
                                 <span x-show="!loading">Join Now</span>
                                 <i x-show="loading" class="ri-loader-4-line animate-spin"></i>
                             </button>
@@ -208,8 +254,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                         
                         <div x-show="p_show_newsletter">
                             <div class="flex flex-col sm:flex-row gap-4">
-                                <input type="email" x-model="email" placeholder="Enter your email" class="flex-1 px-8 py-4 md:py-5 bg-slate-50 border border-slate-100 focus:border-slate-900 outline-none rounded-full text-sm font-medium">
-                                <button @click="subscribe()" :disabled="loading" style="color: white !important;" class="px-10 py-4 md:py-5 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all whitespace-nowrap">
+                                <input type="email" x-model="email" placeholder="Enter your email" class="flex-1 px-8 py-4 md:py-5 bg-slate-50 border-0 border-slate-100 focus:border-slate-900 outline-none rounded-full text-sm font-medium appearance-none">
+                                <button @click="subscribe()" :disabled="loading" style="color: white !important;" class="px-10 py-4 md:py-5 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all whitespace-nowrap border-0 cursor-pointer">
                                     <span x-show="!loading">Subscribe</span>
                                     <i x-show="loading" class="ri-loader-4-line animate-spin"></i>
                                 </button>
@@ -241,8 +287,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                     <p class="text-xs md:text-sm text-white/80 mb-6 md:mb-8 max-w-xs md:max-w-sm mx-auto font-light leading-relaxed" x-text="p_description"></p>
                     
                     <div x-show="p_show_newsletter" class="max-w-xs mx-auto relative group/input">
-                        <input type="email" x-model="email" placeholder="Enter your email" class="w-full bg-white/10 border border-white/20 px-6 py-4 rounded-xl focus:bg-white/20 outline-none transition-all text-white placeholder:text-white/40 mb-3 text-sm">
-                        <button @click="subscribe()" :disabled="loading" class="w-full py-4 bg-white text-slate-900 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-50 transition-all shadow-xl">
+                        <input type="email" x-model="email" placeholder="Enter your email" class="w-full bg-white/10 border-0 border-white/20 px-6 py-4 rounded-xl focus:bg-white/20 outline-none transition-all text-white placeholder:text-white/40 mb-3 text-sm appearance-none">
+                        <button @click="subscribe()" :disabled="loading" class="w-full py-4 bg-white text-slate-900 rounded-xl font-bold uppercase text-[9px] tracking-widest hover:bg-slate-50 transition-all shadow-xl border-0 cursor-pointer">
                             <span x-show="!loading" x-text="p_cta || 'Join Now'"></span>
                             <i x-show="loading" class="ri-loader-4-line animate-spin mr-2"></i>
                         </button>
@@ -274,8 +320,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                         
                         <div x-show="p_show_newsletter" class="space-y-6">
                             <div class="flex gap-2">
-                                <input type="email" x-model="email" placeholder="Your essence (email)" class="flex-1 bg-transparent border-b-2 border-[#c5a059]/30 py-3 md:py-4 focus:border-[#c5a059] outline-none transition-all text-white placeholder:text-white/20 text-sm">
-                                <button @click="subscribe()" :disabled="loading" class="px-6 md:px-8 bg-[#c5a059] text-white font-bold uppercase text-[10px] tracking-widest hover:bg-[#b08d4a] transition-all">
+                                <input type="email" x-model="email" placeholder="Your essence (email)" class="flex-1 bg-transparent border-0 border-b-2 border-[#c5a059]/30 py-3 md:py-4 focus:border-[#c5a059] outline-none transition-all text-white placeholder:text-white/20 text-sm appearance-none">
+                                <button @click="subscribe()" :disabled="loading" class="px-6 md:px-8 bg-[#c5a059] text-white font-bold uppercase text-[10px] tracking-widest hover:bg-[#b08d4a] transition-all border-0 cursor-pointer">
                                     <i x-show="!loading" class="ri-arrow-right-line text-xl"></i>
                                     <i x-show="loading" class="ri-loader-4-line animate-spin"></i>
                                 </button>
@@ -312,8 +358,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                     
                     <div x-show="p_show_newsletter" class="max-w-md mx-auto space-y-6">
                         <div class="relative border-b border-[#d4af37]">
-                            <input type="email" x-model="email" placeholder="Address of residence" class="w-full bg-transparent py-3 md:py-4 px-2 outline-none transition-all text-[#4a3728] placeholder:text-[#d4af37]/40 text-sm font-serif italic">
-                            <button @click="subscribe()" :disabled="loading" class="absolute right-0 bottom-3 text-[#8b7355] hover:text-[#4a3728] transition-colors">
+                            <input type="email" x-model="email" placeholder="Address of residence" class="w-full bg-transparent border-0 py-3 md:py-4 px-2 outline-none transition-all text-[#4a3728] placeholder:text-[#d4af37]/40 text-sm font-serif italic appearance-none">
+                            <button @click="subscribe()" :disabled="loading" class="absolute right-0 bottom-3 text-[#8b7355] hover:text-[#4a3728] transition-colors border-0 bg-transparent cursor-pointer">
                                 <i x-show="!loading" class="ri-quill-pen-line text-xl md:text-2xl"></i>
                                 <i x-show="loading" class="ri-loader-4-line animate-spin"></i>
                             </button>
@@ -347,8 +393,8 @@ class="fixed inset-0 z-[9999] flex items-center justify-center px-4 sm:px-0">
                     <p class="text-slate-500 text-xs md:text-sm mb-8 md:mb-10 leading-relaxed font-medium px-2" x-text="p_description"></p>
                     
                     <div x-show="p_show_newsletter" class="space-y-4">
-                        <input type="email" x-model="email" placeholder="Your essence (email)" class="w-full bg-slate-50 border-none px-6 md:px-8 py-4 md:py-5 rounded-2xl md:rounded-3xl focus:ring-2 focus:ring-slate-900/5 outline-none transition-all text-sm font-bold text-slate-900 placeholder:text-slate-300">
-                        <button @click="subscribe()" :disabled="loading" style="color: white !important;" class="w-full py-4 md:py-5 bg-slate-900 text-white rounded-2xl md:rounded-3xl font-bold uppercase text-[10px] tracking-widest hover:shadow-2xl hover:shadow-slate-900/40 transition-all">
+                        <input type="email" x-model="email" placeholder="Your essence (email)" class="w-full bg-slate-50 border-0 px-6 md:px-8 py-4 md:py-5 rounded-2xl md:rounded-3xl focus:ring-2 focus:ring-slate-900/5 outline-none transition-all text-sm font-bold text-slate-900 placeholder:text-slate-300 appearance-none">
+                        <button @click="subscribe()" :disabled="loading" style="color: white !important;" class="w-full py-4 md:py-5 bg-slate-900 text-white rounded-2xl md:rounded-3xl font-bold uppercase text-[10px] tracking-widest hover:shadow-2xl hover:shadow-slate-900/40 transition-all border-0 cursor-pointer">
                             <span x-show="!loading" x-text="p_cta || 'Stay Connected'"></span>
                             <i x-show="loading" class="ri-loader-4-line animate-spin"></i>
                         </button>

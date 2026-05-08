@@ -7,7 +7,7 @@
         <p style="font-style: italic; color: #111827; margin-bottom: 30px;">Bonjour, {{ explode(' ', $user->name)[0] }}.</p>
         
         <p style="margin-bottom: 30px;">
-            It is a pleasure to welcome you to the {{ \App\Models\Setting::get('site_name', "L'ESSENCE NYC") }} community. 
+            It is a pleasure to welcome you to the {{ \App\Models\Setting::get('site_name', "NewKirk NYC") }} community. 
             At our atelier, we believe a fragrance is more than a scent—it is a signature of identity and a companion to memory.
         </p>
         
@@ -25,7 +25,7 @@
         
         <p style="margin-top: 30px; font-family: 'Georgia', serif; color: #111827;">
             With appreciation,<br>
-            <strong>The {{ \App\Models\Setting::get('site_name', "L'ESSENCE NYC") }} Team</strong>
+            <strong>The {{ \App\Models\Setting::get('site_name', "NewKirk NYC") }} Team</strong>
         </p>
     </div>
 @endsection

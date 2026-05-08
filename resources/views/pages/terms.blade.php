@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', "Terms & Conditions | L'ESSENCE NYC")
+@section('title', "Terms & Conditions | NewKirk NYC")
 
 @section('styles')
 <style>
@@ -52,19 +52,19 @@
     </div>
 
     <div class="legal-content">
-        <p>Welcome to L'ESSENCE. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions.</p>
+        <p>Welcome to NewKirk. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions.</p>
 
         <h2>1. Use of the Website</h2>
         <p>You agree to use our website for lawful purposes only and in a manner that does not infringe upon the rights of others.</p>
 
         <h2>2. Intellectual Property</h2>
-        <p>All content on this website, including text, images, and logos, is the property of L'ESSENCE and is protected by copyright laws.</p>
+        <p>All content on this website, including text, images, and logos, is the property of NewKirk and is protected by copyright laws.</p>
 
         <h2>3. Product Information</h2>
         <p>We strive to provide accurate information about our products; however, we do not warrant that product descriptions or other content are error-free.</p>
 
         <h2>4. Limitation of Liability</h2>
-        <p>L'ESSENCE shall not be liable for any direct, indirect, incidental, or consequential damages arising from the use of our website or products.</p>
+        <p>NewKirk shall not be liable for any direct, indirect, incidental, or consequential damages arising from the use of our website or products.</p>
 
         <h2>5. Governing Law</h2>
         <p>These terms and conditions are governed by the laws of the State of New York, without regard to its conflict of law principles.</p>

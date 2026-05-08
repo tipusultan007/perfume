@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
     {
         \App\Models\Admin::create([
             'name' => 'Super Admin',
-            'email' => 'admin@lessence.nyc',
+            'email' => 'admin@newkirkperfumesusa.com',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
         ]);
         \App\Models\Admin::create([

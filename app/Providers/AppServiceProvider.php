@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Paginator::useTailwind();
+        Paginator::useBootstrapFive();
 
         // Dynamic Mail Configuration
         try {

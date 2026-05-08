@@ -29,7 +29,7 @@ class CustomerWelcomeMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Welcome to " . \App\Models\Setting::get('site_name', "L'ESSENCE NYC"),
+            subject: "Welcome to " . \App\Models\Setting::get('site_name', "NewKirk NYC"),
         );
     }
 

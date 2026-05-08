@@ -4,85 +4,130 @@
 @section('page_title', 'Customers')
 
 @section('content')
-<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-    <!-- Header/Search -->
-    <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-        <form action="{{ route('admin.customers.index') }}" method="GET" class="flex gap-3 max-w-md w-full">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or email..." 
-                class="w-full px-5 py-3 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
-            <button type="submit" class="bg-slate-900 text-white px-8 py-3 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg">Search</button>
-        </form>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Customers</a></li>
+                        <li class="breadcrumb-item active">List</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Customers Management</h4>
+            </div>
+        </div>
     </div>
+    <!-- end page title -->
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
-                    <th class="px-8 py-6">ID</th>
-                    <th class="px-8 py-6">Name</th>
-                    <th class="px-8 py-6">Email</th>
-                    <th class="px-8 py-6">Joined Date</th>
-                    <th class="px-8 py-6 text-center">Total Orders</th>
-                    <th class="px-8 py-6 text-right">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="text-sm">
-                @forelse($customers as $customer)
-                <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                    <td class="px-8 py-6 text-slate-400 font-mono text-xs">#{{ $customer->id }}</td>
-                    <td class="px-8 py-6 font-bold text-slate-900">{{ $customer->name }}</td>
-                    <td class="px-8 py-6 text-slate-600 font-medium">{{ $customer->email }}</td>
-                    <td class="px-8 py-6 text-slate-500 text-xs font-semibold">{{ $customer->created_at->format('M d, Y') }}</td>
-                    <td class="px-8 py-6 text-center">
-                        @if($customer->orders_count > 0)
-                            <span class="inline-flex items-center justify-center bg-slate-900 text-white w-8 h-8 rounded-full text-xs font-bold shadow-md">{{ $customer->orders_count }}</span>
-                        @else
-                            <span class="text-slate-300 font-medium">-</span>
-                        @endif
-                    </td>
-                    <td class="px-8 py-6 text-right">
-                        <div class="flex justify-end gap-3">
-                            <a href="{{ route('admin.customers.show', $customer) }}" 
-                                class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all shadow-sm group/btn" 
-                                title="View Details">
-                                <i class="ri-eye-line text-lg"></i>
-                            </a>
-                            <form action="{{ route('admin.customers.destroy', $customer) }}" method="POST" 
-                                onsubmit="return confirm('Are you sure you want to delete this customer?');" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                    class="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all shadow-sm" 
-                                    title="Delete Customer">
-                                    <i class="ri-delete-bin-line text-lg"></i>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <form action="{{ route('admin.customers.index') }}" method="GET" class="d-flex gap-2">
+                                <div class="search-box">
+                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Search name or email...">
+                                </div>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="ri-search-line me-1"></i> Search
                                 </button>
+                                @if(request('search'))
+                                    <a href="{{ route('admin.customers.index') }}" class="btn btn-soft-dark">Clear</a>
+                                @endif
                             </form>
                         </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="px-8 py-20 text-center text-slate-400">
-                        <div class="flex flex-col items-center gap-4">
-                            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
-                                <i class="ri-user-search-line text-4xl text-slate-200"></i>
-                            </div>
-                            <p class="text-sm font-bold uppercase tracking-widest">No customers found</p>
-                            <p class="text-xs text-slate-400 -mt-2">Try adjusting your search criteria</p>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                    </div>
 
-    <!-- Pagination -->
-    @if($customers->hasPages())
-    <div class="p-8 border-t border-slate-100 bg-slate-50/30">
-        {{ $customers->links() }}
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 table-hover">
+                            <thead class="table-light">
+                                <tr class="text-uppercase fs-11 fw-bold tracking-wider">
+                                    <th style="width: 80px;">ID</th>
+                                    <th>Customer Info</th>
+                                    <th>Email</th>
+                                    <th>Joined Date</th>
+                                    <th class="text-center">Orders</th>
+                                    <th class="text-end" style="width: 120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($customers as $customer)
+                                <tr>
+                                    <td class="text-muted fw-semibold">#{{ $customer->id }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-sm">
+                                                    <span class="avatar-title bg-soft-primary text-primary rounded-circle fw-bold uppercase">
+                                                        {{ substr($customer->name, 0, 1) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-2">
+                                                <h5 class="my-0 fs-14 fw-bold text-dark">{{ $customer->name }}</h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-muted fw-medium">{{ $customer->email }}</td>
+                                    <td class="text-muted fs-12 fw-semibold">{{ $customer->created_at->format('M d, Y') }}</td>
+                                    <td class="text-center">
+                                        @if($customer->orders_count > 0)
+                                            <span class="badge bg-primary rounded-pill px-2 py-1 fs-11">{{ $customer->orders_count }} Orders</span>
+                                        @else
+                                            <span class="text-muted opacity-50">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <a href="{{ route('admin.customers.show', $customer) }}" class="btn btn-soft-info btn-sm" title="View Details">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
+                                            <form action="{{ route('admin.customers.destroy', $customer) }}" method="POST" 
+                                                onsubmit="return confirm('Are you sure you want to delete this customer?');" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-soft-danger btn-sm" title="Delete Customer">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="ri-user-search-line fs-48 opacity-20"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No customers found</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if($customers->hasPages())
+                    <div class="mt-4">
+                        {{ $customers->links() }}
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
     </div>
-    @endif
 </div>
+
+<style>
+    .avatar-sm { height: 32px; width: 32px; }
+    .avatar-title { font-size: 14px; }
+    .fs-11 { font-size: 11px; }
+    .fs-12 { font-size: 12px; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+</style>
 @endsection

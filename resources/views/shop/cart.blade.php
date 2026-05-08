@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', 'Your Bag | L\'ESSENCE NYC')
+@section('title', 'Your Bag | NewKirk NYC')
 
 @section('styles')
 <style>

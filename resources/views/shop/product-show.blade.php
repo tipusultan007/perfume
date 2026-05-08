@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', $product->meta_title ?: $product->name . " | " . \App\Models\Setting::get('meta_title', "L'ESSENCE NYC"))
+@section('title', $product->meta_title ?: $product->name . " | " . \App\Models\Setting::get('meta_title', "NewKirk NYC"))
 @section('meta_description', $product->meta_description ?: Str::limit(strip_tags($product->description), 160))
 @section('og_title', $product->name)
 @section('og_description', $product->meta_description ?: Str::limit(strip_tags($product->description), 160))

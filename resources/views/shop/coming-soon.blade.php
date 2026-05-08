@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon | L'ESSENCE NYC</title>
+    <title>Coming Soon | NewKirk NYC</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Montserrat:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -78,12 +78,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">L'ESSENCE</div>
+        <div class="logo">NewKirk</div>
         <div class="divider"></div>
         <h1>Something beautiful<br>is unfolding.</h1>
         <p>Our NYC-based atelier is preparing to launch a new collection of signature objects.</p>
         <div class="contact">
-            Stay in touch: <a href="mailto:info@lessence.nyc">info@lessence.nyc</a>
+            Stay in touch: <a href="mailto:info@newkirkperfumesusa.com">info@newkirkperfumesusa.com</a>
         </div>
     </div>
 </body>

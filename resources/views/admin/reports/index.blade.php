@@ -3,183 +3,213 @@
 @section('title', 'Reports Overview')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Reports Overview</h1>
-            <p class="text-slate-500 font-medium mt-1">Real-time performance metrics and business insights</p>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Analytics</a></li>
+                        <li class="breadcrumb-item active">Reports</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Performance Reports</h4>
+            </div>
         </div>
-        <div class="flex flex-wrap gap-3">
-            <a href="{{ route('admin.reports.sales') }}" class="px-5 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm flex items-center gap-2">
-                <i class="ri-money-dollar-circle-line text-lg"></i> Sales
+    </div>
+    <!-- end page title -->
+
+    <!-- Header Summary -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex flex-wrap gap-2 justify-content-end">
+            <a href="{{ route('admin.reports.sales') }}" class="btn btn-outline-dark fw-bold text-uppercase fs-11 tracking-wider px-3">
+                <i class="ri-money-dollar-circle-line me-1"></i> Sales
             </a>
-            <a href="{{ route('admin.reports.products') }}" class="px-5 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm flex items-center gap-2">
-                <i class="ri-archive-line text-lg"></i> Products
+            <a href="{{ route('admin.reports.products') }}" class="btn btn-outline-dark fw-bold text-uppercase fs-11 tracking-wider px-3">
+                <i class="ri-archive-line me-1"></i> Products
             </a>
-            <a href="{{ route('admin.reports.customers') }}" class="px-5 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm flex items-center gap-2">
-                <i class="ri-user-star-line text-lg"></i> Customers
+            <a href="{{ route('admin.reports.customers') }}" class="btn btn-outline-dark fw-bold text-uppercase fs-11 tracking-wider px-3">
+                <i class="ri-user-star-line me-1"></i> Customers
             </a>
         </div>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Today Sales -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <span class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mb-2">Today's Revenue</span>
-                    <h3 class="text-3xl font-bold text-slate-900 tracking-tight">${{ number_format($todaySales, 2) }}</h3>
+    <!-- KPI Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm overflow-hidden h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-muted fw-bold text-uppercase fs-10 tracking-widest mb-2">Today's Revenue</h5>
+                            <h3 class="my-0 fw-bold text-dark fs-24">${{ number_format($todaySales, 2) }}</h3>
+                            <div class="mt-2">
+                                <span class="badge bg-soft-success text-success fs-10 fw-bold px-2 py-1 rounded border border-success/10">{{ $todayOrders }} ORDERS</span>
+                            </div>
+                        </div>
+                        <div class="avatar-lg bg-soft-success rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ri-money-dollar-box-line fs-32 text-success"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all transform group-hover:rotate-6 shadow-sm">
-                    <i class="ri-money-dollar-box-line text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-8 flex items-center gap-2">
-                <span class="text-xs font-bold text-slate-900 px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg">{{ $todayOrders }}</span>
-                <span class="text-xs text-slate-500 font-medium tracking-wide">successful orders today</span>
             </div>
         </div>
-
-        <!-- Pending Orders -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <span class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mb-2">Pending Orders</span>
-                    <h3 class="text-3xl font-bold text-slate-900 tracking-tight">{{ $pendingOrders }}</h3>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm overflow-hidden h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-muted fw-bold text-uppercase fs-10 tracking-widest mb-2">Pending Orders</h5>
+                            <h3 class="my-0 fw-bold text-dark fs-24">{{ $pendingOrders }}</h3>
+                            <a href="{{ route('admin.orders.index') }}" class="mt-2 d-inline-block text-warning text-uppercase fs-10 fw-bold tracking-widest text-decoration-none">
+                                Review Queue <i class="ri-arrow-right-line ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="avatar-lg bg-soft-warning rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ri-time-line fs-32 text-warning"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all transform group-hover:rotate-6 shadow-sm">
-                    <i class="ri-time-line text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-8">
-                <a href="{{ route('admin.orders.index') }}" class="text-[10px] font-bold uppercase tracking-widest text-amber-600 hover:text-amber-700 flex items-center gap-2 group/link">
-                    Review Pending Queue <i class="ri-arrow-right-line group-hover/link:translate-x-1 transition-transform"></i>
-                </a>
             </div>
         </div>
-
-        <!-- Low Stock -->
-        <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
-            <div class="flex justify-between items-start">
-                <div>
-                    <span class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mb-2">Inventory Alerts</span>
-                    <h3 class="text-3xl font-bold text-slate-900 tracking-tight">{{ $lowStockCount }}</h3>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm overflow-hidden h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="text-muted fw-bold text-uppercase fs-10 tracking-widest mb-2">Inventory Alerts</h5>
+                            <h3 class="my-0 fw-bold text-dark fs-24">{{ $lowStockCount }}</h3>
+                            <a href="{{ route('admin.reports.products') }}" class="mt-2 d-inline-block text-danger text-uppercase fs-10 fw-bold tracking-widest text-decoration-none">
+                                Low Stock <i class="ri-arrow-right-line ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="avatar-lg bg-soft-danger rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="ri-error-warning-line fs-32 text-danger"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center group-hover:bg-rose-500 group-hover:text-white transition-all transform group-hover:rotate-6 shadow-sm">
-                    <i class="ri-error-warning-line text-2xl"></i>
-                </div>
-            </div>
-            <div class="mt-8">
-                <a href="{{ route('admin.reports.products') }}" class="text-[10px] font-bold uppercase tracking-widest text-rose-600 hover:text-rose-700 flex items-center gap-2 group/link">
-                    View Low Stock Items <i class="ri-arrow-right-line group-hover/link:translate-x-1 transition-transform"></i>
-                </a>
             </div>
         </div>
     </div>
 
     <!-- Revenue Chart -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-10 group">
-        <div class="flex justify-between items-center mb-10">
-            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-3">
-                <i class="ri-line-chart-line text-slate-300"></i> Revenue Trend
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full">Last 7 Days</span>
-            </h3>
-        </div>
-        <div class="relative h-[400px]">
-            <canvas id="revenueChart"></canvas>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm overflow-hidden mb-4">
+                <div class="card-header bg-light/30 border-bottom d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0 fs-13 text-uppercase fw-bold tracking-widest text-dark">Revenue Trend</h5>
+                    <span class="badge bg-dark rounded-pill px-2 py-1 fs-10 fw-bold tracking-widest text-uppercase">Last 7 Days</span>
+                </div>
+                <div class="card-body">
+                    <div style="height: 400px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .fs-10 { font-size: 10px !important; }
+    .fs-11 { font-size: 11px !important; }
+    .fs-12 { font-size: 12px !important; }
+    .fs-13 { font-size: 13px !important; }
+    .fs-24 { font-size: 24px !important; }
+    .fs-32 { font-size: 32px !important; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    
+    .bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
+    .bg-soft-warning { background-color: rgba(245, 158, 11, 0.1); }
+    .bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
+    
+    .avatar-lg { width: 56px; height: 56px; }
+
+    canvas { width: 100% !important; }
+</style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    
-    // Create gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(15, 23, 42, 0.1)');
-    gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+    (function() {
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        
+        // Create gradient
+        const gradient = revenueCtx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(15, 23, 42, 0.08)');
+        gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($dates),
-            datasets: [{
-                label: 'Revenue',
-                data: @json($revenues),
-                borderColor: '#0f172a',
-                backgroundColor: gradient,
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 6,
-                pointBackgroundColor: '#FFF',
-                pointBorderColor: '#0f172a',
-                pointBorderWidth: 3,
-                pointHoverRadius: 8,
-                pointHoverBackgroundColor: '#0f172a',
-                pointHoverBorderColor: '#FFF',
-                pointHoverBorderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: @json($dates),
+                datasets: [{
+                    label: 'Revenue',
+                    data: @json($revenues),
+                    borderColor: '#0f172a',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#FFF',
+                    pointBorderColor: '#0f172a',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#0f172a',
+                    pointHoverBorderColor: '#FFF',
+                    pointHoverBorderWidth: 2
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
                 },
-                tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleFont: { size: 13, family: 'Inter', weight: 'bold' },
-                    bodyFont: { size: 13, family: 'Inter' },
-                    padding: 12,
-                    cornerRadius: 8,
-                    displayColors: false,
-                    callbacks: {
-                        label: function(context) {
-                            return 'Revenue: $' + context.parsed.y.toLocaleString();
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    border: { display: false },
-                    grid: {
-                        color: '#f1f5f9'
-                    },
-                    ticks: {
-                        font: { family: 'Inter', weight: 'bold', size: 11 },
-                        color: '#94a3b8',
-                        padding: 10,
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleFont: { size: 12, family: 'Inter', weight: 'bold' },
+                        bodyFont: { size: 12, family: 'Inter' },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: $' + context.parsed.y.toLocaleString();
+                            }
                         }
                     }
                 },
-                x: {
-                    border: { display: false },
-                    grid: {
-                        display: false
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9', borderDash: [5, 5] },
+                        ticks: {
+                            font: { family: 'Inter', weight: 'bold', size: 10 },
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
                     },
-                    ticks: {
-                        font: { family: 'Inter', weight: 'bold', size: 11 },
-                        color: '#94a3b8',
-                        padding: 10
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Inter', weight: 'bold', size: 10 },
+                            color: '#94a3b8'
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    })();
 </script>
 @endsection

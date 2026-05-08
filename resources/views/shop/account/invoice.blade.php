@@ -92,7 +92,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">L'ESSENCE NYC</div>
+        <div class="logo">NewKirk NYC</div>
         <div class="invoice-info">
             <h1>Invoice</h1>
             <p>#{{ $order->order_number }}<br>Date: {{ $order->created_at->format('M d, Y') }}</p>
@@ -165,8 +165,8 @@
     </div>
 
     <div class="footer">
-        <p>Thank you for choosing L'ESSENCE NYC.</p>
-        <p>&copy; {{ date('Y') }} L'ESSENCE NYC Atelier. All rights reserved.</p>
+        <p>Thank you for choosing NewKirk NYC.</p>
+        <p>&copy; {{ date('Y') }} NewKirk NYC Atelier. All rights reserved.</p>
     </div>
 </body>
 </html>

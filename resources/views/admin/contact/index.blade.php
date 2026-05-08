@@ -3,102 +3,161 @@
 @section('title', 'Contact Submissions')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Contact Inquiries</h1>
-            <p class="text-slate-500 font-medium mt-1">Manage and respond to customer messages and support tickets</p>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Communications</a></li>
+                        <li class="breadcrumb-item active">Inquiries</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Contact Inquiries</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="header-title mb-1">Customer Inbox</h4>
+                    <p class="text-muted fs-12 mb-0">Manage and respond to customer support requests.</p>
+                </div>
+                <span class="badge bg-dark rounded-pill px-3 py-2 fs-10 fw-bold tracking-widest text-uppercase">
+                    {{ $submissions->total() }} Total Inquiries
+                </span>
+            </div>
         </div>
     </div>
 
-    <!-- Submissions List -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col transition-all">
-        <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-            <h3 class="text-lg font-bold text-slate-900">Inbox</h3>
-            <span class="px-3 py-1 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-sm">
-                {{ $submissions->total() }} total inquiries
-            </span>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 table-hover">
+                            <thead class="table-light">
+                                <tr class="text-uppercase fs-10 fw-bold tracking-widest text-muted">
+                                    <th class="ps-4 py-3" style="width: 100px;">Status</th>
+                                    <th class="py-3">Sender Information</th>
+                                    <th class="py-3">Inquiry Subject</th>
+                                    <th class="py-3">Received Date</th>
+                                    <th class="pe-4 py-3 text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fs-13">
+                                @forelse($submissions as $submission)
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        @if($submission->status === 'unread')
+                                            <span class="badge bg-soft-success text-success px-2 py-1 rounded-pill text-uppercase fs-10 tracking-wider fw-bold border border-success/10">NEW</span>
+                                        @else
+                                            <span class="badge bg-soft-secondary text-secondary px-2 py-1 rounded-pill text-uppercase fs-10 tracking-wider fw-bold">READ</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-dark fs-14 mb-1">{{ $submission->name }}</span>
+                                            <span class="text-muted fs-11 fw-semibold">{{ $submission->email }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-dark">{{ $submission->subject ?? 'General Inquiry' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted fs-11 fw-semibold">{{ $submission->created_at->format('M d, Y H:i') }}</span>
+                                    </td>
+                                    <td class="pe-4 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <a href="{{ route('admin.contact-submissions.show', $submission->id) }}" 
+                                                class="btn btn-soft-primary btn-sm rounded-circle p-0 w-8 h-8 d-flex align-items-center justify-center" title="View Message">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
+                                            <button onclick="confirmDelete('{{ $submission->id }}')" 
+                                                class="btn btn-soft-danger btn-sm rounded-circle p-0 w-8 h-8 d-flex align-items-center justify-center" title="Delete Submission">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                            <form id="delete-form-{{ $submission->id }}" action="{{ route('admin.contact-submissions.destroy', $submission->id) }}" method="POST" class="d-none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="py-5 text-center">
+                                        <div class="text-muted opacity-50 py-5">
+                                            <i class="ri-inbox-archive-line fs-48"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest mb-0">Inbox is empty</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    @if($submissions->hasPages())
+                    <div class="px-4 py-3 border-top bg-light/30">
+                        <div class="pagination-jidox">
+                            {{ $submissions->links() }}
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
-                        <th class="px-8 py-5">Status</th>
-                        <th class="px-8 py-5">Sender</th>
-                        <th class="px-8 py-5">Contact Details</th>
-                        <th class="px-8 py-5">Subject</th>
-                        <th class="px-8 py-5">Received At</th>
-                        <th class="px-8 py-5 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-sm">
-                    @forelse($submissions as $submission)
-                    <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                        <td class="px-8 py-4">
-                            @if($submission->status === 'unread')
-                                <span class="inline-flex items-center px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm">
-                                    New
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-500 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                                    Read
-                                </span>
-                            @endif
-                        </td>
-                        <td class="px-8 py-4 font-bold text-slate-900">{{ $submission->name }}</td>
-                        <td class="px-8 py-4 text-slate-500 font-medium">{{ $submission->email }}</td>
-                        <td class="px-8 py-4">
-                            <span class="text-slate-900 font-bold">{{ $submission->subject ?? 'General Inquiry' }}</span>
-                        </td>
-                        <td class="px-8 py-4 text-slate-500 font-medium text-xs">{{ $submission->created_at->format('M d, Y H:i') }}</td>
-                        <td class="px-8 py-4 text-right">
-                            <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('admin.contact-submissions.show', $submission->id) }}" 
-                                    class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white rounded-lg transition-all shadow-sm" 
-                                    title="View Message">
-                                    <i class="ri-eye-line text-lg"></i>
-                                </a>
-                                <button onclick="confirmDelete('{{ $submission->id }}')" 
-                                    class="w-10 h-10 flex items-center justify-center bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all shadow-sm" 
-                                    title="Delete Submission">
-                                    <i class="ri-delete-bin-line text-lg"></i>
-                                </button>
-                                <form id="delete-form-{{ $submission->id }}" action="{{ route('admin.contact-submissions.destroy', $submission->id) }}" method="POST" class="hidden">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="px-8 py-20 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">
-                            <div class="flex flex-col items-center gap-4">
-                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center">
-                                    <i class="ri-inbox-line text-3xl text-slate-200"></i>
-                                </div>
-                                <p>No inquiries found in your inbox</p>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        @if($submissions->hasPages())
-        <div class="px-8 py-6 border-t border-slate-100 bg-slate-50/30">
-            {{ $submissions->links() }}
-        </div>
-        @endif
     </div>
 </div>
 
+<style>
+    .fs-10 { font-size: 10px !important; }
+    .fs-11 { font-size: 11px !important; }
+    .fs-12 { font-size: 12px !important; }
+    .fs-13 { font-size: 13px !important; }
+    .fs-14 { font-size: 14px !important; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .w-8 { width: 32px !important; }
+    .h-8 { height: 32px !important; }
+    
+    .bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
+    .bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
+    .bg-soft-secondary { background-color: rgba(100, 116, 139, 0.1); }
+    .bg-soft-primary { background-color: rgba(59, 130, 246, 0.1); }
+
+    /* Fix Laravel Pagination for Jidox */
+    .pagination-jidox .pagination {
+        margin-bottom: 0;
+        gap: 5px;
+    }
+    .pagination-jidox .page-link {
+        border-radius: 8px !important;
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+    .pagination-jidox .page-item.active .page-link {
+        background-color: #0f172a;
+        border-color: #0f172a;
+        color: white;
+    }
+</style>
+@endsection
+
+@section('scripts')
 <script>
     function confirmDelete(id) {
         Swal.fire({
-            title: 'Delete Submission',
+            title: 'Delete Submission?',
             text: "This action cannot be undone. Are you sure you want to proceed?",
             icon: 'warning',
             showCancelButton: true,
@@ -107,9 +166,9 @@
             confirmButtonText: 'Yes, delete it',
             cancelButtonText: 'Cancel',
             customClass: {
-                popup: 'rounded-2xl',
-                confirmButton: 'rounded-lg px-6 py-3 text-xs uppercase font-bold tracking-widest',
-                cancelButton: 'rounded-lg px-6 py-3 text-xs uppercase font-bold tracking-widest'
+                popup: 'rounded-4 overflow-hidden',
+                confirmButton: 'btn btn-dark px-4 py-2 uppercase tracking-widest fs-11 fw-bold',
+                cancelButton: 'btn btn-light px-4 py-2 uppercase tracking-widest fs-11 fw-bold'
             }
         }).then((result) => {
             if (result.isConfirmed) {

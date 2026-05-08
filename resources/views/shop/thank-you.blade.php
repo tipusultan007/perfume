@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', "Order Confirmed | L'ESSENCE NYC")
+@section('title', "Order Confirmed | NewKirk NYC")
 
 @section('styles')
 <style>

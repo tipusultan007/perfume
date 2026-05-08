@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', "Privacy Policy | L'ESSENCE NYC")
+@section('title', "Privacy Policy | NewKirk NYC")
 
 @section('styles')
 <style>
@@ -52,7 +52,7 @@
     </div>
 
     <div class="legal-content">
-        <p>At L'ESSENCE, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, and safeguard the data you provide to us through our website.</p>
+        <p>At NewKirk, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, and safeguard the data you provide to us through our website.</p>
 
         <h2>1. Information We Collect</h2>
         <p>We may collect personal information such as your name, email address, shipping address, and payment details when you make a purchase or subscribe to our newsletter.</p>
@@ -70,7 +70,7 @@
         <p>Our website uses cookies to enhance your browsing experience and provide personalized content. You can manage your cookie preferences through your browser settings.</p>
 
         <h2>6. Contact Us</h2>
-        <p>If you have any questions about our Privacy Policy, please reach out to us at atelier@lessence.nyc.</p>
+        <p>If you have any questions about our Privacy Policy, please reach out to us at atelier@newkirkperfumesusa.com.</p>
     </div>
 </div>
 @endsection

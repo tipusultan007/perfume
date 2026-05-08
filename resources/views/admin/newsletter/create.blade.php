@@ -3,151 +3,193 @@
 @section('title', 'Create Campaign')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-10 flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">New Campaign</h1>
-            <p class="text-slate-500 font-medium mt-1">Compose your message and select your target audience</p>
-        </div>
-        <a href="{{ route('admin.newsletter.index') }}" 
-            class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-            <i class="ri-arrow-left-line text-lg"></i>
-        </a>
-    </div>
-
-    <!-- Form -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-10">
-        @if ($errors->any())
-            <div class="mb-10 bg-rose-50 border border-rose-100 text-rose-600 p-6 rounded-xl">
-                <div class="flex items-center gap-3 mb-3">
-                    <i class="ri-error-warning-fill text-xl"></i>
-                    <span class="text-xs font-bold uppercase tracking-widest">Action Required</span>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Communications</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.newsletter.index') }}">Newsletter</a></li>
+                        <li class="breadcrumb-item active">New Campaign</li>
+                    </ol>
                 </div>
-                <ul class="list-disc list-inside text-sm space-y-1 font-medium">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                <h4 class="page-title">Create Campaign</h4>
             </div>
-        @endif
+        </div>
+    </div>
+    <!-- end page title -->
 
-        <form action="{{ route('admin.newsletter.store') }}" method="POST" class="space-y-10">
-            @csrf
-            
-            <div class="space-y-10">
-                <!-- Subject -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Email Subject Line</label>
-                    <input type="text" name="subject" value="{{ old('subject') }}"
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold"
-                        placeholder="e.g. Discover our New Winter Collection" required>
-                    @error('subject') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
-
-                <!-- Content -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Campaign Content</label>
-                    <textarea name="content" rows="12"
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium leading-relaxed"
-                        placeholder="Write your email content here (HTML supported)..." required>{{ old('content') }}</textarea>
-                    <div class="flex items-center gap-2 text-slate-400">
-                        <i class="ri-information-line"></i>
-                        <p class="text-[10px] font-bold uppercase tracking-widest">Basic HTML tags are allowed. An unsubscribe link will be automatically appended.</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+                        <div>
+                            <h4 class="header-title mb-1">New Marketing Campaign</h4>
+                            <p class="text-muted fs-12 mb-0">Compose your message and select your target audience.</p>
+                        </div>
+                        <a href="{{ route('admin.newsletter.index') }}" class="btn btn-soft-secondary btn-sm rounded-circle p-0 w-8 h-8 d-flex align-items-center justify-center">
+                            <i class="ri-arrow-left-line"></i>
+                        </a>
                     </div>
-                    @error('content') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
 
-                <!-- Recipients -->
-                <div class="space-y-6">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Target Audience</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <label class="relative flex items-center p-5 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-50 transition-all group">
-                            <input type="radio" name="recipient_type" value="all" {{ old('recipient_type', 'all') == 'all' ? 'checked' : '' }}
-                                onchange="toggleSubscribersList(false)" class="w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300">
-                            <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Broadcast to All</span>
-                                <span class="text-xs text-slate-400 font-medium">All {{ $subscribers->count() }} active subscribers</span>
-                            </div>
-                        </label>
-                        <label class="relative flex items-center p-5 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-50 transition-all group">
-                            <input type="radio" name="recipient_type" value="select" {{ old('recipient_type') == 'select' ? 'checked' : '' }}
-                                onchange="toggleSubscribersList(true)" class="w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300">
-                            <div class="ml-4">
-                                <span class="block text-sm font-bold text-slate-900">Targeted Selection</span>
-                                <span class="text-xs text-slate-400 font-medium">Select specific subscribers manually</span>
-                            </div>
-                        </label>
-                    </div>
-                    @error('recipient_type') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show border-0 mb-4" role="alert">
+                            <h5 class="alert-heading fs-12 fw-bold text-uppercase tracking-widest"><i class="ri-error-warning-fill me-1"></i> Action Required</h5>
+                            <ul class="list-unstyled mb-0 fs-12 font-medium">
+                                @foreach ($errors->all() as $error)
+                                    <li>• {{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-                    <div id="subscribersList" class="transition-all duration-300 {{ old('recipient_type') == 'select' ? 'block' : 'hidden' }}">
-                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6">
-                            <div class="max-h-80 overflow-y-auto pr-4 custom-scrollbar">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    @foreach($subscribers as $subscriber)
-                                    <label class="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-xl cursor-pointer hover:border-slate-900 transition-all group shadow-sm">
-                                        <input type="checkbox" name="recipients[]" value="{{ $subscriber->id }}" 
-                                            class="subscriber-checkbox w-4 h-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded" 
-                                            {{ (is_array(old('recipients')) && in_array($subscriber->id, old('recipients'))) ? 'checked' : '' }}
-                                            {{ old('recipient_type') == 'select' ? '' : 'disabled' }}>
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-slate-900">{{ $subscriber->email }}</span>
-                                            <span class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Joined {{ $subscriber->created_at->format('M d, Y') }}</span>
-                                        </div>
-                                    </label>
-                                    @endforeach
+                    <form action="{{ route('admin.newsletter.store') }}" method="POST">
+                        @csrf
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-widest text-muted mb-2">Email Subject Line</label>
+                                <input type="text" name="subject" value="{{ old('subject') }}"
+                                    class="form-control form-control-lg fw-bold  shadow-none fs-14"
+                                    placeholder="e.g. Discover our New Winter Collection" required>
+                                @error('subject') <div class="text-danger fs-11 fw-bold text-uppercase mt-1">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-widest text-muted mb-2">Campaign Content</label>
+                                <textarea name="content" rows="12"
+                                    class="form-control  shadow-none fs-13"
+                                    placeholder="Write your email content here (HTML supported)..." required>{{ old('content') }}</textarea>
+                                <div class="d-flex align-items-center gap-2 mt-2 text-muted">
+                                    <i class="ri-information-line"></i>
+                                    <p class="fs-11 fw-bold text-uppercase tracking-wider mb-0">Basic HTML tags are allowed. An unsubscribe link will be automatically appended.</p>
                                 </div>
+                                @error('content') <div class="text-danger fs-11 fw-bold text-uppercase mt-1">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-widest text-muted mb-3">Target Audience</label>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="audience-option border rounded-3 p-3 position-relative">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="recipient_type" id="type_all" value="all" 
+                                                    {{ old('recipient_type', 'all') == 'all' ? 'checked' : '' }} onchange="toggleSubscribersList(false)">
+                                                <label class="form-check-label ms-2" for="type_all">
+                                                    <span class="d-block fw-bold text-dark fs-14">Broadcast to All</span>
+                                                    <span class="text-muted fs-11">All {{ $subscribers->count() }} active subscribers</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="audience-option border rounded-3 p-3 position-relative">
+                                            <div class="form-check custom-radio">
+                                                <input class="form-check-input" type="radio" name="recipient_type" id="type_select" value="select" 
+                                                    {{ old('recipient_type') == 'select' ? 'checked' : '' }} onchange="toggleSubscribersList(true)">
+                                                <label class="form-check-label ms-2" for="type_select">
+                                                    <span class="d-block fw-bold text-dark fs-14">Targeted Selection</span>
+                                                    <span class="text-muted fs-11">Select specific subscribers manually</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="subscribersList" class="collapse {{ old('recipient_type') == 'select' ? 'show' : '' }}">
+                                    <div class="bg-light rounded-3 p-3 border">
+                                        <div class="max-h-80 overflow-y-auto pr-2 custom-scrollbar" style="max-height: 350px;">
+                                            <div class="row g-2">
+                                                @foreach($subscribers as $subscriber)
+                                                <div class="col-md-6">
+                                                    <div class="card mb-0 border shadow-none">
+                                                        <div class="card-body p-2 px-3">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input subscriber-checkbox" type="checkbox" 
+                                                                    name="recipients[]" value="{{ $subscriber->id }}" id="sub_{{ $subscriber->id }}"
+                                                                    {{ (is_array(old('recipients')) && in_array($subscriber->id, old('recipients'))) ? 'checked' : '' }}
+                                                                    {{ old('recipient_type') == 'select' ? '' : 'disabled' }}>
+                                                                <label class="form-check-label ms-1" for="sub_{{ $subscriber->id }}">
+                                                                    <span class="d-block fw-bold text-dark fs-12">{{ $subscriber->email }}</span>
+                                                                    <span class="text-muted fs-10 text-uppercase tracking-tighter">Joined {{ $subscriber->created_at->format('M d, Y') }}</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('recipients') <div class="text-danger fs-11 fw-bold text-uppercase mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
-                    </div>
-                    @error('recipients') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
 
-                <!-- Actions -->
-                <div class="pt-10 flex flex-col md:flex-row justify-end gap-4 border-t border-slate-100">
-                    <a href="{{ route('admin.newsletter.index') }}" 
-                        class="px-10 py-4 bg-slate-50 border border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-slate-200 transition-all text-center">
-                        Discard
-                    </a>
-                    <button type="submit" class="px-10 py-4 bg-slate-900 text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/20 active:scale-[0.98]">
-                        <i class="ri-save-line mr-2"></i> Save Campaign Draft
-                    </button>
+                        <div class="mt-4 pt-4 border-top d-flex flex-wrap gap-2 justify-content-end">
+                            <a href="{{ route('admin.newsletter.index') }}" class="btn btn-light px-4 fw-bold text-uppercase fs-11 tracking-widest">
+                                Discard
+                            </a>
+                            <button type="submit" class="btn btn-dark px-4 fw-bold text-uppercase fs-11 tracking-widest shadow-lg">
+                                <i class="ri-save-line me-1"></i> Save Campaign Draft
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
+<style>
+    .fs-10 { font-size: 10px !important; }
+    .fs-11 { font-size: 11px !important; }
+    .fs-12 { font-size: 12px !important; }
+    .fs-13 { font-size: 13px !important; }
+    .fs-14 { font-size: 14px !important; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .w-8 { width: 32px !important; }
+    .h-8 { height: 32px !important; }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    
+    .audience-option {
+        transition: all 0.2s ease;
+        background-color: #fff;
+    }
+    .audience-option:has(input:checked) {
+        border-color: #0f172a !important;
+        background-color: rgba(15, 23, 42, 0.02);
+    }
+    
+    .custom-radio .form-check-input:checked {
+        background-color: #0f172a;
+        border-color: #0f172a;
+    }
+</style>
+@endsection
+
+@section('scripts')
 <script>
     function toggleSubscribersList(show) {
         const list = document.getElementById('subscribersList');
         const checkboxes = document.querySelectorAll('.subscriber-checkbox');
 
         if (show) {
-            list.classList.remove('hidden');
-            list.classList.add('block');
+            $(list).collapse('show');
             checkboxes.forEach(cb => cb.disabled = false);
         } else {
-            list.classList.add('hidden');
-            list.classList.remove('block');
+            $(list).collapse('hide');
             checkboxes.forEach(cb => cb.disabled = true);
         }
     }
 </script>
-
-<style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-    }
-</style>
 @endsection

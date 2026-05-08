@@ -14,7 +14,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <a href="{{ url('/') }}" class="logo">{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}</a>
+            <a href="{{ url('/') }}" class="logo">{{ \App\Models\Setting::get('site_name', 'NewKirk') }}</a>
         </div>
         
         <div class="content">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'NewKirk') }}. All rights reserved.</p>
             <p>
                 <!-- Simple MD5 Hash for now, ideally Signed URL -->
                 <a href="{{ route('newsletter.unsubscribe', ['email' => $subscriber->email, 'hash' => md5($subscriber->email)]) }}" class="unsubscribe">Unsubscribe</a>

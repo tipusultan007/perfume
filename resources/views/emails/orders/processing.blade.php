@@ -4,7 +4,7 @@
 <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; margin-bottom: 20px;">Order #{{ $order->order_number }} Confirmed.</h2>
 
 <p>Hello {{ $order->shipping_address['first_name'] ?? 'there' }},</p>
-<p>Thank you for choosing {{ \App\Models\Setting::get('site_name', "L'ESSENCE NYC") }}. We have received your order and our atelier has begun the preparation process.</p>
+<p>Thank you for choosing {{ \App\Models\Setting::get('site_name', "NewKirk NYC") }}. We have received your order and our atelier has begun the preparation process.</p>
 
 <div class="order-details" style="background: #fdf9f4; border: 1px solid #eee; padding: 20px; margin: 30px 0;">
     <p style="margin: 0; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Order Summary</p>

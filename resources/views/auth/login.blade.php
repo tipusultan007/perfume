@@ -123,7 +123,7 @@
     </form>
 
     <div class="auth-switch">
-        New to L'Essence? <a href="{{ route('register') }}">Create an account</a>
+        New to NewKirk? <a href="{{ route('register') }}">Create an account</a>
     </div>
 </div>
 @endsection

@@ -1051,9 +1051,9 @@
             @php $siteLogo = \App\Models\Setting::get('site_logo'); @endphp
             <a href="{{ url('/') }}">
                 @if($siteLogo)
-                    <img src="{{ asset($siteLogo) }}" alt="{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}">
+                    <img src="{{ asset($siteLogo) }}" alt="{{ \App\Models\Setting::get('site_name', 'NewKirk') }}">
                 @else
-                    {{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}
+                    {{ \App\Models\Setting::get('site_name', 'NewKirk') }}
                 @endif
             </a>
         </div>
@@ -1229,7 +1229,7 @@
 
     <footer>
         <div class="footer-brand">
-            <div class="footer-logo">{{ \App\Models\Setting::get('site_name', 'L\'ESSENCE') }}</div>
+            <div class="footer-logo">{{ \App\Models\Setting::get('site_name', 'NewKirk') }}</div>
             <p class="text-sm opacity-60">{{ \App\Models\Setting::get('site_description', 'Curating the world\'s finest olfactory experiences.') }}</p>
             <div class="social-links mt-8">
                 @if($fb = \App\Models\Setting::get('social_facebook')) <a href="{{ $fb }}" target="_blank" class="social-link" title="Facebook"><i class="ri-facebook-fill"></i></a> @endif
@@ -1276,7 +1276,7 @@
             </ul>
         </div>
         <div class="footer-bottom">
-            <div class="copyright-text">{{ \App\Models\Setting::get('footer_copyright', '© 2026 L\'ESSENCE NYC. All rights reserved.') }}</div>
+            <div class="copyright-text">{{ \App\Models\Setting::get('footer_copyright', '© 2026 NewKirk NYC. All rights reserved.') }}</div>
             <div class="footer-legal-links">
                 <a href="{{ route('privacy') }}">Privacy Policy</a>
                 <a href="{{ route('terms') }}">Terms & Conditions</a>

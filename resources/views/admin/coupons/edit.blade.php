@@ -4,90 +4,103 @@
 @section('page_title', 'Edit Coupon')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="mb-8">
-        <a href="{{ route('admin.coupons.index') }}" 
-            class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-            <i class="ri-arrow-left-line text-lg"></i>
-        </a>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Marketing</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Coupons</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Edit Coupon: <span class="text-primary">{{ $coupon->code }}</span></h4>
+            </div>
+        </div>
     </div>
+    <!-- end page title -->
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden p-10">
-        <form action="{{ route('admin.coupons.update', $coupon) }}" method="POST" class="space-y-10">
-            @csrf
-            @method('PUT')
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <!-- Code -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Coupon Code</label>
-                    <input type="text" name="code" value="{{ old('code', $coupon->code) }}" placeholder="e.g. SUMMER25" 
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold uppercase" required>
-                    @error('code') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form action="{{ route('admin.coupons.update', $coupon) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Coupon Code</label>
+                                <input type="text" name="code" value="{{ old('code', $coupon->code) }}" placeholder="e.g. SUMMER25" 
+                                    class="form-control fw-bold text-uppercase @error('code') is-invalid @enderror" required>
+                                @error('code') <div class="invalid-feedback fw-bold">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" name="is_active" id="isActive" value="1" {{ $coupon->is_active ? 'checked' : '' }}>
+                                    <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="isActive">ACTIVE STATUS</label>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Active Toggle -->
-                <div class="flex items-end pb-4">
-                    <label class="relative inline-flex items-center cursor-pointer group">
-                        <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $coupon->is_active ? 'checked' : '' }}>
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
-                        <span class="ms-3 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 group-hover:text-slate-900 transition-colors">Active Coupon</span>
-                    </label>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Discount Type</label>
+                                <select name="type" class="form-select fw-semibold">
+                                    <option value="percent" {{ $coupon->type === 'percent' ? 'selected' : '' }}>Percentage (%)</option>
+                                    <option value="fixed" {{ $coupon->type === 'fixed' ? 'selected' : '' }}>Fixed Amount ($)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Discount Value</label>
+                                <div class="input-group">
+                                    <input type="number" name="value" value="{{ old('value', $coupon->value) }}" placeholder="0.00" step="0.01" min="0" 
+                                        class="form-control fw-bold @error('value') is-invalid @enderror" required>
+                                    @error('value') <div class="invalid-feedback fw-bold">{{ $message }}</div> @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4 pb-2 border-bottom"></div>
+
+                        <div class="row mb-4 mt-2">
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Min Spend ($)</label>
+                                <input type="number" name="min_spend" value="{{ old('min_spend', $coupon->min_spend) }}" placeholder="Optional" step="0.01" min="0" 
+                                    class="form-control fw-semibold">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Usage Limit</label>
+                                <input type="number" name="usage_limit" value="{{ old('usage_limit', $coupon->usage_limit) }}" placeholder="Unlimited if empty" min="1" 
+                                    class="form-control fw-semibold">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Expiry Date</label>
+                                <input type="date" name="expiry_date" value="{{ old('expiry_date', $coupon->expiry_date ? $coupon->expiry_date->format('Y-m-d') : '') }}" 
+                                    class="form-control fw-semibold @error('expiry_date') is-invalid @enderror">
+                                @error('expiry_date') <div class="invalid-feedback fw-bold">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-2">
+                            <a href="{{ route('admin.coupons.index') }}" class="btn btn-light px-4 fw-bold text-uppercase fs-11">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-5 fw-bold text-uppercase fs-11">
+                                <i class="ri-check-line me-1"></i> Update Coupon
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <!-- Type -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Discount Type</label>
-                    <div class="relative">
-                        <select name="type" class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-semibold appearance-none">
-                            <option value="percent" {{ $coupon->type === 'percent' ? 'selected' : '' }}>Percentage (%)</option>
-                            <option value="fixed" {{ $coupon->type === 'fixed' ? 'selected' : '' }}>Fixed Amount ($)</option>
-                        </select>
-                        <i class="ri-arrow-down-s-line absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg"></i>
-                    </div>
-                </div>
-
-                <!-- Value -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Discount Value</label>
-                    <input type="number" name="value" value="{{ old('value', $coupon->value) }}" placeholder="0.00" step="0.01" min="0" 
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold" required>
-                    @error('value') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Min Spend -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Min Spend ($)</label>
-                    <input type="number" name="min_spend" value="{{ old('min_spend', $coupon->min_spend) }}" placeholder="Optional" step="0.01" min="0" 
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold">
-                </div>
-
-                <!-- Usage Limit -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Usage Limit</label>
-                    <input type="number" name="usage_limit" value="{{ old('usage_limit', $coupon->usage_limit) }}" placeholder="Optional" min="1" 
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold">
-                </div>
-
-                <!-- Expiry Date -->
-                <div class="space-y-4">
-                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500">Expiry Date</label>
-                    <input type="date" name="expiry_date" value="{{ old('expiry_date', $coupon->expiry_date ? $coupon->expiry_date->format('Y-m-d') : '') }}" 
-                        class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-bold">
-                    @error('expiry_date') <p class="text-rose-500 text-[10px] font-bold uppercase tracking-widest mt-2">{{ $message }}</p> @enderror
-                </div>
-            </div>
-
-            <div class="pt-6">
-                <button type="submit" class="w-full py-5 bg-slate-900 text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-lg hover:bg-slate-800 transition-all shadow-xl hover:shadow-slate-900/20 active:scale-[0.98]">
-                    Update Coupon
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<style>
+    .fs-11 { font-size: 11px; }
+    .fs-12 { font-size: 12px; }
+    .tracking-wider { letter-spacing: 0.05em; }
+</style>
 @endsection

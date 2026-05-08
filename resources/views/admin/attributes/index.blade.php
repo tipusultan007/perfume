@@ -1,74 +1,144 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Manage Attributes')
-@section('page_title', 'Attributes')
 
 @section('content')
-<div class="flex justify-between items-center mb-10">
-    <h3 class="font-bold text-2xl text-slate-900">Attributes</h3>
-    <a href="{{ route('admin.attributes.create') }}" class="px-6 py-3 bg-slate-900 text-white text-[11px] uppercase tracking-widest font-bold rounded-lg shadow-xl hover:bg-slate-800 transition-all">
-        Add New Attribute
-    </a>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Catalog</a></li>
+                        <li class="breadcrumb-item active">Attributes</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Product Attributes</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-3">
+        <div class="col-12 text-end">
+            <a href="{{ route('admin.attributes.create') }}" class="btn btn-dark fw-bold text-uppercase fs-11 tracking-wider">
+                <i class="ri-add-line me-1"></i> Add New Attribute
+            </a>
+        </div>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 mb-4" role="alert">
+            <i class="ri-checkbox-circle-line me-1 align-middle fs-16"></i>
+            <span class="fw-bold text-uppercase fs-11 tracking-wider">{{ session('success') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-centered mb-0 table-hover">
+                            <thead class="table-light">
+                                <tr class="text-uppercase fs-10 fw-bold tracking-widest text-muted">
+                                    <th class="ps-4 py-3">Attribute Name</th>
+                                    <th class="py-3">Configured Values</th>
+                                    <th class="pe-4 py-3 text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fs-13">
+                                @forelse($attributes as $attribute)
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <h5 class="my-0 fs-14 fw-bold text-dark text-uppercase tracking-wide">{{ $attribute->name }}</h5>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach($attribute->values as $value)
+                                                <span class="badge bg-soft-dark text-dark border fs-10 fw-bold px-2 py-1 text-uppercase">{{ $value->value }}</span>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td class="pe-4 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <a href="{{ route('admin.attributes.edit', $attribute) }}" 
+                                                class="btn btn-soft-warning btn-sm rounded-circle p-0 w-8 h-8 d-flex align-items-center justify-center" title="Edit">
+                                                <i class="ri-edit-line"></i>
+                                            </a>
+                                            <form action="{{ route('admin.attributes.destroy', $attribute) }}" method="POST" onsubmit="return confirm('Are you sure?')" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                    class="btn btn-soft-danger btn-sm rounded-circle p-0 w-8 h-8 d-flex align-items-center justify-center" title="Delete">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="py-5 text-center">
+                                        <div class="text-muted opacity-50">
+                                            <i class="ri-list-settings-line fs-48"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No attributes found</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    @if($attributes->hasPages())
+                    <div class="px-4 py-3 border-top bg-light/30">
+                        <div class="pagination-jidox">
+                            {{ $attributes->links() }}
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-@if(session('success'))
-    <div class="bg-emerald-50 text-emerald-700 p-6 mb-10 rounded-xl border border-emerald-100 shadow-sm flex items-center space-x-3">
-        <i class="ri-checkbox-circle-line text-xl"></i>
-        <span class="text-[11px] uppercase tracking-widest font-bold">{{ session('success') }}</span>
-    </div>
-@endif
-
-<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full text-left">
-            <thead>
-                <tr class="bg-slate-50/50 border-b border-slate-100">
-                    <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Attribute Name</th>
-                    <th class="py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">Configured Values</th>
-                    <th class="px-8 py-5 text-[10px] uppercase tracking-widest text-slate-500 font-bold text-right">Action</th>
-                </tr>
-            </thead>
-            <tbody class="text-sm">
-                @forelse($attributes as $attribute)
-                <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                    <td class="px-8 py-6">
-                        <span class="text-sm font-bold text-slate-900 uppercase tracking-wide">{{ $attribute->name }}</span>
-                    </td>
-                    <td class="py-6">
-                        <div class="flex flex-wrap gap-2">
-                            @foreach($attribute->values as $value)
-                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-200">{{ $value->value }}</span>
-                            @endforeach
-                        </div>
-                    </td>
-                    <td class="px-8 py-6 text-right">
-                        <div class="flex justify-end items-center gap-3">
-                            <a href="{{ route('admin.attributes.edit', $attribute) }}" 
-                                class="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-900 hover:shadow-lg transition-all shadow-sm">
-                                <i class="ri-edit-line text-lg"></i>
-                            </a>
-                            <form action="{{ route('admin.attributes.destroy', $attribute) }}" method="POST" onsubmit="return confirm('Are you sure?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white hover:shadow-lg transition-all shadow-sm">
-                                    <i class="ri-delete-bin-line text-lg"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="3" class="py-10 text-center text-black/40 text-xs uppercase tracking-widest">No attributes found</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+<style>
+    .fs-10 { font-size: 10px !important; }
+    .fs-11 { font-size: 11px !important; }
+    .fs-12 { font-size: 12px !important; }
+    .fs-13 { font-size: 13px !important; }
+    .fs-14 { font-size: 14px !important; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .w-8 { width: 32px !important; }
+    .h-8 { height: 32px !important; }
     
-    <div class="px-8 py-8 border-t border-slate-50 bg-slate-50/30">
-        {{ $attributes->links() }}
-    </div>
-</div>
+    .bg-soft-dark { background-color: rgba(15, 23, 42, 0.05); }
+    .bg-soft-warning { background-color: rgba(245, 158, 11, 0.1); }
+    .bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
+
+    /* Fix Laravel Pagination for Jidox */
+    .pagination-jidox .pagination {
+        margin-bottom: 0;
+        gap: 5px;
+    }
+    .pagination-jidox .page-link {
+        border-radius: 8px !important;
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+    .pagination-jidox .page-item.active .page-link {
+        background-color: #0f172a;
+        border-color: #0f172a;
+        color: white;
+    }
+</style>
 @endsection

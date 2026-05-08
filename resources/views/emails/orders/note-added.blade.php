@@ -17,5 +17,5 @@
         <a href="{{ route('order.track') }}?order_number={{ $order->order_number }}&email={{ $order->shipping_address['email'] }}" class="btn">View Order Details</a>
     </div>
     
-    <p style="margin-top: 40px;">Sincerely,<br>The {{ \App\Models\Setting::get('site_name', "L'ESSENCE NYC") }} Team</p>
+    <p style="margin-top: 40px;">Sincerely,<br>The {{ \App\Models\Setting::get('site_name', "NewKirk NYC") }} Team</p>
 @endsection

@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('newkirk-management')->name('admin.')->group(function () {
     
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

@@ -1,6 +1,6 @@
 @extends('layouts.store')
 
-@section('title', "Contact | L'ESSENCE NYC")
+@section('title', "Contact | NewKirk NYC")
 
 @section('styles')
 <style>
@@ -112,7 +112,7 @@
             </div>
             <div class="contact-info-item">
                 <h3>Collaborations</h3>
-                <p>atelier@lessence.nyc</p>
+                <p>atelier@newkirkperfumesusa.com</p>
             </div>
             <div class="contact-info-item">
                 <h3>Concierge</h3>
