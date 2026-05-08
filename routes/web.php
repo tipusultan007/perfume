@@ -45,6 +45,7 @@ Route::get('/thank-you', [\App\Http\Controllers\CheckoutController::class, 'than
 // Public Order Tracking
 Route::get('/track-order', [\App\Http\Controllers\OrderTrackingController::class, 'index'])->name('order.track');
 Route::post('/track-order', [\App\Http\Controllers\OrderTrackingController::class, 'track'])->name('order.track.process');
+Route::get('/track-order/view', [\App\Http\Controllers\OrderTrackingController::class, 'showGuestOrder'])->name('order.track.guest');
 
 // Site Status Splash Pages
 Route::get('/maintenance', function() { return view('shop.maintenance'); })->name('maintenance');

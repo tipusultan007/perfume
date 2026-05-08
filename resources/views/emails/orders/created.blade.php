@@ -42,7 +42,7 @@
     </table>
 
     <div style="margin: 50px 0;">
-        <a href="{{ route('account.orders.show', $order->id) }}" class="btn">View Your Order Details</a>
+        <a href="{{ route('order.track.guest', ['order_number' => $order->order_number, 'email' => $order->shipping_address['email']]) }}" class="btn">View Your Order Details</a>
     </div>
 
     <p style="font-size: 13px; font-style: italic; color: #9ca3af; margin-top: 40px;">

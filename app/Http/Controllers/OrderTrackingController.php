@@ -29,4 +29,21 @@ class OrderTrackingController extends Controller
 
         return view('shop.track-results', compact('order'));
     }
+
+    public function showGuestOrder(Request $request)
+    {
+        if (!$request->order_number || !$request->email) {
+            return redirect()->route('order.track');
+        }
+
+        $order = Order::where('order_number', $request->order_number)
+            ->where('shipping_address->email', $request->email)
+            ->first();
+
+        if (!$order) {
+            return redirect()->route('order.track')->with('error', 'Order not found.');
+        }
+
+        return view('shop.track-results', compact('order'));
+    }
 }
