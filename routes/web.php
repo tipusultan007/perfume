@@ -170,27 +170,31 @@ Route::middleware(['auth:admin'])->prefix('newkirk-management')->group(function 
 
             if (file_exists($publicPath)) {
                 if (is_link($publicPath)) {
-                    unlink($publicPath);
+                    @unlink($publicPath);
                 } else {
-                    // It's a directory, rename it to preserve data just in case
-                    rename($publicPath, $publicPath . '_old_' . time());
+                    @rename($publicPath, $publicPath . '_old_' . time());
                 }
             }
 
-            // Try Artisan first
+            // Try manual symlink first on shared hosting to avoid exec() issues
+            try {
+                if (@symlink($storagePath, $publicPath)) {
+                    return "Storage link created successfully via manual symlink!<br><a href='".route('admin.dashboard')."'>Go to Dashboard</a>";
+                }
+            } catch (\Throwable $t) {
+                // Ignore and try Artisan
+            }
+
+            // Fallback to Artisan
             try {
                 Artisan::call('storage:link');
                 return "Storage link created successfully via Artisan!<br><a href='".route('admin.dashboard')."'>Go to Dashboard</a>";
-            } catch (\Exception $e) {
-                // Try manual symlink
-                if (symlink($storagePath, $publicPath)) {
-                    return "Storage link created successfully via manual symlink!<br><a href='".route('admin.dashboard')."'>Go to Dashboard</a>";
-                }
-                throw $e;
+            } catch (\Throwable $e) {
+                return "Error creating storage link: " . $e->getMessage() . "<br>Manual Fix: Log in to Hostinger SSH and run:<br><code>ln -s " . $storagePath . " " . $publicPath . "</code>";
             }
 
-        } catch (\Exception $e) {
-            return "Error creating storage link: " . $e->getMessage() . "<br>Please ensure your hosting allows symlinks.";
+        } catch (\Throwable $e) {
+            return "General Error: " . $e->getMessage();
         }
     })->name('admin.storage.link');
 });
