@@ -8,94 +8,94 @@
     "name": "moment"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BqGkfvI1.css",
+    "file": "assets/app-2lU3Pzu7.css",
     "src": "resources/css/app.css"
-  },
-  "resources/jidox/fonts/bootstrap-icons.woff": {
-    "file": "assets/bootstrap-icons-D8ioIzQS.woff",
-    "src": "resources/jidox/fonts/bootstrap-icons.woff"
-  },
-  "resources/jidox/fonts/bootstrap-icons.woff2": {
-    "file": "assets/bootstrap-icons-Drp84nVS.woff2",
-    "src": "resources/jidox/fonts/bootstrap-icons.woff2"
-  },
-  "resources/jidox/fonts/remixicon.eot": {
-    "file": "assets/remixicon-CsbJS0Nd.eot",
-    "src": "resources/jidox/fonts/remixicon.eot"
-  },
-  "resources/jidox/fonts/remixicon.svg": {
-    "file": "assets/remixicon-DV9onB9s.svg",
-    "src": "resources/jidox/fonts/remixicon.svg"
-  },
-  "resources/jidox/fonts/remixicon.ttf": {
-    "file": "assets/remixicon-DdzasgUs.ttf",
-    "src": "resources/jidox/fonts/remixicon.ttf"
-  },
-  "resources/jidox/fonts/remixicon.woff": {
-    "file": "assets/remixicon-2iUEOVAH.woff",
-    "src": "resources/jidox/fonts/remixicon.woff"
-  },
-  "resources/jidox/fonts/remixicon.woff2": {
-    "file": "assets/remixicon-BBTkVcFJ.woff2",
-    "src": "resources/jidox/fonts/remixicon.woff2"
-  },
-  "resources/jidox/js/app.js": {
-    "file": "assets/app-me-0_dge.js",
-    "name": "app",
-    "src": "resources/jidox/js/app.js",
-    "isEntry": true,
-    "imports": [
-      "_jquery-B2lLd13k.js"
-    ]
-  },
-  "resources/jidox/js/head.js": {
-    "file": "assets/head-DbjR0UZl.js",
-    "name": "head",
-    "src": "resources/jidox/js/head.js",
-    "isEntry": true,
-    "imports": [
-      "_jquery-B2lLd13k.js",
-      "_moment-QfiTXYh-.js"
-    ]
-  },
-  "resources/jidox/js/layout.js": {
-    "file": "assets/layout-C416KBGN.js",
-    "name": "layout",
-    "src": "resources/jidox/js/layout.js",
-    "isEntry": true
-  },
-  "resources/jidox/js/pages/demo.dashboard.js": {
-    "file": "assets/demo.dashboard-DnBQhuO3.js",
-    "name": "demo.dashboard",
-    "src": "resources/jidox/js/pages/demo.dashboard.js",
-    "isEntry": true,
-    "imports": [
-      "_jquery-B2lLd13k.js",
-      "_moment-QfiTXYh-.js"
-    ]
-  },
-  "resources/jidox/scss/app.scss": {
-    "file": "assets/app-DvZX5cVj.css",
-    "src": "resources/jidox/scss/app.scss",
-    "isEntry": true,
-    "name": "app",
-    "names": [
-      "app.css"
-    ]
-  },
-  "resources/jidox/scss/icons.scss": {
-    "file": "assets/icons-BWTSOvNq.css",
-    "src": "resources/jidox/scss/icons.scss",
-    "isEntry": true,
-    "name": "icons",
-    "names": [
-      "icons.css"
-    ]
   },
   "resources/js/app.js": {
     "file": "assets/app-BzV5saVy.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
+  },
+  "resources/newkirk/fonts/bootstrap-icons.woff": {
+    "file": "assets/bootstrap-icons-D8ioIzQS.woff",
+    "src": "resources/newkirk/fonts/bootstrap-icons.woff"
+  },
+  "resources/newkirk/fonts/bootstrap-icons.woff2": {
+    "file": "assets/bootstrap-icons-Drp84nVS.woff2",
+    "src": "resources/newkirk/fonts/bootstrap-icons.woff2"
+  },
+  "resources/newkirk/fonts/remixicon.eot": {
+    "file": "assets/remixicon-CsbJS0Nd.eot",
+    "src": "resources/newkirk/fonts/remixicon.eot"
+  },
+  "resources/newkirk/fonts/remixicon.svg": {
+    "file": "assets/remixicon-DV9onB9s.svg",
+    "src": "resources/newkirk/fonts/remixicon.svg"
+  },
+  "resources/newkirk/fonts/remixicon.ttf": {
+    "file": "assets/remixicon-DdzasgUs.ttf",
+    "src": "resources/newkirk/fonts/remixicon.ttf"
+  },
+  "resources/newkirk/fonts/remixicon.woff": {
+    "file": "assets/remixicon-2iUEOVAH.woff",
+    "src": "resources/newkirk/fonts/remixicon.woff"
+  },
+  "resources/newkirk/fonts/remixicon.woff2": {
+    "file": "assets/remixicon-BBTkVcFJ.woff2",
+    "src": "resources/newkirk/fonts/remixicon.woff2"
+  },
+  "resources/newkirk/js/app.js": {
+    "file": "assets/app-me-0_dge.js",
+    "name": "app",
+    "src": "resources/newkirk/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-B2lLd13k.js"
+    ]
+  },
+  "resources/newkirk/js/head.js": {
+    "file": "assets/head-D70Tn8fQ.js",
+    "name": "head",
+    "src": "resources/newkirk/js/head.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-B2lLd13k.js",
+      "_moment-QfiTXYh-.js"
+    ]
+  },
+  "resources/newkirk/js/layout.js": {
+    "file": "assets/layout-z1nR1KPF.js",
+    "name": "layout",
+    "src": "resources/newkirk/js/layout.js",
+    "isEntry": true
+  },
+  "resources/newkirk/js/pages/demo.dashboard.js": {
+    "file": "assets/demo.dashboard-DnBQhuO3.js",
+    "name": "demo.dashboard",
+    "src": "resources/newkirk/js/pages/demo.dashboard.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-B2lLd13k.js",
+      "_moment-QfiTXYh-.js"
+    ]
+  },
+  "resources/newkirk/scss/app.scss": {
+    "file": "assets/app-DvZX5cVj.css",
+    "src": "resources/newkirk/scss/app.scss",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/newkirk/scss/icons.scss": {
+    "file": "assets/icons-BWTSOvNq.css",
+    "src": "resources/newkirk/scss/icons.scss",
+    "isEntry": true,
+    "name": "icons",
+    "names": [
+      "icons.css"
+    ]
   }
 }

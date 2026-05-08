@@ -191,7 +191,7 @@
                     <div class="px-4 py-3 border-top bg-light/30">
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="text-muted fs-12 mb-0">Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} of {{ $products->total() }} results</p>
-                            <div class="pagination-jidox">
+                            <div class="pagination-newkirk">
                                 {{ $products->links() }}
                             </div>
                         </div>
@@ -224,12 +224,12 @@
         border-color: #0f172a;
     }
 
-    /* Fix Laravel Pagination for Jidox */
-    .pagination-jidox .pagination {
+    /* Fix Laravel Pagination for NewKirk */
+    .pagination-newkirk .pagination {
         margin-bottom: 0;
         gap: 5px;
     }
-    .pagination-jidox .page-link {
+    .pagination-newkirk .page-link {
         border-radius: 8px !important;
         padding: 8px 14px;
         font-size: 12px;
@@ -237,7 +237,7 @@
         color: #475569;
         border: 1px solid #e2e8f0;
     }
-    .pagination-jidox .page-item.active .page-link {
+    .pagination-newkirk .page-item.active .page-link {
         background-color: #0f172a;
         border-color: #0f172a;
         color: white;
@@ -314,3 +314,5 @@
     }
 </script>
 @endsection
+
+

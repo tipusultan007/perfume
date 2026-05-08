@@ -1,4 +1,4 @@
-@extends('admin.layouts.jidox.vertical', ['page_title' => $title ?? 'Admin Dashboard', 'mode' => $mode ?? '', 'demo' => $demo ?? ''])
+@extends('admin.layouts.newkirk.vertical', ['page_title' => $title ?? 'Admin Dashboard', 'mode' => $mode ?? '', 'demo' => $demo ?? ''])
 
 @section('css')
     @yield('styles')
@@ -12,3 +12,4 @@
 @section('script')
     @yield('scripts')
 @endsection
+

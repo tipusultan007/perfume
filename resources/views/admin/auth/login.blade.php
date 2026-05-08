@@ -1,4 +1,4 @@
-@extends('admin.layouts.jidox.shared.layout-auth', ['title' => 'Log In'])
+@extends('admin.layouts.newkirk.shared.layout-auth', ['title' => 'Log In'])
 
 @section('content')
 <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
@@ -81,3 +81,4 @@
 </div>
 <!-- end page -->
 @endsection
+

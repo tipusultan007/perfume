@@ -270,7 +270,7 @@
                 datasets: [{
                     label: 'Revenue',
                     data: @json($revenues),
-                    borderColor: '#4254ba', // Jidox primary
+                    borderColor: '#4254ba', // NewKirk primary
                     backgroundColor: gradient,
                     borderWidth: 2,
                     tension: 0.4,
@@ -332,3 +332,4 @@
     });
 </script>
 @endsection
+

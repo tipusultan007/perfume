@@ -80,7 +80,7 @@
                 </div>
                 @if($subscribers->hasPages())
                 <div class="card-footer bg-light/30 border-top py-3">
-                    <div class="pagination-jidox">
+                    <div class="pagination-newkirk">
                         {{ $subscribers->appends(request()->query())->links() }}
                     </div>
                 </div>
@@ -168,7 +168,7 @@
                 </div>
                 @if($campaigns->hasPages())
                 <div class="card-footer bg-light/30 border-top py-3">
-                    <div class="pagination-jidox">
+                    <div class="pagination-newkirk">
                         {{ $campaigns->appends(request()->query())->links() }}
                     </div>
                 </div>
@@ -195,12 +195,12 @@
     .bg-soft-primary { background-color: rgba(59, 130, 246, 0.1); }
     .bg-soft-secondary { background-color: rgba(100, 116, 139, 0.1); }
 
-    /* Fix Laravel Pagination for Jidox */
-    .pagination-jidox .pagination {
+    /* Fix Laravel Pagination for NewKirk */
+    .pagination-newkirk .pagination {
         margin-bottom: 0;
         gap: 5px;
     }
-    .pagination-jidox .page-link {
+    .pagination-newkirk .page-link {
         border-radius: 8px !important;
         padding: 8px 14px;
         font-size: 12px;
@@ -208,7 +208,7 @@
         color: #475569;
         border: 1px solid #e2e8f0;
     }
-    .pagination-jidox .page-item.active .page-link {
+    .pagination-newkirk .page-item.active .page-link {
         background-color: #0f172a;
         border-color: #0f172a;
         color: white;
@@ -241,3 +241,5 @@
     }
 </script>
 @endsection
+
+
