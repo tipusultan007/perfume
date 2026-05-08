@@ -526,7 +526,7 @@
                                 <div class="security-badge-text">
                                     <div class="d-flex align-items-center gap-2 mb-1">
                                         <strong>Secure Payment by</strong>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Clover_mobile_app_Logo.svg/2560px-Clover_mobile_app_Logo.svg.png" alt="Clover" class="clover-logo-sm">
+                                        <img src="{{ asset('newkirk/images/clover-logo.png') }}" alt="Clover" class="clover-logo-sm">
                                     </div>
                                     Your security is our priority. Your card information never touches our servers and is fully encrypted through Clover's secure processing.
                                 </div>
