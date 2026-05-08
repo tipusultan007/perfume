@@ -25,7 +25,7 @@ class SiteStatusMiddleware
         }
 
         // Always allow admin access
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
+        if (Auth::guard('admin')->check() || (Auth::check() && Auth::user()->hasRole('admin'))) {
             return $next($request);
         }
 
@@ -35,12 +35,12 @@ class SiteStatusMiddleware
         }
 
         // Allow access to admin login/dashboard (in case admin is not logged in)
-        if ($request->is('admin*') || $request->is('login') || $request->is('logout')) {
+        if ($request->is('newkirk-management*') || $request->is('admin*') || $request->is('login*') || $request->is('logout*')) {
             return $next($request);
         }
         
         // Allow access to compiled assets
-        if ($request->is('build/*') || $request->is('storage/*') || $request->is('vendor/*')) {
+        if ($request->is('build/*') || $request->is('storage/*') || $request->is('vendor/*') || $request->is('images/*') || $request->is('css/*') || $request->is('js/*')) {
             return $next($request);
         }
 
