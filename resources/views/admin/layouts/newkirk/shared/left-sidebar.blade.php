@@ -146,6 +146,13 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{ route('admin.reviews.index') }}" class="side-nav-link">
+                    <i class="ri-feedback-line"></i>
+                    <span> Product Reviews </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a href="{{ route('admin.contact-submissions.index') }}" class="side-nav-link">
                     <i class="ri-question-answer-line"></i>
                     <span> Contact Inquiries </span>

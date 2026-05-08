@@ -11,16 +11,27 @@
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <form class="d-flex">
+                    <div class="dropdown ms-2">
+                        <button class="btn btn-soft-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="ri-settings-line me-1"></i> System Fixes
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item text-danger" href="{{ route('admin.storage.link') }}" onclick="return confirm('This will attempt to fix the storage link for images. Proceed?')">
+                                <i class="ri-links-line me-1"></i> Fix Storage Link
+                            </a>
+                            <a class="dropdown-item" href="{{ route('admin.settings.clear-cache') }}" onclick="event.preventDefault(); document.getElementById('clear-cache-form').submit();">
+                                <i class="ri-refresh-line me-1"></i> Clear Cache
+                            </a>
+                        </div>
+                    </div>
+                    <form id="clear-cache-form" action="{{ route('admin.settings.clear-cache') }}" method="POST" class="d-none">@csrf</form>
+                    <form class="d-flex ms-2">
                         <div class="input-group">
                             <input type="text" class="form-control form-control-light" id="dash-daterange">
                             <span class="input-group-text bg-primary border-primary text-white">
                                 <i class="ri-calendar-todo-fill fs-13"></i>
                             </span>
                         </div>
-                        <a href="javascript: void(0);" class="btn btn-primary ms-2">
-                            <i class="ri-refresh-line"></i>
-                        </a>
                     </form>
                 </div>
                 <h4 class="page-title">Dashboard</h4>

@@ -31,8 +31,9 @@ class ReviewController extends Controller
         $review->user_name = $user->name;
         $review->user_email = $user->email;
         $review->variant_name = $user->getPurchasedVariantName($product);
+        $review->status = 'pending';
         $review->save();
 
-        return back()->with('success', 'Thank you for your review!');
+        return back()->with('success', 'Thank you! Your review has been submitted and is awaiting approval.');
     }
 }

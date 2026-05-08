@@ -152,35 +152,45 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
             Route::get('/customers', [\App\Http\Controllers\Admin\ReportController::class, 'customers'])->name('customers');
         });
 
+        // Reviews
+        Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)->only(['index', 'destroy']);
+        Route::post('reviews/{review}/toggle-approval', [\App\Http\Controllers\Admin\ReviewController::class, 'toggleApproval'])->name('reviews.toggle-approval');
+
         // Contact Submissions
         Route::resource('contact-submissions', \App\Http\Controllers\Admin\ContactSubmissionController::class)->only(['index', 'show', 'destroy']);
     });
 });
 
 require __DIR__.'/auth.php';
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:admin'])->prefix('newkirk-management')->group(function () {
     Route::get('/create-storage-link', function () {
         try {
-            // Check if symlink already exists
-            if (file_exists(public_path('storage'))) {
-                // Remove existing symlink if it exists
-                if (is_link(public_path('storage'))) {
-                    unlink(public_path('storage'));
+            $storagePath = storage_path('app/public');
+            $publicPath = public_path('storage');
+
+            if (file_exists($publicPath)) {
+                if (is_link($publicPath)) {
+                    unlink($publicPath);
                 } else {
-                    return "A 'storage' directory already exists in public folder (not a symlink).";
+                    // It's a directory, rename it to preserve data just in case
+                    rename($publicPath, $publicPath . '_old_' . time());
                 }
             }
 
-            // Create the symlink
-            Artisan::call('storage:link');
-
-            // Get the output
-            $output = Artisan::output();
-
-            return "Storage link created successfully!<br>" . nl2br($output);
+            // Try Artisan first
+            try {
+                Artisan::call('storage:link');
+                return "Storage link created successfully via Artisan!<br><a href='".route('admin.dashboard')."'>Go to Dashboard</a>";
+            } catch (\Exception $e) {
+                // Try manual symlink
+                if (symlink($storagePath, $publicPath)) {
+                    return "Storage link created successfully via manual symlink!<br><a href='".route('admin.dashboard')."'>Go to Dashboard</a>";
+                }
+                throw $e;
+            }
 
         } catch (\Exception $e) {
-            return "Error: " . $e->getMessage();
+            return "Error creating storage link: " . $e->getMessage() . "<br>Please ensure your hosting allows symlinks.";
         }
-    })->name('storage.link');
+    })->name('admin.storage.link');
 });
