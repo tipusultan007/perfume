@@ -3,117 +3,143 @@
 @section('title', 'Products Report')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Products Report</h1>
-            <p class="text-slate-500 font-medium mt-1">Inventory health and top-performing product analysis</p>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">NewKirk</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.reports.index') }}">Reports</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Inventory & Performance</h4>
+            </div>
         </div>
-        <a href="{{ route('admin.reports.index') }}" 
-            class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-            <i class="ri-arrow-left-line text-lg"></i>
-        </a>
     </div>
+    <!-- end page title -->
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <div class="row">
         <!-- Best Sellers -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-                <h3 class="text-lg font-bold text-slate-900">Top 10 Best Sellers</h3>
-                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] uppercase font-bold tracking-widest rounded-lg border border-emerald-100">By Quantity</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
-                            <th class="px-8 py-5">Product</th>
-                            <th class="px-8 py-5 text-right">Sold</th>
-                            <th class="px-8 py-5 text-right">Revenue</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        @forelse($bestSellers as $index => $item)
-                        <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-all group">
-                            <td class="px-8 py-6 flex items-center gap-4">
-                                <span class="w-7 h-7 flex items-center justify-center bg-slate-50 text-slate-400 font-mono text-[10px] font-bold rounded border border-slate-100 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 transition-all">
-                                    #{{ $index + 1 }}
-                                </span>
-                                <span class="font-bold text-slate-900">{{ $item->product_name }}</span>
-                            </td>
-                            <td class="px-8 py-6 text-right font-bold text-slate-700">
-                                <span class="px-3 py-1 bg-slate-50 rounded-lg border border-slate-100">{{ number_format($item->total_qty) }}</span>
-                            </td>
-                            <td class="px-8 py-6 text-right">
-                                <span class="font-bold text-slate-900">${{ number_format($item->total_revenue, 2) }}</span>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="px-8 py-20 text-center text-slate-400">
-                                <div class="flex flex-col items-center gap-4">
-                                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center">
-                                        <i class="ri-shopping-basket-line text-3xl text-slate-200"></i>
-                                    </div>
-                                    <p class="text-sm font-bold uppercase tracking-widest">No sales data recorded yet</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light/30 border-bottom d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0 fs-13 text-uppercase fw-bold tracking-widest text-dark">Top 10 Best Sellers</h5>
+                    <span class="badge bg-soft-success text-success fs-10 fw-bold px-2 py-1 rounded text-uppercase tracking-widest">By Quantity</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light/50">
+                                <tr class="text-muted fw-bold text-uppercase fs-10 tracking-widest border-top-0">
+                                    <th class="ps-4 py-3">Product</th>
+                                    <th class="text-end py-3">Sold</th>
+                                    <th class="text-end pe-4 py-3">Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($bestSellers as $index => $item)
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <span class="avatar-sm bg-light text-dark fw-mono fs-10 fw-bold rounded d-flex align-items-center justify-content-center border">
+                                                #{{ $index + 1 }}
+                                            </span>
+                                            <span class="fw-bold text-dark fs-13">{{ $item->product_name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="badge bg-light text-dark border px-2 py-1 fs-11 fw-bold">{{ number_format($item->total_qty) }}</span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <span class="fw-bold text-dark fs-14">${{ number_format($item->total_revenue, 2) }}</span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center py-5 text-muted opacity-50">
+                                        <i class="ri-shopping-basket-line fs-32 mb-2 d-block"></i>
+                                        <p class="fs-11 fw-bold text-uppercase tracking-widest mb-0">No sales data recorded yet</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Low Stock -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-rose-50/30">
-                <h3 class="text-lg font-bold text-rose-900">Low Stock Alerts</h3>
-                <span class="px-3 py-1 bg-rose-100 text-rose-600 text-[10px] uppercase font-bold tracking-widest rounded-lg border border-rose-200">Qty <= 10</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] uppercase tracking-[0.15em] text-slate-500 font-bold">
-                            <th class="px-8 py-5">Product</th>
-                            <th class="px-8 py-5 text-right">Stock</th>
-                            <th class="px-8 py-5 text-right">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        @forelse($lowStockProducts as $product)
-                        <tr class="border-b border-slate-50 hover:bg-rose-50/20 transition-all group">
-                            <td class="px-8 py-6 font-bold text-slate-900">{{ $product->name }}</td>
-                            <td class="px-8 py-6 text-right">
-                                <span class="font-bold {{ $product->stock_quantity == 0 ? 'text-rose-600' : 'text-amber-600' }}">
-                                    {{ $product->stock_quantity }}
-                                </span>
-                            </td>
-                            <td class="px-8 py-6 text-right">
-                                @if($product->stock_quantity == 0)
-                                    <span class="px-3 py-1 bg-rose-100 text-rose-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-rose-200 shadow-sm">Out of Stock</span>
-                                @else
-                                    <span class="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-amber-200 shadow-sm">Priority Restock</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="px-8 py-20 text-center text-slate-400">
-                                <div class="flex flex-col items-center gap-4">
-                                    <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center">
-                                        <i class="ri-checkbox-circle-line text-3xl text-emerald-400"></i>
-                                    </div>
-                                    <p class="text-sm font-bold uppercase tracking-widest">Inventory is healthy</p>
-                                    <p class="text-xs -mt-2">No low stock items found</p>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        <!-- Low Stock Alerts -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-soft-danger-header border-bottom d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0 fs-13 text-uppercase fw-bold tracking-widest text-danger">Low Stock Alerts</h5>
+                    <span class="badge bg-danger text-white fs-10 fw-bold px-2 py-1 rounded text-uppercase tracking-widest">Qty <= 10</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light/50">
+                                <tr class="text-muted fw-bold text-uppercase fs-10 tracking-widest border-top-0">
+                                    <th class="ps-4 py-3">Product</th>
+                                    <th class="text-end py-3">Stock</th>
+                                    <th class="text-end pe-4 py-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($lowStockProducts as $product)
+                                <tr>
+                                    <td class="ps-4 py-3">
+                                        <span class="fw-bold text-dark fs-13">{{ $product->name }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="fw-bold {{ $product->stock_quantity == 0 ? 'text-danger' : 'text-warning' }} fs-14">
+                                            {{ $product->stock_quantity }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        @if($product->stock_quantity == 0)
+                                            <span class="badge bg-soft-danger text-danger px-2 py-1 rounded-pill fs-9 fw-bold text-uppercase tracking-widest">Out of Stock</span>
+                                        @else
+                                            <span class="badge bg-soft-warning text-warning px-2 py-1 rounded-pill fs-9 fw-bold text-uppercase tracking-widest">Priority Restock</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center py-5 text-muted">
+                                        <i class="ri-checkbox-circle-line fs-32 text-success opacity-50 mb-2 d-block"></i>
+                                        <p class="fs-11 fw-bold text-uppercase tracking-widest mb-0 text-success">Inventory is healthy</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .fs-9 { font-size: 9px !important; }
+    .fs-10 { font-size: 10px !important; }
+    .fs-11 { font-size: 11px !important; }
+    .fs-13 { font-size: 13px !important; }
+    .fs-14 { font-size: 14px !important; }
+    .fs-32 { font-size: 32px !important; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    
+    .bg-soft-success { background-color: rgba(16, 185, 129, 0.1); }
+    .bg-soft-danger { background-color: rgba(239, 68, 68, 0.1); }
+    .bg-soft-warning { background-color: rgba(245, 158, 11, 0.1); }
+    .bg-soft-danger-header { background-color: rgba(239, 68, 68, 0.05); }
+    
+    .avatar-sm { width: 32px; height: 32px; }
+</style>
 @endsection
+

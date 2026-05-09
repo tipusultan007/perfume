@@ -49,7 +49,8 @@ class NewOrderNotification extends Notification implements ShouldQueue
             'order_number' => $this->order->order_number,
             'customer_name' => ($this->order->shipping_address['first_name'] ?? '') . ' ' . ($this->order->shipping_address['last_name'] ?? ''),
             'grand_total' => $this->order->grand_total,
-            'message' => "New order #{$this->order->order_number} received from " . ($this->order->shipping_address['first_name'] ?? 'Customer'),
+            'title' => 'New Order Received',
+            'message' => "Order #{$this->order->order_number} has been placed by " . ($this->order->shipping_address['first_name'] ?? 'Customer') . ".",
             'type' => 'order_success'
         ];
     }

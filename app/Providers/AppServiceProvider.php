@@ -73,5 +73,12 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('activePopups', $activePopups);
         });
+
+        \Illuminate\Support\Facades\View::composer('admin.*', function ($view) {
+            if (auth('admin')->check()) {
+                $view->with('unreadNotifications', auth('admin')->user()->unreadNotifications);
+                $view->with('unreadNotificationsCount', auth('admin')->user()->unreadNotifications()->count());
+            }
+        });
     }
 }
