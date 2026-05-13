@@ -1,60 +1,79 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Edit Attribute')
-@section('page_title', 'Update Attribute')
 
 @section('content')
-<div class="max-w-2xl">
-    <div class="flex items-center gap-4 mb-10">
-        <a href="{{ route('admin.attributes.index') }}" class="w-10 h-10 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-            <i class="ri-arrow-left-line"></i>
-        </a>
-        <h3 class="font-bold text-2xl text-slate-900">Edit Attribute: <span class="text-slate-400 font-medium">{{ $attribute->name }}</span></h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.attributes.index') }}">Attributes</a></li>
+                        <li class="breadcrumb-item active">Edit Attribute</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Edit Attribute: {{ $attribute->name }}</h4>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white border border-slate-200 p-10 rounded-xl shadow-sm">
-        <form action="{{ route('admin.attributes.update', $attribute) }}" method="POST" class="space-y-8">
-            @csrf
-            @method('PUT')
-            <div>
-                <label class="block text-[10px] uppercase tracking-widest mb-3 text-slate-500 font-bold">Attribute Name</label>
-                <input type="text" name="name" value="{{ old('name', $attribute->name) }}" required
-                    class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
-                @error('name')
-                    <span class="text-rose-500 text-[10px] mt-2 block font-bold tracking-widest">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <label class="block text-[10px] uppercase tracking-widest mb-4 text-slate-500 font-bold tracking-widest">Attribute Values</label>
-                <div id="values-container" class="space-y-3">
-                    @foreach($attribute->values as $index => $val)
-                    <div class="flex items-center gap-3">
-                        <div class="relative flex-1">
-                            <input type="text" name="values[]" value="{{ $val->value }}" required
-                                class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
-                        </div>
-                        <button type="button" @if($index > 0) onclick="this.parentElement.remove()" @endif 
-                            class="w-12 h-12 flex items-center justify-center rounded-lg transition-all shadow-sm {{ $index == 0 ? 'bg-slate-50 text-slate-200 cursor-not-allowed' : 'bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white' }}">
-                            <i class="ri-delete-bin-line text-lg"></i>
-                        </button>
-                    </div>
-                    @endforeach
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0 fs-15 text-uppercase tracking-wider">Update Details</h5>
+                    <a href="{{ route('admin.attributes.index') }}" class="btn btn-light btn-sm">
+                        <i class="ri-arrow-left-line me-1"></i> Back
+                    </a>
                 </div>
-                <button type="button" onclick="addValueField()" class="mt-6 px-4 py-2 bg-slate-50 border border-slate-200 text-[10px] uppercase tracking-widest text-slate-600 font-bold rounded-lg hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all flex items-center shadow-sm">
-                    <i class="ri-add-line mr-2 text-sm"></i> Add Another Value
-                </button>
-                @error('values')
-                    <span class="text-rose-500 text-[10px] mt-2 block font-bold tracking-widest">{{ $message }}</span>
-                @enderror
-            </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.attributes.update', $attribute) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-muted fs-11 text-uppercase tracking-widest fw-bold">Attribute Name</label>
+                            <input type="text" name="name" value="{{ old('name', $attribute->name) }}" required
+                                class="form-control form-control-lg fs-14">
+                            @error('name')
+                                <div class="text-danger fs-11 mt-1 fw-bold text-uppercase tracking-wider">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-            <div class="pt-6 border-t border-slate-100 mt-10">
-                <button type="submit" class="w-full py-4 bg-slate-900 text-white text-[11px] uppercase tracking-widest font-bold rounded-lg hover:bg-slate-800 transition-all shadow-xl">
-                    Update Attribute
-                </button>
+                        <div class="mb-4">
+                            <label class="form-label text-muted fs-11 text-uppercase tracking-widest fw-bold d-block border-bottom pb-2 mb-3">Attribute Values</label>
+                            <div id="values-container">
+                                @foreach($attribute->values as $index => $val)
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <input type="text" name="values[]" value="{{ $val->value }}" required
+                                        class="form-control fs-14">
+                                    <button type="button" @if($index > 0) onclick="this.parentElement.remove()" @endif 
+                                        class="btn {{ $index == 0 ? 'btn-soft-secondary disabled' : 'btn-soft-danger' }}" style="width: 45px; height: 38px;">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            
+                            <button type="button" onclick="addValueField()" class="btn btn-soft-dark btn-sm mt-2 fw-bold text-uppercase fs-10 tracking-widest">
+                                <i class="ri-add-line me-1"></i> Add Another Value
+                            </button>
+                            
+                            @error('values')
+                                <div class="text-danger fs-11 mt-1 fw-bold text-uppercase tracking-wider">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="pt-3">
+                            <button type="submit" class="btn btn-dark w-100 py-3 text-uppercase tracking-widest fs-11 fw-bold shadow-lg">
+                                <i class="ri-refresh-line me-1"></i> Update Attribute
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 @endsection
@@ -64,17 +83,20 @@
     function addValueField() {
         const container = document.getElementById('values-container');
         const div = document.createElement('div');
-        div.className = 'flex items-center gap-3 group animate-in slide-in-from-top-2 duration-300';
+        div.className = 'd-flex align-items-center gap-2 mb-2 animate__animated animate__fadeInDown animate__faster';
         div.innerHTML = `
-            <div class="relative flex-1">
-                <input type="text" name="values[]" required placeholder="Value"
-                    class="w-full px-5 py-4 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 outline-none transition-all text-sm text-slate-900 font-medium">
-            </div>
-            <button type="button" onclick="this.parentElement.remove()" class="w-12 h-12 flex items-center justify-center bg-rose-50 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all shadow-sm">
-                <i class="ri-delete-bin-line text-lg"></i>
+            <input type="text" name="values[]" required placeholder="Value" class="form-control fs-14">
+            <button type="button" onclick="this.parentElement.remove()" class="btn btn-soft-danger" style="width: 45px; height: 38px;">
+                <i class="ri-delete-bin-line"></i>
             </button>
         `;
         container.appendChild(div);
     }
 </script>
+<style>
+    .btn-soft-secondary.disabled {
+        opacity: .5;
+        cursor: not-allowed;
+    }
+</style>
 @endsection
