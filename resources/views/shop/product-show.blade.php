@@ -425,7 +425,12 @@
                     @endif
                 </h1>
                 <div class="pdp-price" id="main-price-display">
-                    ${{ number_format($product->base_price, 2) }}
+                    @if($product->sale_price > 0)
+                        <span style="color: var(--clr-accent); font-weight: bold;">${{ number_format($product->sale_price, 2) }}</span>
+                        <span class="text-sm line-through opacity-40 ml-2 font-normal">${{ number_format($product->base_price, 2) }}</span>
+                    @else
+                        ${{ number_format($product->base_price, 2) }}
+                    @endif
                 </div>
 
                 <div class="pdp-description-short">
@@ -456,6 +461,7 @@
                     return [
                         'id' => $v->id,
                         'price' => $v->price,
+                        'sale_price' => $v->sale_price,
                         'attributes' => $v->attributeValues->pluck('id', 'attribute.name')
                     ];
                 })) }}">
@@ -796,7 +802,14 @@
         });
 
         if(match) {
-            if(priceDisplay) priceDisplay.innerText = '$' + parseFloat(match.price).toFixed(2);
+            if(priceDisplay) {
+                if(match.sale_price > 0) {
+                    priceDisplay.innerHTML = `<span style="color: var(--clr-accent); font-weight: bold;">$${parseFloat(match.sale_price).toFixed(2)}</span>
+                                              <span class="text-sm line-through opacity-40 ml-2 font-normal">$${parseFloat(match.price).toFixed(2)}</span>`;
+                } else {
+                    priceDisplay.innerText = '$' + parseFloat(match.price).toFixed(2);
+                }
+            }
             if(hiddenInput) hiddenInput.value = match.id;
             if(btn) { btn.disabled = false; btn.innerText = 'Add to Bag'; }
             if(errorMsg) errorMsg.classList.add('hidden');

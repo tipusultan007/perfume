@@ -1625,7 +1625,14 @@
             });
 
             if(match) {
-                if(priceDisplay) priceDisplay.innerText = '$' + parseFloat(match.price).toFixed(2);
+                if(priceDisplay) {
+                    if(match.sale_price > 0) {
+                        priceDisplay.innerHTML = `<span style="color: var(--clr-accent); font-weight: bold;">$${parseFloat(match.sale_price).toFixed(2)}</span>
+                                                  <span class="text-sm line-through opacity-40 ml-2 font-normal">$${parseFloat(match.price).toFixed(2)}</span>`;
+                    } else {
+                        priceDisplay.innerText = '$' + parseFloat(match.price).toFixed(2);
+                    }
+                }
                 if(hiddenInput) hiddenInput.value = match.id;
                 if(btn) { btn.disabled = false; btn.innerText = 'Add to Bag'; }
                 if(errorMsg) errorMsg.classList.add('hidden');

@@ -45,13 +45,6 @@ class CheckoutController extends Controller
         }
         
         $taxes = 0;
-        // ... Tax logic (omitted for brevity, keep existing if needed or assume user handles) ...
-        // Re-implementing simplified tax for context, assuming previous logic holds
-        // NOTE: For this update, I will keep tax as 0 unless explicitly integrated.
-        // But since I am replacing the block, I should carry over the tax logic if possible or simplify.
-        // Let's assume dynamic tax is minimal for now or previously defined. 
-        // Use the previous logic or a simplified version?
-        // Let's re-use the read logic carefully.
         
         if (\App\Models\Setting::get('tax_enabled', false)) {
              $shippingState = null;
@@ -112,8 +105,6 @@ class CheckoutController extends Controller
             $discount = $coupon->value;
         }
         
-        // Return simplified totals (client might reload or upd DOM)
-        // Ideally we would recalc everything (tax/total) but for AJAX simple feedback:
         return response()->json([
             'valid' => true,
             'message' => 'Coupon applied successfully!',
@@ -231,14 +222,14 @@ class CheckoutController extends Controller
              $product = \App\Models\Product::find($pId);
              if(!$product) continue;
              
-             $price = $product->base_price;
+             $price = $product->sale_price > 0 ? $product->sale_price : $product->base_price;
              $variantName = null;
              
              if ($vId) {
                  $variant = \App\Models\ProductVariant::find($vId);
                  // If variant exists, use its price
                  if($variant) {
-                     $price = $variant->price;
+                     $price = $variant->sale_price > 0 ? $variant->sale_price : $variant->price;
                      // Construct variant name (simplified)
                      $variantName = 'Variant'; 
                  }
@@ -425,7 +416,9 @@ class CheckoutController extends Controller
         return $items->map(function($item) {
              $product = $item->product;
              $variant = $item->variant;
-             $price = $variant ? $variant->price : $product->base_price;
+             $price = $variant 
+                ? ($variant->sale_price > 0 ? $variant->sale_price : $variant->price)
+                : ($product->sale_price > 0 ? $product->sale_price : $product->base_price);
              
              $options = '';
              if ($variant) {
@@ -455,12 +448,12 @@ class CheckoutController extends Controller
             
             $variant = null;
             $options = '';
-            $price = $product->base_price;
+            $price = $product->sale_price > 0 ? $product->sale_price : $product->base_price;
 
             if ($item['variant_id']) {
                 $variant = ProductVariant::with('attributeValues.attribute')->find($item['variant_id']);
                 if($variant) {
-                    $price = $variant->price;
+                    $price = $variant->sale_price > 0 ? $variant->sale_price : $variant->price;
                     $options = $variant->attributeValues->map(function($av) {
                         return $av->attribute->name . ': ' . $av->value;
                     })->join(', ');

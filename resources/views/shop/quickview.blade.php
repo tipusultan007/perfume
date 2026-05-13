@@ -10,6 +10,7 @@
         return [
             'id' => $variant->id,
             'price' => $variant->price,
+            'sale_price' => $variant->sale_price,
             'stock' => $variant->stock_quantity,
             'attributes' => $variant->attributeValues->mapWithKeys(function($av) {
                 return [$av->attribute->name => $av->id];
@@ -91,9 +92,19 @@
         <!-- Price -->
         <div class="text-xl mb-4 font-light tracking-wide text-gray-900" id="main-price-display">
             @if($product->product_type == 'variable')
-               From ${{ number_format($product->base_price, 2) }}
+                @if($product->sale_price > 0)
+                    From <span style="color: var(--clr-accent); font-weight: bold;">${{ number_format($product->sale_price, 2) }}</span>
+                    <span class="text-sm line-through opacity-40 ml-2 font-normal">${{ number_format($product->base_price, 2) }}</span>
+                @else
+                    From ${{ number_format($product->base_price, 2) }}
+                @endif
             @else
-               ${{ number_format($product->base_price, 2) }}
+                @if($product->sale_price > 0)
+                    <span style="color: var(--clr-accent); font-weight: bold;">${{ number_format($product->sale_price, 2) }}</span>
+                    <span class="text-sm line-through opacity-40 ml-2 font-normal">${{ number_format($product->base_price, 2) }}</span>
+                @else
+                    ${{ number_format($product->base_price, 2) }}
+                @endif
             @endif
         </div>
 

@@ -181,7 +181,9 @@ class CartController extends Controller
         return $items->map(function($item) {
              $product = $item->product;
              $variant = $item->variant;
-             $price = $variant ? $variant->price : $product->base_price;
+             $price = $variant 
+                ? ($variant->sale_price > 0 ? $variant->sale_price : $variant->price)
+                : ($product->sale_price > 0 ? $product->sale_price : $product->base_price);
              
              // Construct options string from DB relationships
              $options = '';
@@ -214,12 +216,12 @@ class CartController extends Controller
             
             $variant = null;
             $options = '';
-            $price = $product->base_price;
+            $price = $product->sale_price > 0 ? $product->sale_price : $product->base_price;
 
             if ($item['variant_id']) {
                 $variant = ProductVariant::with('attributeValues.attribute')->find($item['variant_id']);
                 if($variant) {
-                    $price = $variant->price;
+                    $price = $variant->sale_price > 0 ? $variant->sale_price : $variant->price;
                     $options = $variant->attributeValues->map(function($av) {
                         return $av->attribute->name . ': ' . $av->value;
                     })->join(', ');

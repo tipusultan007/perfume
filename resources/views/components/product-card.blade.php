@@ -5,6 +5,8 @@
     <div class="product-thumb">
         @if($badge)
             <span class="badge sale">{{ $badge }}</span>
+        @elseif($product->sale_price > 0)
+            <span class="badge sale">Sale</span>
         @elseif($product->stock_quantity < 5 && $product->stock_quantity > 0)
             <span class="badge sale">Low Stock</span>
         @elseif($product->created_at->gt(now()->subDays(7)))
@@ -56,9 +58,21 @@
             </div> --}}
             <div class="product-price mt-2">
                 @if($product->product_type == 'variable')
-                    <span class="price font-sans">From ${{ number_format($product->base_price, 2) }}</span>
+                    <span class="price font-sans">
+                        @if($product->sale_price > 0)
+                            From ${{ number_format($product->sale_price, 2) }}
+                            <span class="old-price font-sans text-xs line-through opacity-50 ml-1 font-normal">${{ number_format($product->base_price, 2) }}</span>
+                        @else
+                            From ${{ number_format($product->base_price, 2) }}
+                        @endif
+                    </span>
                 @else
-                    <span class="price font-sans">${{ number_format($product->base_price, 2) }}</span>
+                    @if($product->sale_price > 0)
+                        <span class="price font-sans">${{ number_format($product->sale_price, 2) }}</span>
+                        <span class="old-price font-sans text-xs line-through opacity-50 ml-1 font-normal">${{ number_format($product->base_price, 2) }}</span>
+                    @else
+                        <span class="price font-sans">${{ number_format($product->base_price, 2) }}</span>
+                    @endif
                 @endif
             </div>
         </div>
