@@ -27,7 +27,10 @@
                 <h4 class="header-title mb-0">Inventory Overview</h4>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin.products.import') }}" class="btn btn-soft-secondary fw-bold text-uppercase fs-11 tracking-wider">
-                        <i class="ri-upload-cloud-2-line me-1"></i> Import Products
+                        <i class="ri-upload-cloud-2-line me-1"></i> Import
+                    </a>
+                    <a href="{{ route('admin.products.export') }}" download="products.xlsx" class="btn btn-soft-success fw-bold text-uppercase fs-11 tracking-wider">
+                        <i class="ri-download-cloud-2-line me-1"></i> Export
                     </a>
                     <a href="{{ route('admin.products.create') }}" class="btn btn-dark fw-bold text-uppercase fs-11 tracking-wider">
                         <i class="ri-add-line me-1"></i> Add New Product

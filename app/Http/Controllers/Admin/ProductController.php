@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
+use App\Exports\ProductsExport;
 
 class ProductController extends Controller
 {
@@ -385,5 +386,11 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Import failed: ' . $e->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        Excel::store(new ProductsExport, 'products.xlsx', 'public');
+        return redirect('/storage/products.xlsx?v=' . time());
     }
 }

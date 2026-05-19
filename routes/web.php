@@ -99,6 +99,7 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
         Route::resource('attributes', AttributeController::class);
         Route::post('products/import', [ProductController::class, 'processImport'])->name('products.import.process');
         Route::get('products/import', [ProductController::class, 'import'])->name('products.import');
+        Route::get('products/export', [ProductController::class, 'export'])->name('products.export');
         Route::post('products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
         Route::resource('products', ProductController::class);
         Route::resource('sliders', SliderController::class);
