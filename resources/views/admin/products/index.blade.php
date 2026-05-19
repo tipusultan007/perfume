@@ -123,6 +123,15 @@
                                 <tr>
                                     <td class="ps-4 py-3">
                                         <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                @if($product->getFirstMediaUrl('featured'))
+                                                    <img src="{{ $product->getFirstMediaUrl('featured') }}" class="rounded border" style="width: 48px; height: 48px; object-fit: cover;" alt="{{ $product->name }}">
+                                                @else
+                                                    <div class="bg-light rounded border d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                                        <i class="ri-image-line text-muted fs-18"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
                                             <div class="flex-grow-1">
                                                 <h5 class="my-0 fs-14 fw-bold text-dark">{{ $product->name }}</h5>
                                                 <div class="d-flex align-items-center gap-2 mt-1">
