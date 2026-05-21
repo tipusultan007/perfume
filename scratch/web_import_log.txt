@@ -1,0 +1,12 @@
+=== PERFUME IMAGE IMPORTER STARTED ===
+Dry Run: NO
+Limit: 0
+
+Found 1 products missing a featured image.
+
+[1/1] Processing: ID 69 | Odyssey - MandarinSky
+      Found URL: https://nuestrasfragancias.com/wp-content/uploads/2023/04/Armaf-Odyssey-Mandarin-Sky-100ml-Eau-de-Parfum-EDP.webp
+      [FAIL] Failed to download image.
+
+=== COMPLETED ===
+Success: 0 | Fail: 1

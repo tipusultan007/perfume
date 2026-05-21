@@ -164,6 +164,147 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/newkirk-management/temp-run-import', function() {
+    ignore_user_abort(true);
+    set_time_limit(1800);
+    $limit = request('limit', 0);
+    $dryRun = request('dry_run', 1) == 1;
+    $includeGallery = request('include_gallery', 0) == 1;
+    
+    $logFile = base_path('scratch/web_import_log.txt');
+    file_put_contents($logFile, "=== PERFUME IMAGE IMPORTER STARTED ===\n");
+    file_put_contents($logFile, "Dry Run: " . ($dryRun ? "YES" : "NO") . "\n", FILE_APPEND);
+    file_put_contents($logFile, "Limit: $limit\n\n", FILE_APPEND);
+    
+    $queryBuilder = \App\Models\Product::whereDoesntHave('media', function($q) {
+        $q->where('collection_name', 'featured');
+    })->with('brand');
+
+    if ($limit > 0) {
+        $queryBuilder->take($limit);
+    }
+
+    $products = $queryBuilder->get();
+    $total = count($products);
+    
+    file_put_contents($logFile, "Found $total products missing a featured image.\n\n", FILE_APPEND);
+    
+    $get_vqd = function($query) {
+        $url = 'https://duckduckgo.com/?q=' . urlencode($query);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        $html = curl_exec($ch);
+        curl_close($ch);
+        if (!$html) return false;
+        if (preg_match('/vqd=([0-9-]+)/', $html, $matches)) return $matches[1];
+        if (preg_match('/vqd\s*[:=]\s*[\'"]([0-9-]+)[\'"]/', $html, $matches)) return $matches[1];
+        return false;
+    };
+
+    $get_image_results = function($query) use ($get_vqd) {
+        $vqd = $get_vqd($query);
+        if (!$vqd) return [];
+        $searchUrl = "https://duckduckgo.com/i.js?q=" . urlencode($query) . "&vqd=" . $vqd . "&o=json&l=wt-wt";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $searchUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        curl_setopt($ch, CURLOPT_REFERER, "https://duckduckgo.com/");
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        if (!$response) return [];
+        $data = json_decode($response, true);
+        return $data['results'] ?? [];
+    };
+
+    $download_image = function($url, $savePath) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+        $data = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($httpCode == 200 && $data) {
+            file_put_contents($savePath, $data);
+            return true;
+        }
+        return false;
+    };
+
+    $successCount = 0;
+    $failCount = 0;
+    $tempDir = storage_path('app/public/temp');
+    if (!is_dir($tempDir)) {
+        mkdir($tempDir, 0755, true);
+    }
+
+    foreach ($products as $index => $product) {
+        $num = $index + 1;
+        $brandName = $product->brand ? $product->brand->name : '';
+        $searchQuery = trim("$brandName {$product->name} perfume");
+        
+        file_put_contents($logFile, "[$num/$total] Processing: ID {$product->id} | {$product->name}\n", FILE_APPEND);
+        
+        $results = $get_image_results($searchQuery);
+        
+        if (empty($results)) {
+            file_put_contents($logFile, "      [FAIL] No image search results found.\n", FILE_APPEND);
+            $failCount++;
+            sleep(1);
+            continue;
+        }
+        
+        $featuredImgUrl = $results[0]['image'];
+        file_put_contents($logFile, "      Found URL: $featuredImgUrl\n", FILE_APPEND);
+        
+        if ($dryRun) {
+            file_put_contents($logFile, "      [DRY RUN] Would download and import.\n", FILE_APPEND);
+            $successCount++;
+        } else {
+            $extension = pathinfo(parse_url($featuredImgUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+            if (empty($extension)) $extension = 'jpg';
+            $extension = explode('?', $extension)[0];
+            if (strlen($extension) > 4 || empty($extension)) $extension = 'jpg';
+            
+            $tempFile = $tempDir . '/temp_web_featured_' . $product->id . '.' . $extension;
+            
+            if ($download_image($featuredImgUrl, $tempFile)) {
+                try {
+                    $product->clearMediaCollection('featured');
+                    $product->addMedia($tempFile)->toMediaCollection('featured');
+                    file_put_contents($logFile, "      [SUCCESS] Imported successfully.\n", FILE_APPEND);
+                    $successCount++;
+                } catch (\Exception $e) {
+                    file_put_contents($logFile, "      [FAIL] Failed to add media: " . $e->getMessage() . "\n", FILE_APPEND);
+                    $failCount++;
+                }
+            } else {
+                file_put_contents($logFile, "      [FAIL] Failed to download image.\n", FILE_APPEND);
+                $failCount++;
+            }
+        }
+        sleep(1);
+    }
+    
+    file_put_contents($logFile, "\n=== COMPLETED ===\nSuccess: $successCount | Fail: $failCount\n", FILE_APPEND);
+    return response()->json([
+        'status' => 'completed',
+        'success' => $successCount,
+        'fail' => $failCount,
+        'log' => file_get_contents($logFile)
+    ]);
+});
+
 Route::middleware(['auth:admin'])->prefix('newkirk-management')->group(function () {
     Route::get('/create-storage-link', function () {
         try {
