@@ -61,7 +61,7 @@ class PopupSeeder extends Seeder
             [
                 'title' => 'The Heritage Edit',
                 'subtitle' => 'Vintage Charm',
-                'description' => 'Rediscover the timeless elegance of classic floral notes. A collection inspired by 19th-century Parisian ateliers.',
+                'description' => 'Rediscover the timeless elegance of classic floral notes. A collection inspired by 19th-century Parisian studios.',
                 'link' => '/heritage',
                 'cta_text' => 'View History',
                 'template_id' => 'vintage-classic',

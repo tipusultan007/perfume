@@ -77,9 +77,9 @@
     <div class="container">
         <div class="logo">NewKirk</div>
         <div class="divider"></div>
-        <h1>Our atelier is<br>currently evolving.</h1>
+        <h1>Our boutique is<br>currently evolving.</h1>
         <p>We are refining our collection and will return shortly with fresh inspirations.</p>
-        <div class="status">Atelier Maintenance</div>
+        <div class="status">Boutique Maintenance</div>
     </div>
 </body>
 </html>

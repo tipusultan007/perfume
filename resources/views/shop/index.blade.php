@@ -435,7 +435,7 @@
 
 @section('content')
 <header class="collection-header">
-    <p class="mono">New York Atelier</p>
+    <p class="mono">New York Boutique</p>
     <h1>The Collection</h1>
 </header>
 

@@ -105,7 +105,8 @@
             .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 300px; }
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .split-section { flex-direction: column; text-align: center; gap: 40px; }
-            footer { grid-template-columns: 1fr 1fr; }
+            footer { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+            .footer-bottom { grid-column: span 3; }
         }
 
         @media (max-width: 768px) {
@@ -113,9 +114,54 @@
             .menu-toggle { display: flex; }
             .bento { grid-template-columns: 1fr; grid-auto-rows: 400px; padding: 10px; }
             .bento-1, .bento-2 { grid-column: span 1; grid-row: span 1; }
-            footer { grid-template-columns: 1fr; text-align: center; }
-            .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; }
+            footer { grid-template-columns: 1fr; text-align: left; gap: 35px; }
+            .footer-brand { text-align: center; align-items: center; }
+            .footer-brand p { max-width: 400px; margin: 0 auto; }
+            .footer-col h4 { margin-bottom: 15px; }
+            .footer-col h4::after { left: 0; transform: none; }
+            .footer-col ul li { justify-content: start; }
+            .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; text-align: center; }
+            .social-links { justify-content: center; }
+            .footer-newsletter-form { text-align: center; }
+            .footer-newsletter-form .input-group { justify-content: center; max-width: 320px; margin: 0 auto; }
             .section-padding { padding: 60px 5%; }
+            
+            /* Accordion overrides on Mobile */
+            .footer-col.footer-accordion-col h4 {
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                padding-bottom: 15px;
+            }
+            .footer-col.footer-accordion-col h4::after {
+                content: '\ea64'; /* remixicon arrow down */
+                font-family: 'remixicon';
+                font-size: 16px;
+                position: static;
+                width: auto;
+                height: auto;
+                background: transparent;
+                transition: transform 0.3s ease;
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .footer-col.footer-accordion-col.active h4::after {
+                transform: rotate(180deg);
+                color: var(--clr-accent);
+            }
+            .footer-col.footer-accordion-col ul {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                margin: 0;
+                opacity: 0;
+            }
+            .footer-col.footer-accordion-col.active ul {
+                max-height: 500px;
+                opacity: 1;
+                margin-top: 15px;
+            }
             
             /* --- Mobile Bottom Nav Styles --- */
             .mobile-bottom-nav {
@@ -795,48 +841,191 @@
 
         /* Footer */
         footer { 
-            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('{{ asset('images/footer-bg.png') }}');
+            background: linear-gradient(rgba(10, 10, 10, 0.95), rgba(10, 10, 10, 0.95)), url('{{ asset('images/footer-bg.png') }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: white; 
-            padding: 80px 5% 40px; 
+            color: rgba(255, 255, 255, 0.9); 
+            padding: 90px 8% 40px; 
             display: grid; 
-            grid-template-columns: 2fr 1fr 1fr 1fr; 
-            gap: 60px; 
+            grid-template-columns: 2fr 1fr 1fr 1.5fr 2fr; 
+            gap: 50px; 
             position: relative; 
+            font-family: var(--font-body);
         }
-        footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(181, 164, 139, 0.3), transparent); }
-        .footer-logo { font-family: 'Cormorant Garamond'; font-size: 36px; letter-spacing: 6px; margin-bottom: 25px; background: linear-gradient(135deg, #ffffff 0%, #b5a48b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .footer-col h4 { font-size: 18px;font-weight: 600; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 30px; color: var(--accent); position: relative; padding-bottom: 12px; }
-        .footer-col h4::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 1px; background: var(--accent); }
-        .footer-col ul li { margin-bottom: 14px; font-size: 15px; opacity: 0.7; transition: all 0.3s ease; display: flex; align-items: start; gap: 10px; }
-        .footer-col ul li i { color: var(--accent); font-size: 14px; opacity: 0.8; }
-        .footer-col ul li a:hover { opacity: 1; color: var(--accent); transform: translateX(5px); }
-        .footer-bottom { grid-column: span 4; display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; opacity: 0.6; }
+        footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent); }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .footer-logo { 
+            font-family: var(--font-logo); 
+            font-size: 32px; 
+            font-weight: 300;
+            letter-spacing: 5px; 
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-transform: uppercase;
+        }
+        
+        .footer-col h4 { 
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 500; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 25px; 
+            color: var(--clr-accent); 
+            position: relative; 
+            padding-bottom: 12px; 
+        }
+        .footer-col h4::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 25px; 
+            height: 1px; 
+            background: var(--clr-accent); 
+        }
+        
+        .footer-col ul {
+            padding-left: 0;
+            margin: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-col ul li { 
+            font-size: 14px; 
+            display: flex; 
+            align-items: start; 
+            gap: 8px; 
+            line-height: 1.4;
+        }
+        
+        .footer-col ul li i { 
+            color: var(--clr-accent); 
+            font-size: 14px; 
+            margin-top: 2px;
+        }
+        
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+        .footer-col ul li a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--clr-accent);
+            transform-origin: bottom right;
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .footer-col ul li a:hover { 
+            color: var(--clr-accent); 
+        }
+        .footer-col ul li a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .footer-newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .footer-newsletter-form .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: border-color 0.3s ease;
+        }
+        .footer-newsletter-form .input-group:focus-within {
+            border-color: var(--clr-accent);
+        }
+        .footer-newsletter-form input[type="email"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 10px 0;
+            color: white;
+            font-size: 13px;
+            font-family: var(--font-body);
+        }
+        .footer-newsletter-form input[type="email"]::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .footer-newsletter-form button {
+            background: transparent;
+            border: none;
+            color: var(--clr-accent);
+            padding: 0 10px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-newsletter-form button:hover {
+            color: white;
+            transform: translateX(4px);
+        }
+        .footer-newsletter-form button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .footer-bottom { 
+            grid-column: span 5; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-top: 30px; 
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            font-size: 13px; 
+            color: rgba(255, 255, 255, 0.5); 
+        }
 
         /* Social Icons Refinement */
-        .social-links { display: flex; gap: 15px; margin-top: 30px; }
+        .social-links { display: flex; gap: 12px; margin-top: 10px; }
         .social-link { 
-            width: 40px; 
-            height: 40px; 
+            width: 36px; 
+            height: 36px; 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             color: white;
             opacity: 0.7;
         }
         .social-link:hover { 
-            border-color: var(--accent); 
-            color: var(--accent) !important; 
+            border-color: var(--clr-accent); 
+            color: var(--clr-accent) !important; 
             opacity: 1; 
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             background: rgba(212, 175, 55, 0.05);
         }
-        .social-link i { font-size: 18px; }
+        .social-link i { font-size: 16px; }
 
         /* Utility */
         .section-padding { padding: 100px 8%; }
@@ -850,7 +1039,8 @@
             .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 300px; }
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .split-section { flex-direction: column; text-align: center; gap: 40px; }
-            footer { grid-template-columns: 1fr 1fr; }
+            footer { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+            .footer-bottom { grid-column: span 3; }
         }
 
         @media (max-width: 768px) {
@@ -858,9 +1048,54 @@
             .menu-toggle { display: flex; }
             .bento { grid-template-columns: 1fr; grid-auto-rows: 400px; padding: 10px; }
             .bento-1, .bento-2 { grid-column: span 1; grid-row: span 1; }
-            footer { grid-template-columns: 1fr; text-align: center; }
-            .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; }
+            footer { grid-template-columns: 1fr; text-align: left; gap: 35px; }
+            .footer-brand { text-align: center; align-items: center; }
+            .footer-brand p { max-width: 400px; margin: 0 auto; }
+            .footer-col h4 { margin-bottom: 15px; }
+            .footer-col h4::after { left: 0; transform: none; }
+            .footer-col ul li { justify-content: start; }
+            .footer-bottom { grid-column: span 1; flex-direction: column; gap: 20px; text-align: center; }
+            .social-links { justify-content: center; }
+            .footer-newsletter-form { text-align: center; }
+            .footer-newsletter-form .input-group { justify-content: center; max-width: 320px; margin: 0 auto; }
             .section-padding { padding: 60px 5%; }
+            
+            /* Accordion overrides on Mobile */
+            .footer-col.footer-accordion-col h4 {
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                padding-bottom: 15px;
+            }
+            .footer-col.footer-accordion-col h4::after {
+                content: '\ea64'; /* remixicon arrow down */
+                font-family: 'remixicon';
+                font-size: 16px;
+                position: static;
+                width: auto;
+                height: auto;
+                background: transparent;
+                transition: transform 0.3s ease;
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .footer-col.footer-accordion-col.active h4::after {
+                transform: rotate(180deg);
+                color: var(--clr-accent);
+            }
+            .footer-col.footer-accordion-col ul {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                margin: 0;
+                opacity: 0;
+            }
+            .footer-col.footer-accordion-col.active ul {
+                max-height: 500px;
+                opacity: 1;
+                margin-top: 15px;
+            }
             
             /* --- Mobile Bottom Nav Styles --- */
             .mobile-bottom-nav {
@@ -1122,7 +1357,7 @@
 
         <div class="mobile-search">
             <form action="{{ route('shop') }}" method="GET">
-                <input type="text" name="search" placeholder="SEARCH OUR ATELIER..." value="{{ request('search') }}">
+                <input type="text" name="search" placeholder="SEARCH OUR STORE..." value="{{ request('search') }}">
                 <button type="submit"><i class="ri-search-line"></i></button>
             </form>
         </div>
@@ -1191,7 +1426,7 @@
             <input 
                 type="text" 
                 class="search-input" 
-                placeholder="Search our atelier..." 
+                placeholder="Search our store..." 
                 x-model.debounce.300ms="query"
                 x-ref="searchInput"
                 @input="fetchResults()"
@@ -1229,57 +1464,92 @@
 
     <footer>
         <div class="footer-brand">
-            <div class="footer-logo">{{ \App\Models\Setting::get('site_name', 'NewKirk') }}</div>
-            <p class="text-sm opacity-60">{{ \App\Models\Setting::get('site_description', 'Curating the world\'s finest olfactory experiences.') }}</p>
-            <div class="social-links mt-8">
+            <div class="footer-logo">{{ \App\Models\Setting::get('site_name', 'Newkirk NYC') }}</div>
+            <p class="text-xs opacity-60 leading-relaxed">{{ \App\Models\Setting::get('site_description', 'Curating the world\'s finest olfactory experiences and luxury fragrance collections.') }}</p>
+            <div class="social-links mt-4">
                 @if($fb = \App\Models\Setting::get('social_facebook')) <a href="{{ $fb }}" target="_blank" class="social-link" title="Facebook"><i class="ri-facebook-fill"></i></a> @endif
                 @if($ig = \App\Models\Setting::get('social_instagram')) <a href="{{ $ig }}" target="_blank" class="social-link" title="Instagram"><i class="ri-instagram-line"></i></a> @endif
                 @if($tw = \App\Models\Setting::get('social_twitter')) <a href="{{ $tw }}" target="_blank" class="social-link" title="Twitter"><i class="ri-twitter-x-line"></i></a> @endif
                 @if($pt = \App\Models\Setting::get('social_pinterest')) <a href="{{ $pt }}" target="_blank" class="social-link" title="Pinterest"><i class="ri-pinterest-line"></i></a> @endif
             </div>
         </div>
-        <div class="footer-col">
-            <h4>Shop</h4>
+        
+        <div class="footer-col footer-accordion-col">
+            <h4>Discover</h4>
+            @php
+                $footerCategories = \App\Models\Category::take(5)->get();
+            @endphp
             <ul>
-                <li><a href="#">All Perfumes</a></li>
-                <li><a href="#">Attar / Oils</a></li>
-                <li><a href="#">Home Fragrance</a></li>
-                <li><a href="#">Gift Sets</a></li>
+                <li><a href="{{ route('shop') }}">All Collections</a></li>
+                @foreach($footerCategories as $cat)
+                    <li><a href="{{ route('shop', ['category' => $cat->slug]) }}">{{ $cat->name }}</a></li>
+                @endforeach
             </ul>
         </div>
-        <div class="footer-col">
-            <h4>Atelier</h4>
+        
+        <div class="footer-col footer-accordion-col">
+            <h4>The House</h4>
             <ul>
                 @foreach(\App\Models\Setting::get('nav_menu_json', []) as $link)
-                <li><a href="{{ $link['url'] }}">{{ $link['label'] }}</a></li>
+                    <li><a href="{{ $link['url'] }}">{{ $link['label'] }}</a></li>
                 @endforeach
-                <li><a href="#">Our Story</a></li>
-                <li><a href="#">Journal</a></li>
+                <li><a href="{{ route('shop') }}">Our Story</a></li>
+                <li><a href="{{ route('shop') }}">The Journal</a></li>
             </ul>
         </div>
-        <div class="footer-col">
-            <h4>Client Care</h4>
+        
+        <div class="footer-col footer-accordion-col">
+            <h4>Client Care & Legal</h4>
             <ul>
-                <li><i class="ri-message-line"></i> <a href="#">Contact Us</a></li>
-                @if($phone = \App\Models\Setting::get('contact_phone')) 
-                    <li><i class="ri-phone-line"></i> <a href="tel:{{ $phone }}">{{ $phone }}</a></li> 
-                @endif
-                @if($email = \App\Models\Setting::get('contact_email')) 
-                    <li><i class="ri-mail-line"></i> <a href="mailto:{{ $email }}">{{ $email }}</a></li> 
-                @endif
-                @if($addr = \App\Models\Setting::get('contact_address')) 
-                    <li>
-                        <i class="ri-map-pin-line"></i>
-                        <span class="text-xs opacity-70 leading-relaxed">{{ $addr }}</span>
-                    </li> 
-                @endif
+                <li><i class="ri-message-line"></i> <a href="{{ route('contact') }}">Contact Us</a></li>
+                <li><i class="ri-navigation-line"></i> <a href="{{ route('order.track') }}">Track Order</a></li>
+                <li><i class="ri-shield-check-line"></i> <a href="{{ route('authenticity') }}">Authenticity Guarantee</a></li>
+                <li><i class="ri-truck-line"></i> <a href="{{ route('shipping') }}">Shipping & Delivery</a></li>
+                <li><i class="ri-refund-2-line"></i> <a href="{{ route('refunds') }}">Returns & Refunds</a></li>
+                <li><i class="ri-body-scan-line"></i> <a href="{{ route('accessibility') }}">Accessibility Statement</a></li>
+                <li><i class="ri-lock-line"></i> <a href="{{ route('privacy') }}">Privacy Policy</a></li>
+                <li><i class="ri-file-text-line"></i> <a href="{{ route('terms') }}">Terms & Conditions</a></li>
             </ul>
         </div>
+        
+        <div class="footer-col">
+            <h4>Newsletter</h4>
+            <p class="text-xs opacity-60 leading-relaxed">Subscribe to receive updates on new olfactory creations and private boutique events.</p>
+            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="footer-newsletter-form" id="footerNewsletterForm">
+                @csrf
+                <div class="input-group">
+                    <input type="email" name="email" id="footerNewsletterEmail" placeholder="Your email address" required>
+                    <button type="submit" id="footerNewsletterSubmitBtn" title="Subscribe">
+                        <i class="ri-arrow-right-line"></i>
+                    </button>
+                </div>
+                <div id="footerNewsletterMessage" style="margin-top: 10px; font-size: 11px; display: none; font-family: var(--font-mono);"></div>
+            </form>
+            @if($phone = \App\Models\Setting::get('contact_phone') || $email = \App\Models\Setting::get('contact_email'))
+                <div class="footer-boutique-info mt-6 text-xs opacity-60 leading-relaxed" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px;">
+                    <strong>Customer Concierge</strong><br>
+                    @if($phone = \App\Models\Setting::get('contact_phone'))
+                        Tel: <a href="tel:{{ $phone }}" class="hover:text-accent">{{ $phone }}</a><br>
+                    @endif
+                    @if($email = \App\Models\Setting::get('contact_email'))
+                        Email: <a href="mailto:{{ $email }}" class="hover:text-accent">{{ $email }}</a>
+                    @endif
+                </div>
+            @endif
+        </div>
+        
         <div class="footer-bottom">
-            <div class="copyright-text">{{ \App\Models\Setting::get('footer_copyright', '© 2026 NewKirk NYC. All rights reserved.') }}</div>
-            <div class="footer-legal-links">
-                <a href="{{ route('privacy') }}">Privacy Policy</a>
-                <a href="{{ route('terms') }}">Terms & Conditions</a>
+            <div class="copyright-text">
+                {{ \App\Models\Setting::get('footer_copyright', '© 2026 Newkirk NYC. All rights reserved.') }}
+            </div>
+            <div class="footer-payment-gateways flex items-center gap-3">
+                <span class="text-xs opacity-50 tracking-wider mr-2 uppercase" style="font-size: 10px; font-family: var(--font-mono);">Secured by Clover</span>
+                <div class="flex gap-3 text-lg opacity-60" style="display: inline-flex; align-items: center;">
+                    <i class="fa-brands fa-cc-visa" title="Visa"></i>
+                    <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+                    <i class="fa-brands fa-cc-discover" title="Discover"></i>
+                    <i class="fa-brands fa-cc-amex" title="American Express"></i>
+                </div>
             </div>
         </div>
     </footer>
@@ -1717,6 +1987,77 @@
                 // Force a layout recalculation for libraries like Swiper & AOS
                 window.dispatchEvent(new Event('resize'));
             }, 800);
+        });
+
+        // Footer Newsletter AJAX Submission
+        const footerNewsForm = document.getElementById('footerNewsletterForm');
+        if (footerNewsForm) {
+            footerNewsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const emailInput = document.getElementById('footerNewsletterEmail');
+                const submitBtn = document.getElementById('footerNewsletterSubmitBtn');
+                const messageDiv = document.getElementById('footerNewsletterMessage');
+                
+                if (!emailInput || !submitBtn || !messageDiv) return;
+                
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i>';
+                messageDiv.style.display = 'none';
+                messageDiv.innerText = '';
+                
+                fetch('{{ route("newsletter.subscribe") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ email: emailInput.value })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="ri-arrow-right-line"></i>';
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerText = data.message;
+                    
+                    if (data.status === 'success') {
+                        messageDiv.style.color = '#d4af37'; // gold
+                        footerNewsForm.reset();
+                    } else {
+                        messageDiv.style.color = '#f87171'; // red/pink
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="ri-arrow-right-line"></i>';
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerText = 'Something went wrong. Please try again.';
+                    messageDiv.style.color = '#f87171';
+                });
+            });
+        }
+
+        // Mobile Footer Accordion Toggle
+        const accordionCols = document.querySelectorAll('.footer-accordion-col');
+        accordionCols.forEach(col => {
+            const header = col.querySelector('h4');
+            if (header) {
+                header.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        col.classList.toggle('active');
+                    }
+                });
+            }
+        });
+        
+        // Reset accordion states when window is resized back to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                accordionCols.forEach(col => col.classList.remove('active'));
+            }
         });
     </script>
     <x-popup />

@@ -23,6 +23,10 @@ Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store']
 
 Route::get('/privacy-policy', [App\Http\Controllers\PageController::class, 'privacy'])->name('privacy');
 Route::get('/terms-conditions', [App\Http\Controllers\PageController::class, 'terms'])->name('terms');
+Route::get('/shipping-policy', [App\Http\Controllers\PageController::class, 'shipping'])->name('shipping');
+Route::get('/refund-policy', [App\Http\Controllers\PageController::class, 'refunds'])->name('refunds');
+Route::get('/authenticity-guarantee', [App\Http\Controllers\PageController::class, 'authenticity'])->name('authenticity');
+Route::get('/accessibility-statement', [App\Http\Controllers\PageController::class, 'accessibility'])->name('accessibility');
 
 // Cart Routes
 Route::group(['prefix' => 'cart'], function () {
@@ -86,7 +90,7 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
     
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
     });
 
     Route::middleware('auth:admin')->group(function () {

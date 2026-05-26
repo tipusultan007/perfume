@@ -520,7 +520,7 @@
                     <form action="{{ route('newsletter.subscribe') }}" method="POST" class="newsletter-form" id="newsletterForm">
                         @csrf
                         <div class="input-group lux-group">
-                            <input type="email" name="email" id="newsletterEmail" class="ghost-input" placeholder="Enter your email atelier..." required>
+                            <input type="email" name="email" id="newsletterEmail" class="ghost-input" placeholder="Enter your email address..." required>
                             <button type="submit" class="btn-submit gold-btn" id="newsletterSubmitBtn">
                                 JOIN <i class="ri-arrow-right-line"></i>
                             </button>

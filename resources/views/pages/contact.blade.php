@@ -101,18 +101,18 @@
 <div class="container contact-page">
     <div class="contact-header">
         <h1 class="serif">Get in Touch</h1>
-        <p class="text-sm opacity-60">Whether you seek a bespoke olfactive creation or have an inquiry, our atelier is here to assist.</p>
+        <p class="text-sm opacity-60">Whether you seek a bespoke olfactive creation or have an inquiry, our team is here to assist.</p>
     </div>
 
     <div class="contact-grid">
         <div class="contact-info">
             <div class="contact-info-item">
-                <h3>Our Atelier</h3>
+                <h3>Our Boutique</h3>
                 <p>123 Fifth Avenue, Manhattan<br>New York, NY 10001, USA</p>
             </div>
             <div class="contact-info-item">
                 <h3>Collaborations</h3>
-                <p>atelier@newkirkperfumesusa.com</p>
+                <p>info@newkirkperfumesusa.com</p>
             </div>
             <div class="contact-info-item">
                 <h3>Concierge</h3>

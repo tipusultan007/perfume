@@ -15,4 +15,24 @@ class PageController extends Controller
     {
         return view('pages.terms');
     }
+
+    public function shipping()
+    {
+        return view('pages.shipping');
+    }
+
+    public function refunds()
+    {
+        return view('pages.refunds');
+    }
+
+    public function authenticity()
+    {
+        return view('pages.authenticity');
+    }
+
+    public function accessibility()
+    {
+        return view('pages.accessibility');
+    }
 }

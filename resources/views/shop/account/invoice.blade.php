@@ -166,7 +166,7 @@
 
     <div class="footer">
         <p>Thank you for choosing NewKirk NYC.</p>
-        <p>&copy; {{ date('Y') }} NewKirk NYC Atelier. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} NewKirk NYC. All rights reserved.</p>
     </div>
 </body>
 </html>

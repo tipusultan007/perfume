@@ -81,7 +81,7 @@
         <div class="logo">NewKirk</div>
         <div class="divider"></div>
         <h1>Something beautiful<br>is unfolding.</h1>
-        <p>Our NYC-based atelier is preparing to launch a new collection of signature objects.</p>
+        <p>Our NYC-based boutique is preparing to launch a new collection of signature objects.</p>
         <div class="contact">
             Stay in touch: <a href="mailto:info@newkirkperfumesusa.com">info@newkirkperfumesusa.com</a>
         </div>

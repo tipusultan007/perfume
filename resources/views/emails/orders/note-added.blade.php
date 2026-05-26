@@ -5,7 +5,7 @@
     
     <p>Hello {{ $order->shipping_address['first_name'] ?? 'there' }},</p>
     
-    <p>Our atelier has added a new update to your order:</p>
+    <p>Our team has added a new update to your order:</p>
     
     <div class="order-details" style="font-style: italic; color: #555; border-left: 2px solid #D4AF37; background: #fafafa; padding: 20px; margin: 30px 0;">
         "{{ $note->note }}"

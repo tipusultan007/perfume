@@ -98,7 +98,7 @@
 
             <div class="footer">
                 <p>&copy; {{ date('Y') }} {{ \App\Models\Setting::get('site_name', 'NewKirk') }}. All rights reserved.</p>
-                <div style="margin-top: 20px; color: #d1d5db;">Fragrance & Objects Atelier</div>
+                <div style="margin-top: 20px; color: #d1d5db;">Fragrance & Objects Boutique</div>
             </div>
         </div>
     </div>

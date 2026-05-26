@@ -6,7 +6,7 @@
     <h1 style="font-size: 28px; margin-bottom: 30px;">Thank You for Your Order</h1>
     
     <p style="margin-bottom: 30px;">
-        Dear {{ $order->user ? $order->user->name : 'Customer' }}, your order has been successfully placed at our atelier and is currently being prepared for curation.
+        Dear {{ $order->user ? $order->user->name : 'Customer' }}, your order has been successfully placed and is currently being prepared for shipping.
     </p>
 
     <div class="order-details" style="background: #fdfcf8; border: 1px solid #f3f4f6; padding: 30px; margin: 40px 0; text-align: left;">

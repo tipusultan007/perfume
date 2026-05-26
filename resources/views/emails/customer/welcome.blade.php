@@ -2,13 +2,13 @@
 
 @section('content')
     <div style="text-align: center;">
-        <h1 style="font-size: 32px; letter-spacing: -0.5px; margin-bottom: 24px;">Welcome to the Atelier</h1>
+        <h1 style="font-size: 32px; letter-spacing: -0.5px; margin-bottom: 24px;">Welcome to NewKirk NYC</h1>
         
         <p style="font-style: italic; color: #111827; margin-bottom: 30px;">Bonjour, {{ explode(' ', $user->name)[0] }}.</p>
         
         <p style="margin-bottom: 30px;">
             It is a pleasure to welcome you to the {{ \App\Models\Setting::get('site_name', "NewKirk NYC") }} community. 
-            At our atelier, we believe a fragrance is more than a scent—it is a signature of identity and a companion to memory.
+            Here, we believe a fragrance is more than a scent—it is a signature of identity and a companion to memory.
         </p>
         
         <p style="margin-bottom: 40px;">
