@@ -176,6 +176,13 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{ route('admin.email-templates.index') }}" class="side-nav-link">
+                    <i class="ri-mail-settings-line"></i>
+                    <span> Email Templates </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a href="{{ route('admin.announcements.index') }}" class="side-nav-link">
                     <i class="ri-notification-badge-line"></i>
                     <span> Announcements </span>

@@ -30,8 +30,19 @@ class OrderNoteMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $template = \App\Models\EmailTemplate::where('name', 'order_note_added')->first();
+        $subject = "New Update for your Order #{$this->order->order_number}";
+        
+        if ($template) {
+            $subject = str_replace(
+                ['{order_number}'],
+                [$this->order->order_number],
+                $template->subject
+            );
+        }
+
         return new Envelope(
-            subject: "New Update for your Order #{$this->order->order_number}",
+            subject: $subject,
         );
     }
 
@@ -40,8 +51,27 @@ class OrderNoteMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
+        $template = \App\Models\EmailTemplate::where('name', 'order_note_added')->first();
+        
+        if (!$template) {
+            return new Content(view: 'emails.orders.note-added');
+        }
+
+        $body = str_replace(
+            ['{customer_name}', '{order_number}', '{note}', '{tracking_url}', '{site_name}'],
+            [
+                $this->order->shipping_address['first_name'] ?? 'there',
+                $this->order->order_number,
+                $this->note->note,
+                route('order.track.guest', ['order_number' => $this->order->order_number, 'email' => $this->order->shipping_address['email'] ?? '']),
+                \App\Models\Setting::get('site_name', "NewKirk NYC")
+            ],
+            $template->body
+        );
+
         return new Content(
-            view: 'emails.orders.note-added',
+            view: 'emails.dynamic',
+            with: ['body' => $body],
         );
     }
 

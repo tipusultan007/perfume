@@ -141,6 +141,10 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
         Route::post('/newsletter/{id}/send', [\App\Http\Controllers\Admin\NewsletterController::class, 'send'])->name('newsletter.send');
         Route::resource('newsletter', \App\Http\Controllers\Admin\NewsletterController::class);
 
+        // Email Templates
+        Route::post('email-templates/preview', [\App\Http\Controllers\Admin\EmailTemplateController::class, 'preview'])->name('email-templates.preview');
+        Route::resource('email-templates', \App\Http\Controllers\Admin\EmailTemplateController::class)->only(['index', 'edit', 'update']);
+
         // Notifications
     Route::get('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])->name('notifications.read');

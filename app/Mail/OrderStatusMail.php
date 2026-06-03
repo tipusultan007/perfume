@@ -29,9 +29,23 @@ class OrderStatusMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
-        $status = ucfirst($this->order->status);
+        $status = strtolower($this->order->status);
+        $templateName = "order_{$status}";
+        
+        $template = \App\Models\EmailTemplate::where('name', $templateName)->first();
+        
+        $defaultSubject = "Your Order #{$this->order->order_number} is " . ucfirst($this->order->status);
+        
+        if ($template) {
+            $defaultSubject = str_replace(
+                ['{order_number}', '{customer_name}', '{site_name}'],
+                [$this->order->order_number, $this->order->shipping_address['first_name'] ?? 'there', \App\Models\Setting::get('site_name', 'NewKirk NYC')],
+                $template->subject
+            );
+        }
+
         return new Envelope(
-            subject: "Your Order #{$this->order->order_number} is {$status}",
+            subject: $defaultSubject,
         );
     }
 
@@ -40,19 +54,47 @@ class OrderStatusMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
-        // Simple mapping of status to view
-        // We will create these views next
-        $view = match ($this->order->status) {
-            'processing' => 'emails.orders.processing',
-            'shipped' => 'emails.orders.shipped',
-            'completed' => 'emails.orders.completed',
-            'cancelled' => 'emails.orders.cancelled',
-            'refunded' => 'emails.orders.refunded',
-            default => 'emails.orders.processing', // Fallback
-        };
+        $status = strtolower($this->order->status);
+        $templateName = "order_{$status}";
+        
+        $template = \App\Models\EmailTemplate::where('name', $templateName)->first();
+        
+        if (!$template) {
+            $view = match ($this->order->status) {
+                'processing' => 'emails.orders.processing',
+                'shipped' => 'emails.orders.shipped',
+                'completed' => 'emails.orders.completed',
+                'cancelled' => 'emails.orders.cancelled',
+                'refunded' => 'emails.orders.refunded',
+                default => 'emails.orders.processing',
+            };
+            return new Content(view: $view);
+        }
+
+        $address = "";
+        if (isset($this->order->shipping_address['address'])) {
+            $address = $this->order->shipping_address['address'] . "<br>" . ($this->order->shipping_address['city'] ?? '') . ", " . ($this->order->shipping_address['zip'] ?? '');
+        }
+
+        $body = str_replace(
+            ['{customer_name}', '{order_number}', '{order_date}', '{order_total}', '{order_status}', '{shipping_address}', '{tracking_url}', '{shop_url}', '{site_name}'],
+            [
+                $this->order->shipping_address['first_name'] ?? 'there',
+                $this->order->order_number,
+                $this->order->created_at->format('M d, Y'),
+                '$' . number_format($this->order->grand_total, 2),
+                ucfirst($this->order->status),
+                $address,
+                route('order.track.guest', ['order_number' => $this->order->order_number, 'email' => $this->order->shipping_address['email'] ?? '']),
+                url('/shop'),
+                \App\Models\Setting::get('site_name', 'NewKirk NYC')
+            ],
+            $template->body
+        );
 
         return new Content(
-            view: $view,
+            view: 'emails.dynamic',
+            with: ['body' => $body],
         );
     }
 

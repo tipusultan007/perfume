@@ -29,8 +29,19 @@ class AdminNewOrderMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $template = \App\Models\EmailTemplate::where('name', 'admin_new_order')->first();
+        $subject = 'New Order Received #' . $this->order->order_number;
+        
+        if ($template) {
+            $subject = str_replace(
+                ['{order_number}'],
+                [$this->order->order_number],
+                $template->subject
+            );
+        }
+
         return new Envelope(
-            subject: 'New Order Received #' . $this->order->order_number,
+            subject: $subject,
         );
     }
 
@@ -39,8 +50,27 @@ class AdminNewOrderMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
+        $template = \App\Models\EmailTemplate::where('name', 'admin_new_order')->first();
+        
+        if (!$template) {
+            return new Content(view: 'emails.admin.new_order');
+        }
+
+        $body = str_replace(
+            ['{order_number}', '{customer_name}', '{order_total}', '{order_status}', '{admin_order_url}'],
+            [
+                $this->order->order_number, 
+                $this->order->user ? $this->order->user->name : 'Guest', 
+                '$' . number_format($this->order->grand_total, 2), 
+                ucfirst($this->order->status), 
+                route('admin.orders.show', $this->order->id)
+            ],
+            $template->body
+        );
+
         return new Content(
-            view: 'emails.admin.new_order',
+            view: 'emails.dynamic',
+            with: ['body' => $body],
         );
     }
 

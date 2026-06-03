@@ -14,8 +14,6 @@
             border-bottom: 2px solid #D4AF37;
             padding-bottom: 20px;
             margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
         }
         .logo {
             font-size: 24px;
@@ -92,11 +90,38 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">NewKirk NYC</div>
-        <div class="invoice-info">
-            <h1>Invoice</h1>
-            <p>#{{ $order->order_number }}<br>Date: {{ $order->created_at->format('M d, Y') }}</p>
-        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="vertical-align: top; text-align: left; width: 50%;">
+                    <div class="logo-container">
+                        @php $siteLogo = \App\Models\Setting::get('site_logo'); @endphp
+                        @if($siteLogo)
+                            <img src="{{ public_path($siteLogo) }}" alt="{{ \App\Models\Setting::get('site_name', 'NewKirk NYC') }}" style="max-height: 50px; margin-bottom: 10px;">
+                        @else
+                            <div class="logo">{{ \App\Models\Setting::get('site_name', 'NewKirk NYC') }}</div>
+                        @endif
+                        
+                        <div class="company-contact" style="font-size: 11px; color: #555; line-height: 1.4; margin-top: 10px;">
+                            @if($address = \App\Models\Setting::get('contact_address'))
+                                <div>{{ $address }}</div>
+                            @endif
+                            @if($phone = \App\Models\Setting::get('contact_phone'))
+                                <div>{{ $phone }}</div>
+                            @endif
+                            @if($email = \App\Models\Setting::get('contact_email'))
+                                <div>{{ $email }}</div>
+                            @endif
+                        </div>
+                    </div>
+                </td>
+                <td style="vertical-align: top; text-align: right; width: 50%;">
+                    <div class="invoice-info">
+                        <h1>Invoice</h1>
+                        <p>#{{ $order->order_number }}<br>Date: {{ $order->created_at->format('M d, Y') }}</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <table class="grid">

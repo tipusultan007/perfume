@@ -36,11 +36,14 @@ class OrderController extends Controller
             'payment_status' => $request->payment_status,
         ]);
 
-        if ($oldStatus !== $newStatus && $order->user) {
-            try {
-                \Illuminate\Support\Facades\Mail::to($order->user->email)->send(new \App\Mail\OrderStatusMail($order));
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to send order status email: " . $e->getMessage());
+        if ($oldStatus !== $newStatus) {
+            $email = $order->user->email ?? $order->shipping_address['email'] ?? null;
+            if ($email) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\OrderStatusMail($order));
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to send order status email: " . $e->getMessage());
+                }
             }
         }
 
@@ -56,15 +59,16 @@ class OrderController extends Controller
 
     public function resendDetails(Order $order)
     {
-        if ($order->user) {
+        $email = $order->user->email ?? $order->shipping_address['email'] ?? null;
+        if ($email) {
             try {
-                \Illuminate\Support\Facades\Mail::to($order->user->email)->send(new \App\Mail\OrderCreatedMail($order));
+                \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\OrderCreatedMail($order));
                 return back()->with('success', 'Order details resent successfully.');
             } catch (\Exception $e) {
                 return back()->with('error', 'Failed to resend details: ' . $e->getMessage());
             }
         }
-        return back()->with('error', 'No user associated with this order.');
+        return back()->with('error', 'No email address associated with this order.');
     }
 
     public function addNote(Request $request, Order $order)
@@ -79,11 +83,14 @@ class OrderController extends Controller
             'is_customer_notified' => $request->has('is_customer_notified'),
         ]);
 
-        if ($note->is_customer_notified && $order->user) {
-            try {
-                \Illuminate\Support\Facades\Mail::to($order->user->email)->send(new \App\Mail\OrderNoteMail($order, $note));
-            } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to send order note notification: " . $e->getMessage());
+        if ($note->is_customer_notified) {
+            $email = $order->user->email ?? $order->shipping_address['email'] ?? null;
+            if ($email) {
+                try {
+                    \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\OrderNoteMail($order, $note));
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Failed to send order note notification: " . $e->getMessage());
+                }
             }
         }
 

@@ -28,8 +28,19 @@ class CustomerWelcomeMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $template = \App\Models\EmailTemplate::where('name', 'customer_welcome')->first();
+        $subject = 'Welcome to ' . \App\Models\Setting::get('site_name', "NewKirk NYC");
+        
+        if ($template) {
+            $subject = str_replace(
+                ['{site_name}'],
+                [\App\Models\Setting::get('site_name', "NewKirk NYC")],
+                $template->subject
+            );
+        }
+
         return new Envelope(
-            subject: "Welcome to " . \App\Models\Setting::get('site_name', "NewKirk NYC"),
+            subject: $subject,
         );
     }
 
@@ -38,8 +49,25 @@ class CustomerWelcomeMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
+        $template = \App\Models\EmailTemplate::where('name', 'customer_welcome')->first();
+        
+        if (!$template) {
+            return new Content(view: 'emails.customer.welcome');
+        }
+
+        $customerName = explode(' ', $this->user->name)[0];
+        $siteName = \App\Models\Setting::get('site_name', "NewKirk NYC");
+        $loginUrl = url('/account/dashboard');
+
+        $body = str_replace(
+            ['{site_name}', '{customer_name}', '{login_url}'],
+            [$siteName, $customerName, $loginUrl],
+            $template->body
+        );
+
         return new Content(
-            view: 'emails.customer.welcome',
+            view: 'emails.dynamic',
+            with: ['body' => $body],
         );
     }
 
