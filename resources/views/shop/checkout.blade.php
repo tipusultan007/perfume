@@ -253,6 +253,48 @@
         margin-right: -50vw;
     }
 
+    /* Select2 Custom Styling to match inputs */
+    .select2-container {
+        flex: 1;
+    }
+    .select2-container--default .select2-selection--single {
+        height: 47px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 0;
+        background: transparent;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        transition: border-color 0.3s;
+    }
+    .select2-container--default.select2-container--open .select2-selection--single {
+        border-color: var(--accent);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: inherit;
+        padding-left: 0;
+        line-height: normal;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 45px;
+        right: 10px;
+    }
+    .select2-dropdown {
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 0;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+    }
+    .select2-results__option {
+        padding: 10px 12px;
+    }
+    .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+        background-color: var(--accent);
+        color: white;
+    }
+
     /* Responsive */
     @media (max-width: 1100px) {
         .checkout-content-container { grid-template-columns: 1fr; }
@@ -415,9 +457,7 @@
                     <div id="new-address-fields" @if(auth()->check() && $savedShipping) style="display: none;" @endif>
                         <div class="input-row">
                             <select name="country">
-                                <option value="US" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'US') ? 'selected' : '' }}>United States</option>
-                                <option value="UK" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'UK') ? 'selected' : '' }}>United Kingdom</option>
-                                <option value="CA" {{ (auth()->check() && ($savedShipping['country'] ?? '') == 'CA') ? 'selected' : '' }}>Canada</option>
+                                <option value="US" selected>United States</option>
                             </select>
                             <input type="tel" name="phone" placeholder="Phone" value="{{ $savedShipping['phone'] ?? '' }}" required>
                         </div>
@@ -430,8 +470,12 @@
                             <input type="text" name="apartment" placeholder="Apartment, suite, etc. (optional)" value="{{ $savedShipping['apartment'] ?? '' }}">
                         </div>
                         <div class="input-row">
-                            <input type="text" name="city" placeholder="City" value="{{ $savedShipping['city'] ?? '' }}" required style="flex: 1;">
-                            <input type="text" name="state" placeholder="State/Province" value="{{ $savedShipping['state'] ?? '' }}" required style="flex: 1;">
+                            <select name="state" id="shipping_state" required style="flex: 1;">
+                                <option value="">State/Province</option>
+                            </select>
+                            <select name="city" id="shipping_city" required style="flex: 1;">
+                                <option value="">City</option>
+                            </select>
                             <input type="text" name="zip" placeholder="ZIP code" value="{{ $savedShipping['zip'] ?? '' }}" required style="flex: 1;">
                         </div>
                     </div>
@@ -459,9 +503,7 @@
                     <div id="billing-address-fields" style="display: none; padding-top: 10px;">
                         <div class="input-row">
                             <select name="billing_country">
-                                <option value="US">United States</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="CA">Canada</option>
+                                <option value="US" selected>United States</option>
                             </select>
                             <input type="tel" name="billing_phone" placeholder="Phone">
                         </div>
@@ -474,8 +516,12 @@
                             <input type="text" name="billing_apartment" placeholder="Apartment, suite, etc. (optional)">
                         </div>
                         <div class="input-row">
-                            <input type="text" name="billing_city" placeholder="City" style="flex: 1;">
-                            <input type="text" name="billing_state" placeholder="State/Province" style="flex: 1;">
+                            <select name="billing_state" id="billing_state" style="flex: 1;">
+                                <option value="">State/Province</option>
+                            </select>
+                            <select name="billing_city" id="billing_city" style="flex: 1;">
+                                <option value="">City</option>
+                            </select>
                             <input type="text" name="billing_zip" placeholder="ZIP code" style="flex: 1;">
                         </div>
                     </div>
@@ -821,6 +867,75 @@
 
             return 'Payment details are invalid. Please check the card fields and try again.';
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Select2
+        $('#shipping_state, #shipping_city, #billing_state, #billing_city').select2({
+            width: '100%'
+        });
+
+        const savedShippingState = "{{ $savedShipping['state'] ?? '' }}";
+        const savedShippingCity = "{{ $savedShipping['city'] ?? '' }}";
+
+        function loadStates(stateSelectId, selectedState = '') {
+            fetch('/api/states')
+                .then(r => r.json())
+                .then(data => {
+                    const select = $('#' + stateSelectId);
+                    select.empty().append('<option value="">Select State</option>');
+                    data.forEach(state => {
+                        const isSelected = (state.name === selectedState || state.state_code === selectedState);
+                        const option = new Option(state.name, state.name, isSelected, isSelected);
+                        option.dataset.id = state.id;
+                        select.append(option);
+                    });
+                    select.trigger('change');
+                    
+                    if (selectedState) {
+                        const stateId = select.find('option:selected').data('id');
+                        if (stateId) {
+                            const citySelectId = stateSelectId === 'shipping_state' ? 'shipping_city' : 'billing_city';
+                            loadCities(stateId, citySelectId, stateSelectId === 'shipping_state' ? savedShippingCity : '');
+                        }
+                    }
+                });
+        }
+
+        function loadCities(stateId, citySelectId, selectedCity = '') {
+            fetch(`/api/cities/${stateId}`)
+                .then(r => r.json())
+                .then(data => {
+                    const select = $('#' + citySelectId);
+                    select.empty().append('<option value="">Select City</option>');
+                    data.forEach(city => {
+                        const isSelected = city.name === selectedCity;
+                        select.append(new Option(city.name, city.name, isSelected, isSelected));
+                    });
+                    select.trigger('change');
+                });
+        }
+
+        loadStates('shipping_state', savedShippingState);
+        loadStates('billing_state');
+
+        $('#shipping_state').on('change', function() {
+            const stateId = $(this).find('option:selected').data('id');
+            if(stateId) {
+                loadCities(stateId, 'shipping_city');
+            } else {
+                $('#shipping_city').empty().append('<option value="">Select City</option>').trigger('change');
+            }
+        });
+
+        $('#billing_state').on('change', function() {
+            const stateId = $(this).find('option:selected').data('id');
+            if(stateId) {
+                loadCities(stateId, 'billing_city');
+            } else {
+                $('#billing_city').empty().append('<option value="">Select City</option>').trigger('change');
+            }
+        });
     });
 </script>
 @endsection

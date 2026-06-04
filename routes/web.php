@@ -38,6 +38,8 @@ Route::group(['prefix' => 'cart'], function () {
 });
 
 Route::get('/api/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('api.search');
+Route::get('/api/states', [\App\Http\Controllers\LocationController::class, 'states'])->name('api.states');
+Route::get('/api/cities/{stateId}', [\App\Http\Controllers\LocationController::class, 'cities'])->name('api.cities');
 
 // Checkout Routes
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
