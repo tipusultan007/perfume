@@ -18,9 +18,10 @@ class HomeController extends Controller
         $heritage = \App\Models\HomeSection::where('key', '=', 'heritage', 'and')->first();
         $heroStyle = Setting::where('key', '=', 'home_hero_style', 'and')->value('value') ?? 'default';
         
-        $categories = Category::where('show_on_home', '=', true, 'and')
+        $categories = Category::with('media')
+            ->where('show_on_home', '=', true, 'and')
             ->orderBy('home_order', 'asc')
-            ->take(4)
+            ->take(12)
             ->get();
 
             

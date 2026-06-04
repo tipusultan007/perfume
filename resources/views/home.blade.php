@@ -289,69 +289,23 @@
             <h2 class="section-title">New Collection</h2>
             <div class="swiper category-slider">
                 <div class="swiper-wrapper">
-                    <!-- Cat 1 -->
+                    @forelse($categories as $category)
                     <div class="swiper-slide category-item">
                         <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-2.jpg"
-                                    alt="Citrus Perfume"></a>
+                            <a href="{{ route('shop', ['category' => $category->slug]) }}">
+                                @php
+                                    $imgUrl = $category->getFirstMediaUrl() ?: 'https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-2.jpg';
+                                @endphp
+                                <img src="{{ $imgUrl }}" alt="{{ $category->name }}">
+                            </a>
                         </div>
-                        <h3 class="cat-title"><a href="#">Citrus Perfume</a></h3>
+                        <h3 class="cat-title"><a href="{{ route('shop', ['category' => $category->slug]) }}">{{ $category->name }}</a></h3>
                     </div>
-                    <!-- Cat 2 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-5.jpg"
-                                    alt="Lemon"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Lemon</a></h3>
+                    @empty
+                    <div class="swiper-slide text-center py-20">
+                        <p class="opacity-50">No collections found.</p>
                     </div>
-                    <!-- Cat 3 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-6.jpg"
-                                    alt="Orange"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Orange</a></h3>
-                    </div>
-                    <!-- Cat 4 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-4.jpg"
-                                    alt="Scents"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Scents</a></h3>
-                    </div>
-                    <!-- Cat 5 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-1.jpg"
-                                    alt="Bertrand"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Bertrand</a></h3>
-                    </div>
-                    <!-- Cat 6 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-4.jpg"
-                                    alt="Eau de Toilette"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Eau de Toilette</a></h3>
-                    </div>
-                    <!-- Cat 7 -->
-                    <div class="swiper-slide category-item">
-                        <div class="cat-thumb">
-                            <a href="#"><img
-                                    src="https://wordpressthemes.live/WCM9/WCM204_purfemos/default/wp-content/uploads/2024/09/categories-3.jpg"
-                                    alt="Duchaufour"></a>
-                        </div>
-                        <h3 class="cat-title"><a href="#">Duchaufour</a></h3>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
