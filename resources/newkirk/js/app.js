@@ -9,6 +9,12 @@ import.meta.glob([
 ]);
 
 import select2 from 'select2';
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+
+import 'jquery-toast-plugin/dist/jquery.toast.min.css';
+import 'jquery-toast-plugin/src/jquery.toast';
+
 select2(window, jQuery);
 
 import 'jquery-mask-plugin/dist/jquery.mask.min.js'

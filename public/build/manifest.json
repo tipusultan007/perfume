@@ -3,12 +3,19 @@
     "file": "assets/jquery-B2lLd13k.js",
     "name": "jquery"
   },
+  "_jquery-CJ8hjKyH.js": {
+    "file": "assets/jquery-CJ8hjKyH.js",
+    "name": "jquery",
+    "imports": [
+      "_jquery-B2lLd13k.js"
+    ]
+  },
   "_moment-QfiTXYh-.js": {
     "file": "assets/moment-QfiTXYh-.js",
     "name": "moment"
   },
   "resources/css/app.css": {
-    "file": "assets/app-2lU3Pzu7.css",
+    "file": "assets/app-CMCfTLBv.css",
     "src": "resources/css/app.css"
   },
   "resources/js/app.js": {
@@ -46,22 +53,27 @@
     "src": "resources/newkirk/fonts/remixicon.woff2"
   },
   "resources/newkirk/js/app.js": {
-    "file": "assets/app-me-0_dge.js",
+    "file": "assets/app-CW1xUGPG.js",
     "name": "app",
     "src": "resources/newkirk/js/app.js",
     "isEntry": true,
     "imports": [
-      "_jquery-B2lLd13k.js"
+      "_jquery-B2lLd13k.js",
+      "_jquery-CJ8hjKyH.js"
+    ],
+    "css": [
+      "assets/app-UHti9dpf.css"
     ]
   },
   "resources/newkirk/js/head.js": {
-    "file": "assets/head-D70Tn8fQ.js",
+    "file": "assets/head-V692E6Xf.js",
     "name": "head",
     "src": "resources/newkirk/js/head.js",
     "isEntry": true,
     "imports": [
-      "_jquery-B2lLd13k.js",
-      "_moment-QfiTXYh-.js"
+      "_jquery-CJ8hjKyH.js",
+      "_moment-QfiTXYh-.js",
+      "_jquery-B2lLd13k.js"
     ]
   },
   "resources/newkirk/js/layout.js": {

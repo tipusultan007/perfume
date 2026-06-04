@@ -266,3 +266,39 @@
     .cursor-pointer { cursor: pointer; }
 </style>
 @endsection
+
+@section('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fallback in case $.toast is still not attached
+        if (typeof window.$ === 'undefined' || typeof $.toast !== 'function') {
+            console.error("Toast plugin not loaded properly.");
+            return;
+        }
+
+        @if(session('success'))
+            $.toast({
+                heading: 'Success',
+                text: "{{ session('success') }}",
+                position: 'top-right',
+                loaderBg: '#0f172a',
+                icon: 'success',
+                hideAfter: 3000,
+                stack: 1
+            });
+        @endif
+
+        @if(session('error'))
+            $.toast({
+                heading: 'Error',
+                text: "{{ session('error') }}",
+                position: 'top-right',
+                loaderBg: '#0f172a',
+                icon: 'error',
+                hideAfter: 3000,
+                stack: 1
+            });
+        @endif
+    });
+</script>
+@endsection
