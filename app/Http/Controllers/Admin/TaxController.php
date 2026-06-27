@@ -20,6 +20,7 @@ class TaxController extends Controller
             'name' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0',
             'state_code' => 'nullable|string|size:2',
+            'zip_code' => 'nullable|string|max:10',
             'priority' => 'nullable|integer',
             'is_active' => 'boolean'
         ]);
@@ -39,6 +40,7 @@ class TaxController extends Controller
             'name' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0',
             'state_code' => 'nullable|string|size:2',
+            'zip_code' => 'nullable|string|max:10',
             'priority' => 'nullable|integer',
         ]);
 

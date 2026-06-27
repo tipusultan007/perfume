@@ -108,15 +108,15 @@
         <div class="contact-info">
             <div class="contact-info-item">
                 <h3>Our Boutique</h3>
-                <p>123 Fifth Avenue, Manhattan<br>New York, NY 10001, USA</p>
+                <p>{!! nl2br(e(\App\Models\Setting::get('contact_address', '123 Fifth Avenue, Manhattan\nNew York, NY 10001, USA'))) !!}</p>
             </div>
             <div class="contact-info-item">
                 <h3>Collaborations</h3>
-                <p>info@newkirkperfumesusa.com</p>
+                <p><a href="mailto:{{ \App\Models\Setting::get('contact_email', 'info@newkirkperfumesusa.com') }}">{{ \App\Models\Setting::get('contact_email', 'info@newkirkperfumesusa.com') }}</a></p>
             </div>
             <div class="contact-info-item">
                 <h3>Concierge</h3>
-                <p>+1 (212) 555-0123<br>Available Mon-Fri, 9am - 6pm EST</p>
+                <p><a href="tel:{{ preg_replace('/[^0-9+]/', '', \App\Models\Setting::get('contact_phone', '+1 (212) 555-0123')) }}">{{ \App\Models\Setting::get('contact_phone', '+1 (212) 555-0123') }}</a></p>
             </div>
             <div class="contact-info-item">
                 <h3>Socials</h3>
@@ -160,9 +160,11 @@
 </div>
 
 <div class="map-container">
-    <!-- Placeholder for Map -->
+    @php
+        $mapAddress = \App\Models\Setting::get('contact_address', '123 Fifth Avenue, Manhattan New York, NY 10001, USA');
+    @endphp
     <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.6173590513926!2d-73.9877477!3d40.7484405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1737380000000!5m2!1sen!2sus" 
+        src="https://maps.google.com/maps?q={{ urlencode($mapAddress) }}&t=&z=14&ie=UTF8&iwloc=&output=embed" 
         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
     </iframe>
 </div>

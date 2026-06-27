@@ -476,7 +476,7 @@
                             <select name="city" id="shipping_city" required style="flex: 1;">
                                 <option value="">City</option>
                             </select>
-                            <input type="text" name="zip" placeholder="ZIP code" value="{{ $savedShipping['zip'] ?? '' }}" required style="flex: 1;">
+                            <input type="text" name="zip" placeholder="ZIP code" value="{{ $savedShipping['zip'] ?? '' }}" required minlength="5" pattern="[0-9\-]+" style="flex: 1;">
                         </div>
                     </div>
                 </div>
@@ -522,7 +522,7 @@
                             <select name="billing_city" id="billing_city" style="flex: 1;">
                                 <option value="">City</option>
                             </select>
-                            <input type="text" name="billing_zip" placeholder="ZIP code" style="flex: 1;">
+                            <input type="text" name="billing_zip" placeholder="ZIP code" minlength="5" pattern="[0-9\-]+" style="flex: 1;">
                         </div>
                     </div>
                 </div>
@@ -651,21 +651,29 @@
             <div class="totals-area">
                 <div class="total-row">
                     <span>Subtotal</span>
-                    <span>${{ number_format($subtotal, 2) }}</span>
+                    <span id="subtotalValue">${{ number_format($subtotal, 2) }}</span>
                 </div>
                  
                 <div class="total-row" id="discountRow" style="{{ $discount > 0 ? '' : 'display: none;' }}">
                     <span class="flex items-center gap-2">Discount <span class="bg-gray-200 text-[10px] px-1 rounded">{{ $coupon ? $coupon->code : '' }}</span></span>
-                    <span class="text-green-700">- ${{ number_format($discount, 2) }}</span>
+                    <span id="discountValue" class="text-green-700">- ${{ number_format($discount, 2) }}</span>
                 </div>
 
                 <div class="total-row">
                     <span>Shipping</span>
-                    <span class="opacity-50">{{ $shipping > 0 ? '$'.number_format($shipping, 2) : 'Free' }}</span>
+                    <span id="shippingValue" class="opacity-50">
+                        @if(is_null($shipping))
+                            Calculated at next step
+                        @elseif($shipping > 0)
+                            ${{ number_format($shipping, 2) }}
+                        @else
+                            Free
+                        @endif
+                    </span>
                 </div>
                 <div class="total-row">
                     <span>Estimated taxes</span>
-                    <span>${{ number_format($taxes, 2) }}</span>
+                    <span id="taxesValue">${{ number_format($taxes, 2) }}</span>
                 </div>
                 <div class="total-row total-final">
                     <span>Total</span>
@@ -756,6 +764,104 @@
             btn.innerText = 'Apply';
         });
     }
+
+    // Dynamic Tax and Shipping Calculation
+    let debounceTimer;
+    function triggerUpdateTotals() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(updateTotals, 500);
+    }
+
+    function updateTotals() {
+        const addressSelection = document.querySelector('input[name="address_selection"]:checked');
+        const isSavedAddress = addressSelection && addressSelection.value === 'saved';
+
+        let state = '';
+        let zip = '';
+
+        if (!isSavedAddress) {
+            state = document.getElementById('shipping_state').value;
+            zip = document.querySelector('input[name="zip"]').value;
+        } else {
+            // For saved address, the server already uses the DB value, but we can pass it if we have it in DOM.
+            // Since we don't have it easily accessible without parsing PHP, let's just make an API call without state/zip 
+            // and let the backend figure out what's in the session if possible. Wait, the API doesn't know the selected address.
+            // Actually, for saved address, it's already calculated on page load. We only need to update when using 'new' address.
+        }
+
+        // Even if we use saved, if they type coupon it might change, but applyCoupon reloads the page.
+        // So we only really need to trigger this when state or zip changes for new address.
+        if (isSavedAddress) return;
+        if (!state || !zip || zip.length < 5) {
+            // Revert shipping display to "Calculated at next step" if zip is missing or incomplete
+            const shippingRow = document.getElementById('shippingValue');
+            if (shippingRow) shippingRow.innerText = 'Calculated at next step';
+            return;
+        }
+
+        fetch('{{ route("api.checkout.calculate") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ state: state, zip: zip })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update the DOM elements
+            const formatMoney = (amount) => '$' + parseFloat(amount).toFixed(2);
+            
+            // Subtotal
+            const subtotalRow = document.getElementById('subtotalValue');
+            if (subtotalRow) subtotalRow.innerText = formatMoney(data.subtotal);
+            
+            // Discount
+            const discountRow = document.getElementById('discountRow');
+            if (discountRow) {
+                if (data.discount > 0) {
+                    discountRow.style.display = 'flex';
+                    document.getElementById('discountValue').innerText = '- ' + formatMoney(data.discount);
+                } else {
+                    discountRow.style.display = 'none';
+                }
+            }
+
+            // Shipping
+            const shippingRow = document.getElementById('shippingValue');
+            if (shippingRow) {
+                if (data.shipping === null) {
+                    shippingRow.innerText = 'Calculated at next step';
+                } else {
+                    shippingRow.innerText = data.shipping > 0 ? formatMoney(data.shipping) : 'Free';
+                }
+            }
+
+            // Taxes
+            const taxesRow = document.getElementById('taxesValue');
+            if (taxesRow) taxesRow.innerText = formatMoney(data.taxes);
+
+            // Total
+            const finalTotal = document.getElementById('finalTotal');
+            if (finalTotal) finalTotal.innerText = 'USD ' + formatMoney(data.total);
+        })
+        .catch(error => console.error('Error calculating totals:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const stateSelect = document.getElementById('shipping_state');
+        const zipInput = document.querySelector('input[name="zip"]');
+        
+        if (stateSelect) {
+            // If using Select2, we need to bind to its specific event
+            $(stateSelect).on('change', triggerUpdateTotals);
+            stateSelect.addEventListener('change', triggerUpdateTotals);
+        }
+        
+        if (zipInput) {
+            zipInput.addEventListener('input', triggerUpdateTotals);
+        }
+    });
     // Clover Integration
     document.addEventListener('DOMContentLoaded', function() {
         const publicKey = '{{ config('services.clover.public_key') }}';
@@ -886,7 +992,7 @@
                     select.empty().append('<option value="">Select State</option>');
                     data.forEach(state => {
                         const isSelected = (state.name === selectedState || state.state_code === selectedState);
-                        const option = new Option(state.name, state.name, isSelected, isSelected);
+                        const option = new Option(state.name, state.state_code, isSelected, isSelected);
                         option.dataset.id = state.id;
                         select.append(option);
                     });

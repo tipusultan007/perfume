@@ -19,61 +19,137 @@ class CheckoutController extends Controller
             return redirect()->route('shop')->with('error', 'Your cart is empty');
         }
 
+        $shippingState = null;
+        $shippingZip = null;
+        if (auth()->check() && auth()->user()->shipping_address) {
+            $addr = auth()->user()->shipping_address; 
+            if (is_string($addr)) $addr = json_decode($addr, true);
+            $shippingState = strtoupper($addr['state'] ?? '');
+            $shippingZip = $addr['zip'] ?? null;
+        }
+
+        $totals = $this->calculateOrderTotals($shippingState, $shippingZip);
+
+        $savedShipping = auth()->check() ? auth()->user()->shipping_address : null;
+        $savedBilling = auth()->check() ? auth()->user()->billing_address : null;
+
+        return view('shop.checkout', [
+            'cartItems' => $cartItems,
+            'subtotal' => $totals['subtotal'],
+            'shipping' => $totals['shipping'],
+            'taxes' => $totals['taxes'],
+            'discount' => $totals['discount'],
+            'coupon' => $totals['coupon'],
+            'total' => $totals['total'],
+            'savedShipping' => $savedShipping,
+            'savedBilling' => $savedBilling
+        ]);
+    }
+
+    public function calculateTotals(Request $request)
+    {
+        $state = strtoupper($request->state);
+        $zip = $request->zip;
+
+        $totals = $this->calculateOrderTotals($state, $zip);
+
+        return response()->json([
+            'subtotal' => $totals['subtotal'],
+            'discount' => $totals['discount'],
+            'shipping' => $totals['shipping'],
+            'taxes' => $totals['taxes'],
+            'total' => $totals['total']
+        ]);
+    }
+
+    private function calculateOrderTotals($state, $zip)
+    {
+        $cartItems = $this->getCartItems();
         $subtotal = 0;
         foreach ($cartItems as $item) {
             $subtotal += $item['price'] * $item['quantity'];
         }
 
-        $shipping = 0; 
-        
-        // Calculate Discount
         $discount = 0;
         $couponCode = Session::get('coupon');
         $coupon = null;
-
         if ($couponCode) {
             $coupon = \App\Models\Coupon::where('code', $couponCode)->first();
             if ($coupon && $coupon->isValid($subtotal)) {
-                if ($coupon->type === 'percent') {
-                    $discount = $subtotal * ($coupon->value / 100);
-                } else {
-                    $discount = $coupon->value;
-                }
+                $discount = ($coupon->type === 'percent') ? $subtotal * ($coupon->value / 100) : $coupon->value;
             } else {
                 Session::forget('coupon');
             }
         }
-        
-        $taxes = 0;
-        
-        if (\App\Models\Setting::get('tax_enabled', false)) {
-             $shippingState = null;
-             if (auth()->check() && auth()->user()->shipping_address) {
-                 $addr = auth()->user()->shipping_address; 
-                 if (is_string($addr)) $addr = json_decode($addr, true);
-                 $shippingState = $addr['state'] ?? null;
-             }
-             
-             if ($shippingState) {
-                $taxRate = \App\Models\TaxRate::where('is_active', true)
-                            ->where('state_code', strtoupper($shippingState))
-                            ->orderBy('priority')
-                            ->first();
 
-                if ($taxRate) {
-                    $taxableAmount = $subtotal - $discount; // Tax on discounted amount
-                    if ($taxRate->is_shipping_taxable) $taxableAmount += $shipping;
-                    $taxes = max(0, $taxableAmount * ($taxRate->rate / 100));
-                }
-             }
+        $shipping = null;
+        if ($zip && strlen(trim($zip)) >= 5) {
+            $shippingRateQuery = \App\Models\ShippingRate::where('is_active', true)
+                ->where(function ($query) use ($state, $zip) {
+                    $query->where('zip_code', $zip);
+                    if ($state) {
+                        $query->orWhere(function ($q) use ($state) {
+                            $q->where('state_code', $state)->whereNull('zip_code');
+                        });
+                    }
+                    $query->orWhere(function ($q) {
+                        $q->whereNull('state_code')->whereNull('zip_code');
+                    });
+                });
+                
+            $shippingRates = $shippingRateQuery->get();
+            
+            $shippingRate = $shippingRates->firstWhere('zip_code', $zip);
+            
+            if (!$shippingRate && $state) {
+                // Use strict comparison or specifically match state_code to avoid null matching issues
+                $shippingRate = $shippingRates->firstWhere('state_code', $state);
+            }
+            
+            if (!$shippingRate) {
+                $shippingRate = $shippingRates->whereNull('state_code')->whereNull('zip_code')->first();
+            }
+
+            if ($shippingRate) {
+                $shipping = $shippingRate->cost;
+            }
         }
 
-        $total = max(0, $subtotal - $discount + $taxes + $shipping);
+        $taxes = 0;
+        if (\App\Models\Setting::get('tax_enabled', false)) {
+            $taxRateQuery = \App\Models\TaxRate::where('is_active', true)
+                ->where(function ($query) use ($state, $zip) {
+                    if ($zip) $query->where('zip_code', $zip);
+                    if ($state) $query->orWhere(function ($q) use ($state) {
+                        $q->where('state_code', $state)->whereNull('zip_code');
+                    });
+                    $query->orWhere(function ($q) {
+                        $q->whereNull('state_code')->whereNull('zip_code');
+                    });
+                });
+                
+            $taxRates = $taxRateQuery->get();
+            $taxRate = $taxRates->firstWhere('zip_code', $zip)
+                    ?? $taxRates->firstWhere('state_code', $state)
+                    ?? $taxRates->whereNull('state_code')->whereNull('zip_code')->first();
 
-        $savedShipping = auth()->check() ? auth()->user()->shipping_address : null;
-        $savedBilling = auth()->check() ? auth()->user()->billing_address : null;
+            if ($taxRate) {
+                $taxableAmount = $subtotal - $discount;
+                if ($taxRate->is_shipping_taxable) $taxableAmount += $shipping;
+                $taxes = max(0, $taxableAmount * ($taxRate->rate / 100));
+            }
+        }
 
-        return view('shop.checkout', compact('cartItems', 'subtotal', 'shipping', 'taxes', 'discount', 'coupon', 'total', 'savedShipping', 'savedBilling'));
+        $total = max(0, $subtotal - $discount + $taxes + ($shipping ?? 0));
+
+        return [
+            'subtotal' => $subtotal,
+            'discount' => $discount,
+            'coupon' => $coupon,
+            'shipping' => $shipping,
+            'taxes' => $taxes,
+            'total' => $total
+        ];
     }
 
     public function applyCoupon(Request $request)
@@ -151,31 +227,18 @@ class CheckoutController extends Controller
         ]);
 
         // Final Calculation
-        $cartItems = $this->getCartItems();
-        if(empty($cartItems)) return redirect()->route('shop');
+        $totals = $this->calculateOrderTotals(strtoupper($request->state), $request->zip);
 
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item['price'] * $item['quantity'];
-        }
-
-        // Apply Coupon (if any)
-        $discount = 0;
-        $couponCode = Session::get('coupon');
-        $coupon = null;
-        if ($couponCode) {
-            $coupon = \App\Models\Coupon::where('code', $couponCode)->first();
-            if ($coupon && $coupon->isValid($subtotal)) {
-                $discount = ($coupon->type === 'percent') ? $subtotal * ($coupon->value / 100) : $coupon->value;
-                $coupon->increment('used_count');
-            } else {
-                $couponCode = null;
-            }
-        }
+        $subtotal = $totals['subtotal'];
+        $discount = $totals['discount'];
+        $shipping = $totals['shipping'];
+        $taxes = $totals['taxes'];
+        $grandTotal = $totals['total'];
         
-        $shipping = 0; // Simplified
-        $taxes = 0;    // Simplified
-        $grandTotal = max(0, $subtotal - $discount + $taxes + $shipping);
+        $coupon = $totals['coupon'];
+        if ($coupon) {
+            $coupon->increment('used_count');
+        }
 
         // CREATE ORDER
         $order = \App\Models\Order::create([

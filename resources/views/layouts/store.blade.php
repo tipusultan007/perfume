@@ -1530,13 +1530,21 @@
                 </div>
                 <div id="footerNewsletterMessage" style="margin-top: 10px; font-size: 11px; display: none; font-family: var(--font-mono);"></div>
             </form>
-            @if($phone = \App\Models\Setting::get('contact_phone') || $email = \App\Models\Setting::get('contact_email'))
+            @php
+                $phone = \App\Models\Setting::get('contact_phone');
+                $email = \App\Models\Setting::get('contact_email');
+                $address = \App\Models\Setting::get('contact_address');
+            @endphp
+            @if($phone || $email || $address)
                 <div class="footer-boutique-info mt-6 text-xs opacity-60 leading-relaxed" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px;">
                     <strong>Customer Concierge</strong><br>
-                    @if($phone = \App\Models\Setting::get('contact_phone'))
-                        Tel: <a href="tel:{{ $phone }}" class="hover:text-accent">{{ $phone }}</a><br>
+                    @if($address)
+                        {!! nl2br(e($address)) !!}<br>
                     @endif
-                    @if($email = \App\Models\Setting::get('contact_email'))
+                    @if($phone)
+                        Tel: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" class="hover:text-accent">{{ $phone }}</a><br>
+                    @endif
+                    @if($email)
                         Email: <a href="mailto:{{ $email }}" class="hover:text-accent">{{ $email }}</a>
                     @endif
                 </div>

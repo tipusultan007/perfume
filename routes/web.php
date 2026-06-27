@@ -42,6 +42,7 @@ Route::get('/api/states', [\App\Http\Controllers\LocationController::class, 'sta
 Route::get('/api/cities/{stateId}', [\App\Http\Controllers\LocationController::class, 'cities'])->name('api.cities');
 
 // Checkout Routes
+Route::post('/api/checkout/calculate', [\App\Http\Controllers\CheckoutController::class, 'calculateTotals'])->name('api.checkout.calculate');
 Route::get('/checkout', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
 Route::post('/checkout/coupon', [\App\Http\Controllers\CheckoutController::class, 'applyCoupon'])->name('checkout.apply-coupon');
@@ -125,6 +126,7 @@ Route::prefix('newkirk-management')->name('admin.')->group(function () {
 
         // Tax & Settings
         Route::resource('taxes', \App\Http\Controllers\Admin\TaxController::class);
+        Route::resource('shipping-rates', \App\Http\Controllers\Admin\ShippingRateController::class);
     // Global Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Tax Settings')
-@section('page_title', 'Tax Configurations')
+@section('title', 'Shipping Rates')
+@section('page_title', 'Shipping Rates')
 
 @section('content')
 <div class="container-fluid">
@@ -13,49 +13,54 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">NewKirk</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Settings</a></li>
-                        <li class="breadcrumb-item active">Tax Rates</li>
+                        <li class="breadcrumb-item active">Shipping Rates</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Tax Configurations</h4>
+                <h4 class="page-title">Shipping Rates</h4>
             </div>
         </div>
     </div>
     <!-- end page title -->
 
     <div class="row">
-        <!-- List of Tax Rates -->
+        <!-- List of Shipping Rates -->
         <div class="col-xl-8 col-lg-7">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3">Active Tax Rates</h4>
+                    <h4 class="header-title mb-3">Active Shipping Rates</h4>
                     
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0 table-hover">
                             <thead class="table-light">
                                 <tr class="text-uppercase fs-11 fw-bold tracking-wider">
-                                    <th>Name / Scope</th>
-                                    <th>Rate (%)</th>
-                                    <th>Priority</th>
+                                    <th>Name</th>
+                                    <th>State / ZIP</th>
+                                    <th>Cost</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-end" style="width: 100px;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($taxRates as $rate)
+                                @forelse($shippingRates as $rate)
                                 <tr>
                                     <td>
                                         <h5 class="my-0 fs-14 fw-bold text-dark">{{ $rate->name }}</h5>
+                                    </td>
+                                    <td>
                                         <span class="text-muted fs-11 fw-semibold text-uppercase opacity-75">
-                                            Region: {{ $rate->state_code ?? 'Global' }}
+                                            @if($rate->zip_code)
+                                                ZIP: {{ $rate->zip_code }}
+                                            @elseif($rate->state_code)
+                                                State: {{ $rate->state_code }}
+                                            @else
+                                                Global
+                                            @endif
                                         </span>
                                     </td>
                                     <td>
                                         <span class="badge bg-soft-dark text-dark fw-bold px-2 py-1 fs-12 font-monospace border">
-                                            {{ number_format($rate->rate, 3) }}%
+                                            ${{ number_format($rate->cost, 2) }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted fw-bold">L{{ $rate->priority }}</span>
                                     </td>
                                     <td class="text-center">
                                         @if($rate->is_active)
@@ -65,8 +70,8 @@
                                         @endif
                                     </td>
                                     <td class="text-end">
-                                        <form action="{{ route('admin.taxes.destroy', $rate) }}" method="POST" 
-                                            onsubmit="return confirm('Delete this tax rate?');" class="d-inline">
+                                        <form action="{{ route('admin.shipping-rates.destroy', $rate) }}" method="POST" 
+                                            onsubmit="return confirm('Delete this shipping rate?');" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-soft-danger btn-sm" title="Delete">
@@ -79,8 +84,8 @@
                                 <tr>
                                     <td colspan="5" class="text-center py-5">
                                         <div class="text-muted opacity-50">
-                                            <i class="ri-percent-line fs-48"></i>
-                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No tax rates defined</p>
+                                            <i class="ri-truck-line fs-48"></i>
+                                            <p class="mt-2 fw-bold text-uppercase fs-12 tracking-widest">No shipping rates defined</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -92,58 +97,49 @@
             </div>
         </div>
 
-        <!-- Add New Tax Rate -->
+        <!-- Add New Shipping Rate -->
         <div class="col-xl-4 col-lg-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3">Add Tax Rate</h4>
+                    <h4 class="header-title mb-3">Add Shipping Rate</h4>
                     
-                    <form action="{{ route('admin.taxes.store') }}" method="POST">
+                    <form action="{{ route('admin.shipping-rates.store') }}" method="POST">
                         @csrf
                         
                         <div class="mb-3">
                             <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Display Name</label>
-                            <input type="text" name="name" required placeholder="e.g. Standard Sales Tax" 
+                            <input type="text" name="name" required placeholder="e.g. Standard Shipping" 
                                 class="form-control fw-semibold">
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Rate (%)</label>
-                                <input type="number" step="0.0001" name="rate" required placeholder="8.875" 
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Cost ($)</label>
+                                <input type="number" step="0.01" name="cost" required placeholder="10.00" 
                                     class="form-control fw-bold">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">State (2 Char)</label>
-                                <input type="text" name="state_code" maxlength="2" placeholder="AL" 
+                                <input type="text" name="state_code" maxlength="2" placeholder="NY" 
                                     class="form-control fw-bold text-uppercase">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">ZIP Code</label>
-                                <input type="text" name="zip_code" maxlength="10" placeholder="10001" 
-                                    class="form-control fw-bold">
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Priority</label>
-                            <input type="number" name="priority" value="1" 
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">ZIP Code Override</label>
+                            <input type="text" name="zip_code" maxlength="10" placeholder="e.g. 10001 (Optional)" 
                                 class="form-control fw-semibold">
                         </div>
 
                         <div class="bg-light p-3 rounded mb-4">
-                            <div class="form-check form-switch mb-2">
+                            <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="isActive" checked value="1">
                                 <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="isActive">ACTIVE STATUS</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="is_shipping_taxable" id="isShippingTaxable" checked value="1">
-                                <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="isShippingTaxable">TAXABLE SHIPPING</label>
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 fw-bold text-uppercase fs-11 py-2">
-                            <i class="ri-save-line me-1"></i> Save Tax Rate
+                            <i class="ri-save-line me-1"></i> Save Shipping Rate
                         </button>
                     </form>
                 </div>
@@ -161,4 +157,3 @@
     .tracking-widest { letter-spacing: 0.1em; }
 </style>
 @endsection
-
