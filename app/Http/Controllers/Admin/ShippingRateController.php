@@ -23,6 +23,10 @@ class ShippingRateController extends Controller
             'zip_code' => 'nullable|string|max:10',
         ]);
 
+        if (!empty($validated['state_code'])) {
+            $validated['state_code'] = strtoupper($validated['state_code']);
+        }
+
         $validated['is_active'] = $request->has('is_active');
 
         ShippingRate::create($validated);
@@ -38,6 +42,10 @@ class ShippingRateController extends Controller
             'state_code' => 'nullable|string|size:2',
             'zip_code' => 'nullable|string|max:10',
         ]);
+
+        if (!empty($validated['state_code'])) {
+            $validated['state_code'] = strtoupper($validated['state_code']);
+        }
 
         $validated['is_active'] = $request->has('is_active');
 

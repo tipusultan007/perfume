@@ -99,11 +99,15 @@ class CheckoutController extends Controller
                 
             $shippingRates = $shippingRateQuery->get();
             
-            $shippingRate = $shippingRates->firstWhere('zip_code', $zip);
+            $shippingRate = $shippingRates->first(function($r) use ($zip) {
+                return $r->zip_code && strtoupper($r->zip_code) === strtoupper($zip);
+            });
             
             if (!$shippingRate && $state) {
-                // Use strict comparison or specifically match state_code to avoid null matching issues
-                $shippingRate = $shippingRates->firstWhere('state_code', $state);
+                // specifically match state_code to avoid null matching issues and case sensitivity
+                $shippingRate = $shippingRates->first(function($r) use ($state) {
+                    return $r->state_code && strtoupper($r->state_code) === $state;
+                });
             }
             
             if (!$shippingRate) {
@@ -129,8 +133,12 @@ class CheckoutController extends Controller
                 });
                 
             $taxRates = $taxRateQuery->get();
-            $taxRate = $taxRates->firstWhere('zip_code', $zip)
-                    ?? $taxRates->firstWhere('state_code', $state)
+            $taxRate = $taxRates->first(function($r) use ($zip) {
+                        return $r->zip_code && strtoupper($r->zip_code) === strtoupper($zip);
+                    })
+                    ?? $taxRates->first(function($r) use ($state) {
+                        return $r->state_code && strtoupper($r->state_code) === $state;
+                    })
                     ?? $taxRates->whereNull('state_code')->whereNull('zip_code')->first();
 
             if ($taxRate) {

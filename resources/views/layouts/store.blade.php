@@ -1327,6 +1327,9 @@
                 </li>
             @endforeach
             <li class="nav-item">
+                <a href="{{ route('order.track') }}" class="nav-link">Track Order</a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('contact') }}" class="nav-link">Contact</a>
             </li>
         </ul>
@@ -1398,7 +1401,7 @@
             <div class="mobile-secondary-links">
                 <a href="{{ route('account.index') }}" class="mobile-sec-link">Account</a>
                 <a href="{{ route('wishlist.index') }}" class="mobile-sec-link">Wishlist</a>
-                <a href="#" class="mobile-sec-link">Track Order</a>
+                <a href="{{ route('order.track') }}" class="mobile-sec-link">Track Order</a>
                 <a href="#" class="mobile-sec-link">Store Locator</a>
             </div>
 

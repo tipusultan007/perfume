@@ -25,6 +25,10 @@ class TaxController extends Controller
             'is_active' => 'boolean'
         ]);
 
+        if (!empty($validated['state_code'])) {
+            $validated['state_code'] = strtoupper($validated['state_code']);
+        }
+
         $validated['is_active'] = $request->has('is_active');
         $validated['is_compounded'] = $request->has('is_compounded');
         $validated['is_shipping_taxable'] = $request->has('is_shipping_taxable');
@@ -43,6 +47,10 @@ class TaxController extends Controller
             'zip_code' => 'nullable|string|max:10',
             'priority' => 'nullable|integer',
         ]);
+
+        if (!empty($validated['state_code'])) {
+            $validated['state_code'] = strtoupper($validated['state_code']);
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['is_compounded'] = $request->has('is_compounded');
