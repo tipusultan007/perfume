@@ -322,7 +322,7 @@
             font-size: 16px;
             font-weight: 500;
             margin-bottom: 5px;
-            color: var(--black);
+            color: var(--white);
         }
         .search-result-info p {
             font-size: 14px;

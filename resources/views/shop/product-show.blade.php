@@ -682,8 +682,16 @@
 
 <!-- Mobile Lightbox -->
 <div id="mobile-lightbox" class="fixed inset-0 z-[9999] bg-black bg-opacity-95 hidden flex-col justify-center items-center">
-    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-4xl">&times;</button>
-    <img id="lightbox-img" src="" class="max-w-full max-h-[90vh] object-contain p-4">
+    <div class="relative w-full h-full flex justify-between items-center px-2 md:px-8">
+        <button id="lightbox-prev" class="text-white text-3xl z-[100] p-2 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center opacity-80 hover:opacity-100 flex-shrink-0"><i class="ri-arrow-left-s-line"></i></button>
+        
+        <div class="flex-grow flex justify-center items-center h-full overflow-hidden relative" id="lightbox-img-wrapper">
+            <img id="lightbox-img" src="" class="max-w-full max-h-[90vh] object-contain z-40 transition-transform duration-300 transform origin-center">
+        </div>
+        
+        <button id="lightbox-next" class="text-white text-3xl z-[100] p-2 bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center opacity-80 hover:opacity-100 flex-shrink-0"><i class="ri-arrow-right-s-line"></i></button>
+    </div>
+    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-5xl leading-none opacity-80 hover:opacity-100 z-[1000]">&times;</button>
 </div>
 
 @if(count($relatedProducts) > 0)
@@ -726,9 +734,11 @@
             },
         });
 
-        // 2. Zoom Effect on Hover
+        // 2. Zoom Effect on Hover & Lightbox
         const zoomContainers = document.querySelectorAll('.mySwiperMain .swiper-slide');
-        zoomContainers.forEach(container => {
+        let currentLightboxIndex = 0;
+
+        zoomContainers.forEach((container, index) => {
             const img = container.querySelector('img');
             
             container.addEventListener('mousemove', (e) => {
@@ -752,7 +762,10 @@
                 if (window.innerWidth <= 1024) {
                     const lightbox = document.getElementById('mobile-lightbox');
                     const lightboxImg = document.getElementById('lightbox-img');
+                    
+                    currentLightboxIndex = index;
                     lightboxImg.src = img.src;
+                    
                     lightbox.classList.remove('hidden');
                     lightbox.classList.add('flex');
                     document.body.style.overflow = 'hidden'; // Prevent scrolling
@@ -760,19 +773,74 @@
             });
         });
 
-        // Close lightbox
+        // Lightbox Navigation & Close
         const lightbox = document.getElementById('mobile-lightbox');
         const closeLightbox = document.getElementById('close-lightbox');
+        const prevBtn = document.getElementById('lightbox-prev');
+        const nextBtn = document.getElementById('lightbox-next');
+        const lightboxImg = document.getElementById('lightbox-img');
+
         if (lightbox && closeLightbox) {
+            let isZoomed = false;
+
             const close = () => {
                 lightbox.classList.add('hidden');
                 lightbox.classList.remove('flex');
                 document.body.style.overflow = '';
+                isZoomed = false;
+                lightboxImg.style.transform = 'scale(1)';
             };
+            
             closeLightbox.addEventListener('click', close);
             lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) close();
+                if (e.target === lightbox || e.target.id === 'lightbox-img-wrapper') close();
             });
+
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (zoomContainers.length > 0) {
+                        currentLightboxIndex = (currentLightboxIndex - 1 + zoomContainers.length) % zoomContainers.length;
+                        lightboxImg.src = zoomContainers[currentLightboxIndex].querySelector('img').src;
+                        isZoomed = false;
+                        lightboxImg.style.transform = 'scale(1)';
+                    }
+                });
+                
+                nextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (zoomContainers.length > 0) {
+                        currentLightboxIndex = (currentLightboxIndex + 1) % zoomContainers.length;
+                        lightboxImg.src = zoomContainers[currentLightboxIndex].querySelector('img').src;
+                        isZoomed = false;
+                        lightboxImg.style.transform = 'scale(1)';
+                    }
+                });
+                
+                // Swipe & Double Tap support
+                let touchstartX = 0;
+                let touchendX = 0;
+                let lastTap = 0;
+                
+                lightboxImg.addEventListener('touchstart', e => {
+                    touchstartX = e.changedTouches[0].screenX;
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    if (tapLength < 300 && tapLength > 0 && e.touches.length === 1) {
+                        toggleZoom();
+                        e.preventDefault();
+                    }
+                    lastTap = currentTime;
+                }, { passive: false });
+                
+                lightboxImg.addEventListener('touchend', e => {
+                    touchendX = e.changedTouches[0].screenX;
+                    if (!isZoomed) {
+                        if (touchendX < touchstartX - 50) nextBtn.click();
+                        if (touchendX > touchstartX + 50) prevBtn.click();
+                    }
+                }, { passive: true });
+            }
         }
 
         // 3. Initialize Attributes
