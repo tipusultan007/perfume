@@ -680,6 +680,12 @@
     </div>
 </main>
 
+<!-- Mobile Lightbox -->
+<div id="mobile-lightbox" class="fixed inset-0 z-[9999] bg-black bg-opacity-95 hidden flex-col justify-center items-center">
+    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-4xl">&times;</button>
+    <img id="lightbox-img" src="" class="max-w-full max-h-[90vh] object-contain p-4">
+</div>
+
 @if(count($relatedProducts) > 0)
 <section class="related-products">
     <h2 class="serif">You May Also Like</h2>
@@ -740,7 +746,34 @@
                 img.style.transform = 'scale(1)';
                 img.style.transformOrigin = 'center center';
             });
+
+            // Lightbox on click for mobile
+            container.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    const lightbox = document.getElementById('mobile-lightbox');
+                    const lightboxImg = document.getElementById('lightbox-img');
+                    lightboxImg.src = img.src;
+                    lightbox.classList.remove('hidden');
+                    lightbox.classList.add('flex');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                }
+            });
         });
+
+        // Close lightbox
+        const lightbox = document.getElementById('mobile-lightbox');
+        const closeLightbox = document.getElementById('close-lightbox');
+        if (lightbox && closeLightbox) {
+            const close = () => {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
+                document.body.style.overflow = '';
+            };
+            closeLightbox.addEventListener('click', close);
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) close();
+            });
+        }
 
         // 3. Initialize Attributes
         document.querySelectorAll('.attribute-group').forEach(group => {
