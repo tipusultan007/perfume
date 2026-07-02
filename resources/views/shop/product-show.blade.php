@@ -81,7 +81,7 @@
     .mySwiperMain img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         transition: transform 0.3s ease-out;
     }
 
@@ -342,6 +342,7 @@
         .thumbs-container { width: 100%; }
         .mySwiperThumbs { height: auto; }
         .mySwiperThumbs .swiper-slide { width: 80px; }
+        .mySwiperMain { height: 400px; }
         .pdp-details { padding-left: 0; margin-top: 40px; }
         .tab-trigger { gap: 20px; font-size: 10px; }
     }
