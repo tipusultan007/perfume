@@ -493,9 +493,11 @@
                 <ul class="filter-list scrollable" x-show="expanded">
                     @foreach($brands as $brand)
                         <li>
-                            <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
-                                {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
-                            {{ $brand->name }}
+                            <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                                <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
+                                    {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
+                                {{ $brand->name }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
@@ -511,9 +513,11 @@
                 <ul class="filter-list" x-show="expanded" style="display: none;">
                     @foreach($genders as $gender)
                         <li>
-                            <input type="checkbox" name="genders[]" value="{{ $gender }}" 
-                                {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
-                            {{ ucfirst($gender) }}
+                            <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                                <input type="checkbox" name="genders[]" value="{{ $gender }}" 
+                                    {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
+                                {{ ucfirst($gender) }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
@@ -529,9 +533,11 @@
                 <ul class="filter-list" x-show="expanded" style="display: none;">
                     @foreach($concentrations as $concentration)
                         <li>
-                            <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
-                                {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
-                            {{ $concentration }}
+                            <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                                <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
+                                    {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
+                                {{ $concentration }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
@@ -547,9 +553,11 @@
                 <ul class="filter-list" x-show="expanded" style="display: none;">
                     @foreach($seasons as $season)
                         <li>
-                            <input type="checkbox" name="seasons[]" value="{{ $season }}" 
-                                {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
-                            {{ ucfirst($season) }}
+                            <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                                <input type="checkbox" name="seasons[]" value="{{ $season }}" 
+                                    {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
+                                {{ ucfirst($season) }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
@@ -565,9 +573,11 @@
                 <ul class="filter-list" x-show="expanded" style="display: none;">
                     @foreach($sizes as $size)
                         <li>
-                            <input type="checkbox" name="sizes[]" value="{{ $size }}" 
-                                {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
-                            {{ $size }}
+                            <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                                <input type="checkbox" name="sizes[]" value="{{ $size }}" 
+                                    {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
+                                {{ $size }}
+                            </label>
                         </li>
                     @endforeach
                 </ul>
@@ -732,9 +742,11 @@
             <ul class="filter-list scrollable" x-show="expanded">
                 @foreach($brands as $brand)
                     <li>
-                        <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
-                            {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
-                        {{ $brand->name }}
+                        <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                            <input type="checkbox" name="brands[]" value="{{ $brand->slug }}" 
+                                {{ in_array($brand->slug, (array)$activeBrands) ? 'checked' : '' }}>
+                            {{ $brand->name }}
+                        </label>
                     </li>
                 @endforeach
             </ul>
@@ -750,9 +762,11 @@
             <ul class="filter-list" x-show="expanded" style="display: none;">
                 @foreach($sizes as $size)
                     <li>
-                        <input type="checkbox" name="sizes[]" value="{{ $size }}" 
-                            {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
-                        {{ $size }}
+                        <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                            <input type="checkbox" name="sizes[]" value="{{ $size }}" 
+                                {{ in_array($size, (array)$activeSizes) ? 'checked' : '' }}>
+                            {{ $size }}
+                        </label>
                     </li>
                 @endforeach
             </ul>
@@ -767,9 +781,11 @@
             <ul class="filter-list" x-show="expanded" style="display: none;">
                 @foreach($genders as $gender)
                     <li>
-                        <input type="checkbox" name="genders[]" value="{{ $gender }}" 
-                            {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
-                        {{ ucfirst($gender) }}
+                        <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                            <input type="checkbox" name="genders[]" value="{{ $gender }}" 
+                                {{ in_array($gender, (array)$activeGenders) ? 'checked' : '' }}>
+                            {{ ucfirst($gender) }}
+                        </label>
                     </li>
                 @endforeach
             </ul>
@@ -784,9 +800,11 @@
             <ul class="filter-list" x-show="expanded" style="display: none;">
                 @foreach($concentrations as $concentration)
                     <li>
-                        <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
-                            {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
-                        {{ $concentration }}
+                        <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                            <input type="checkbox" name="concentrations[]" value="{{ $concentration }}" 
+                                {{ in_array($concentration, (array)$activeConcentrations) ? 'checked' : '' }}>
+                            {{ $concentration }}
+                        </label>
                     </li>
                 @endforeach
             </ul>
@@ -801,9 +819,11 @@
             <ul class="filter-list" x-show="expanded" style="display: none;">
                 @foreach($seasons as $season)
                     <li>
-                        <input type="checkbox" name="seasons[]" value="{{ $season }}" 
-                            {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
-                        {{ ucfirst($season) }}
+                        <label style="cursor: pointer; display: flex; align-items: center; width: 100%;">
+                            <input type="checkbox" name="seasons[]" value="{{ $season }}" 
+                                {{ in_array($season, (array)$activeSeasons) ? 'checked' : '' }}>
+                            {{ ucfirst($season) }}
+                        </label>
                     </li>
                 @endforeach
             </ul>
