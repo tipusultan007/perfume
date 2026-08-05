@@ -8,9 +8,18 @@ use Illuminate\Http\Request;
 
 class TaxController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $taxRates = TaxRate::orderBy('priority')->get();
+        $query = TaxRate::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('state_code', 'like', '%' . $search . '%')
+                  ->orWhere('zip_code', 'like', '%' . $search . '%');
+        }
+
+        $taxRates = $query->orderBy('priority')->paginate(10);
         return view('admin.taxes.index', compact('taxRates'));
     }
 

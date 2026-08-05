@@ -169,6 +169,13 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{ route('admin.shipping-rates.index') }}" class="side-nav-link">
+                    <i class="ri-truck-line"></i>
+                    <span> Shipping Rates </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a href="{{ route('admin.settings.index') }}" class="side-nav-link">
                     <i class="ri-settings-4-line"></i>
                     <span> Global Settings </span>

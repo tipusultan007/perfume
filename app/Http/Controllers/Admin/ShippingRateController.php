@@ -8,9 +8,18 @@ use Illuminate\Http\Request;
 
 class ShippingRateController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $shippingRates = ShippingRate::orderBy('state_code')->get();
+        $query = ShippingRate::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('state_code', 'like', '%' . $search . '%')
+                  ->orWhere('zip_code', 'like', '%' . $search . '%');
+        }
+
+        $shippingRates = $query->orderBy('state_code')->paginate(10);
         return view('admin.shipping_rates.index', compact('shippingRates'));
     }
 

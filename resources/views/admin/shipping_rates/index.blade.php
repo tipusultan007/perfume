@@ -27,7 +27,16 @@
         <div class="col-xl-8 col-lg-7">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3">Active Shipping Rates</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="header-title m-0">Active Shipping Rates</h4>
+                        <form action="{{ route('admin.shipping-rates.index') }}" method="GET" class="d-flex">
+                            <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Search rates..." value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.shipping-rates.index') }}" class="btn btn-sm btn-light ms-1">Clear</a>
+                            @endif
+                        </form>
+                    </div>
                     
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0 table-hover">
@@ -70,6 +79,13 @@
                                         @endif
                                     </td>
                                     <td class="text-end">
+                                        <button type="button" class="btn btn-soft-primary btn-sm me-1 edit-shipping-btn" 
+                                            title="Edit" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editShippingModal"
+                                            data-shipping='{{ json_encode($rate) }}'>
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
                                         <form action="{{ route('admin.shipping-rates.destroy', $rate) }}" method="POST" 
                                             onsubmit="return confirm('Delete this shipping rate?');" class="d-inline">
                                             @csrf
@@ -92,6 +108,10 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="mt-3">
+                        {{ $shippingRates->withQueryString()->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
@@ -147,6 +167,84 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Shipping Modal -->
+<div class="modal fade" id="editShippingModal" tabindex="-1" aria-labelledby="editShippingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editShippingModalLabel">Edit Shipping Rate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editShippingForm" action="" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Display Name</label>
+                        <input type="text" name="name" id="edit_name" required class="form-control fw-semibold">
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Cost ($)</label>
+                            <input type="number" step="0.01" name="cost" id="edit_cost" required class="form-control fw-bold">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">State (2 Char)</label>
+                            <input type="text" name="state_code" id="edit_state_code" maxlength="2" class="form-control fw-bold text-uppercase">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">ZIP Code Override</label>
+                        <input type="text" name="zip_code" id="edit_zip_code" maxlength="10" class="form-control fw-semibold">
+                    </div>
+
+                    <div class="bg-light p-3 rounded mb-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="is_active" id="edit_is_active" value="1">
+                            <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="edit_is_active">ACTIVE STATUS</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtns = document.querySelectorAll('.edit-shipping-btn');
+        const editForm = document.getElementById('editShippingForm');
+        
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const shipping = JSON.parse(this.getAttribute('data-shipping'));
+                
+                // Update form action URL dynamically
+                let actionUrl = "{{ route('admin.shipping-rates.update', ':id') }}";
+                actionUrl = actionUrl.replace(':id', shipping.id);
+                editForm.action = actionUrl;
+                
+                // Populate fields
+                document.getElementById('edit_name').value = shipping.name;
+                document.getElementById('edit_cost').value = shipping.cost;
+                document.getElementById('edit_state_code').value = shipping.state_code || '';
+                document.getElementById('edit_zip_code').value = shipping.zip_code || '';
+                
+                // Checkboxes
+                document.getElementById('edit_is_active').checked = shipping.is_active == 1;
+            });
+        });
+    });
+</script>
+@endsection
 
 <style>
     .fs-11 { font-size: 11px; }

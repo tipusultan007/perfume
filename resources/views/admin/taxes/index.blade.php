@@ -27,7 +27,16 @@
         <div class="col-xl-8 col-lg-7">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title mb-3">Active Tax Rates</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="header-title m-0">Active Tax Rates</h4>
+                        <form action="{{ route('admin.taxes.index') }}" method="GET" class="d-flex">
+                            <input type="text" name="search" class="form-control form-control-sm me-2" placeholder="Search taxes..." value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.taxes.index') }}" class="btn btn-sm btn-light ms-1">Clear</a>
+                            @endif
+                        </form>
+                    </div>
                     
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0 table-hover">
@@ -65,6 +74,13 @@
                                         @endif
                                     </td>
                                     <td class="text-end">
+                                        <button type="button" class="btn btn-soft-primary btn-sm me-1 edit-tax-btn" 
+                                            title="Edit" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editTaxModal"
+                                            data-tax='{{ json_encode($rate) }}'>
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
                                         <form action="{{ route('admin.taxes.destroy', $rate) }}" method="POST" 
                                             onsubmit="return confirm('Delete this tax rate?');" class="d-inline">
                                             @csrf
@@ -87,6 +103,10 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="mt-3">
+                        {{ $taxRates->withQueryString()->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
@@ -151,6 +171,94 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Tax Modal -->
+<div class="modal fade" id="editTaxModal" tabindex="-1" aria-labelledby="editTaxModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaxModalLabel">Edit Tax Rate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editTaxForm" action="" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Display Name</label>
+                        <input type="text" name="name" id="edit_name" required class="form-control fw-semibold">
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Rate (%)</label>
+                            <input type="number" step="0.0001" name="rate" id="edit_rate" required class="form-control fw-bold">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">State (2 Char)</label>
+                            <input type="text" name="state_code" id="edit_state_code" maxlength="2" class="form-control fw-bold text-uppercase">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">ZIP Code</label>
+                            <input type="text" name="zip_code" id="edit_zip_code" maxlength="10" class="form-control fw-bold">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-uppercase fs-11 fw-bold tracking-wider text-muted">Priority</label>
+                        <input type="number" name="priority" id="edit_priority" class="form-control fw-semibold">
+                    </div>
+
+                    <div class="bg-light p-3 rounded mb-2">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" name="is_active" id="edit_is_active" value="1">
+                            <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="edit_is_active">ACTIVE STATUS</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="is_shipping_taxable" id="edit_is_shipping_taxable" value="1">
+                            <label class="form-check-label fs-12 fw-bold text-muted ms-1" for="edit_is_shipping_taxable">TAXABLE SHIPPING</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtns = document.querySelectorAll('.edit-tax-btn');
+        const editForm = document.getElementById('editTaxForm');
+        
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tax = JSON.parse(this.getAttribute('data-tax'));
+                
+                // Update form action URL dynamically
+                let actionUrl = "{{ route('admin.taxes.update', ':id') }}";
+                actionUrl = actionUrl.replace(':id', tax.id);
+                editForm.action = actionUrl;
+                
+                // Populate fields
+                document.getElementById('edit_name').value = tax.name;
+                document.getElementById('edit_rate').value = tax.rate;
+                document.getElementById('edit_state_code').value = tax.state_code || '';
+                document.getElementById('edit_zip_code').value = tax.zip_code || '';
+                document.getElementById('edit_priority').value = tax.priority || 1;
+                
+                // Checkboxes
+                document.getElementById('edit_is_active').checked = tax.is_active == 1;
+                document.getElementById('edit_is_shipping_taxable').checked = tax.is_shipping_taxable == 1;
+            });
+        });
+    });
+</script>
+@endsection
 
 <style>
     .fs-11 { font-size: 11px; }
